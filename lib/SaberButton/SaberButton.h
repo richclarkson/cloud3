@@ -15,8 +15,8 @@ class SaberButton
 		SaberButton(int pin);
 		long getPressTime();
 	private:
-		long _pressMillis;
-		long _prevMillis;
+		unsigned long _pressMillis;
+		unsigned long _prevMillis;
 };
 
 #endif
