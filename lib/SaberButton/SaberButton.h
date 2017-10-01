@@ -11,12 +11,13 @@ Proprietary to Richard Clarkson Studio
 
 class SaberButton
 {
-	public:
-		SaberButton(int pin);
-		long getPressTime();
-	private:
-		unsigned long _pressMillis;
-		unsigned long _prevMillis;
+public:
+	SaberButton(int pin);
+	long getPressTime();
+
+private:
+	unsigned long _pressMillis;
+	unsigned long _prevMillis;
 };
 
 #endif
