@@ -69,3 +69,8 @@ eagle.epf
 
 # file locks introduced since 7.x
 *.lck
+
+# Ignore list for PlatformIO IDE
+.pioenvs
+.piolibdeps
+.vscode/c_cpp_properties.json
