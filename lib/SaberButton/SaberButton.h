@@ -7,8 +7,6 @@ Proprietary to Richard Clarkson Studio
 #ifndef SaberButton_h
 #define SaberButton_h
 
-#include "Arduino.h"
-
 class SaberButton
 {
 public:
