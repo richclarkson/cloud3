@@ -7,9 +7,10 @@ Proprietary to Richard Clarkson Studio
 
 #include "SaberStateMachine.h"
 
-SaberStateMachine::SaberStateMachine()
+SaberStateMachine::SaberStateMachine(int statesCount)
 {
-    _currentState = OFF;
+    _currentState = 0;
+    _statesCount = statesCount;
 }
 
 int SaberStateMachine::getCurrent()
@@ -19,15 +20,20 @@ int SaberStateMachine::getCurrent()
 
 void SaberStateMachine::setCurrent(int newState)
 {
+   if (newState >= _statesCount)
+   {
+       newState = _statesCount - 1;
+   }
     _currentState = newState;
 }
 
 void SaberStateMachine::next()
+// Increment the state. Rollover to zero if it is at max.
 {
     _currentState ++;
-    if (_currentState >= STATES_ENUM_LENGTH)
+    if (_currentState >= _statesCount)
     {
-        _currentState = OFF;
+        _currentState = 0;
     }
     
 }
