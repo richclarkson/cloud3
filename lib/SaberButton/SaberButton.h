@@ -14,8 +14,9 @@ public:
 	long getPressTime();
 
 private:
-	unsigned long _pressMillis;
+	char _pin;
 	unsigned long _prevMillis;
+	unsigned long _pressMillis;
 };
 
 #endif
