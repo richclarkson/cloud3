@@ -20,11 +20,12 @@ long SaberButton::getPressTime()
 {
 	if (digitalRead(_pin) == HIGH)
 	{
-		long millis = millis();
-		if (millis > _prevMillis)
+		unsigned long currentMillis = millis();
+		// Check that some time has passed
+		if (currentMillis > _prevMillis)
 		{
-			_pressMillis += millis - _prevMillis;
-			_prevMillis = millis
+			_pressMillis += currentMillis - _prevMillis;
+			_prevMillis = currentMillis;
 		}
 		else
 		{
