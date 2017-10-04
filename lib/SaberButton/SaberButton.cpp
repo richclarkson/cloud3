@@ -28,7 +28,7 @@ void SaberButton::check()
 		_pressMillis += _getPressMillis();
 		if (_pressMillis > pressThreshold)
 		{
-			_pressType = 2;
+			_setPressType(2); // press press type recorded
 		}
 	}
 	else // _pin is LOW
@@ -36,12 +36,12 @@ void SaberButton::check()
 		// too short for a tap (bouncing), or between a tap and press
 		if (_pressMillis <= tapThreshold || (_pressMillis > tapLength + tapThreshold && _pressMillis <= pressThreshold))
 		{
-			_pressType = 0; // no press recorded
+			_setPressType(0); // no press recorded
 		}
 		// tap recorded
 		else if (_pressMillis > tapThreshold && _pressMillis <= tapLength)
 		{
-			_pressType = 1; // tap press type recorded
+			_setPressType(1); // tap press type recorded
 		}
 	}
 }
@@ -57,6 +57,15 @@ unsigned long SaberButton::getPressLength() {
 	unsigned long pressMillisHolder = _pressMillis;
 	_pressMillis = 0;
 	return pressMillisHolder;	
+}
+
+char SaberButton::_setPressType(char pressType)
+// Prevents press type from being changed back to an earlier state type. Buttons can only go from not pressed -> tapped -> pressed.
+{
+	if (pressType > _pressType) {
+		_pressType = pressType;
+	}
+	return _pressType;
 }
 
 void SaberButton::_clearPrevMillis()
