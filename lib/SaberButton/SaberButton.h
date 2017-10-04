@@ -20,6 +20,7 @@ public:
 	unsigned long pressLength;
 	
 private:
+	char _setPressType(char pressType);
 	void _clearPrevMillis();
 	unsigned long _getPressMillis();
 	char _pin;
