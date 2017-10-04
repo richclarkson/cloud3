@@ -1,16 +1,16 @@
 /*
-SaberButton.h - A library to control the button for the Saber music lighting product
+TapPressButton.h - A library to control the button for the Saber music lighting product
 Created by Steve Faletti, 2017-09-30
 Proprietary to Richard Clarkson Studio
 */
 
-#ifndef SaberButton_h
-#define SaberButton_h
+#ifndef TapPressButton_h
+#define TapPressButton_h
 
-class SaberButton
+class TapPressButton
 {
 public:
-	SaberButton(int pin);
+	TapPressButton(int pin);
 	void check();
 	char getPressType();
 	unsigned long getPressLength();
