@@ -1,7 +1,7 @@
 #include <Arduino.h>
-#include <SaberButton.h>
+#include <TapPressButton.h>
 
-SaberButton capSensor(7);
+TapPressButton capSensor(7);
 
 unsigned long pressTime = 0;
 

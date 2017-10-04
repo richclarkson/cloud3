@@ -1,13 +1,13 @@
 /*
-SaberButton.cpp - A library to read the button for the Saber music lighting product
+TapPressButton.cpp - A library to read the button for the Saber music lighting product
 Created by Steve Faletti, 2017-09-30
 Proprietary to Richard Clarkson Studio
 */
 
 #include "Arduino.h"
-#include "SaberButton.h"
+#include "TapPressButton.h"
 
-SaberButton::SaberButton(int pin)
+TapPressButton::TapPressButton(int pin)
 {
 	pinMode(pin, INPUT);
 	_pin = pin;
@@ -21,7 +21,7 @@ SaberButton::SaberButton(int pin)
 }
 
 // This function should be called repeatedly in the main loop. It assumes a debounced button, though in actual application it will just wait until the button has settled before beginning to count, which won't be noticed by most users.
-void SaberButton::check()
+void TapPressButton::check()
 {
 	if (digitalRead(_pin) == HIGH)
 	{
@@ -46,20 +46,20 @@ void SaberButton::check()
 	}
 }
 
-char SaberButton::getPressType()
+char TapPressButton::getPressType()
 {
 	char pressTypeHolder = _pressType;
 	_pressType = 0;
 	return pressTypeHolder;
 }
 
-unsigned long SaberButton::getPressLength() {
+unsigned long TapPressButton::getPressLength() {
 	unsigned long pressMillisHolder = _pressMillis;
 	_pressMillis = 0;
 	return pressMillisHolder;	
 }
 
-char SaberButton::_setPressType(char pressType)
+char TapPressButton::_setPressType(char pressType)
 // Prevents press type from being changed back to an earlier state type. Buttons can only go from not pressed -> tapped -> pressed.
 {
 	if (pressType > _pressType) {
@@ -68,12 +68,12 @@ char SaberButton::_setPressType(char pressType)
 	return _pressType;
 }
 
-void SaberButton::_clearPrevMillis()
+void TapPressButton::_clearPrevMillis()
 {
 	_prevMillis = 0;
 }
 
-unsigned long SaberButton::_getPressMillis()
+unsigned long TapPressButton::_getPressMillis()
 {
 	unsigned long currentMillis = millis();
 	unsigned long returnMillis = 0;
