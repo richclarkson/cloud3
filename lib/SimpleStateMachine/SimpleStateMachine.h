@@ -1,17 +1,17 @@
 /* 
-Saber State Machine
+Simple State Machine
 A very simple finite state machine library
 Created by Steve Faletti, 2017-10-01
 Proprietary to Richard Clarkson Studio
 */
 
-#ifndef SaberStateMachine_h
-#define SaberStateMachine_h
+#ifndef SimpleStateMachine_h
+#define SimpleStateMachine_h
 
-class SaberStateMachine
+class SimpleStateMachine
 {
 public:
-  SaberStateMachine(int statesCount);
+  SimpleStateMachine(int statesCount);
   int getCurrent();
   void setCurrent(int newState);
   void next();
