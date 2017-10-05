@@ -1,24 +1,24 @@
 /* 
-Saber State Machine
+Simple State Machine
 A very simple finite state machine library
 Created by Steve Faletti, 2017-10-01
 Proprietary to Richard Clarkson Studio
 */
 
-#include "SaberStateMachine.h"
+#include "SimpleStateMachine.h"
 
-SaberStateMachine::SaberStateMachine(int statesCount)
+SimpleStateMachine::SimpleStateMachine(int statesCount)
 {
     _currentState = 0;
     _statesCount = statesCount;
 }
 
-int SaberStateMachine::getCurrent()
+int SimpleStateMachine::getCurrent()
 {
     return _currentState;
 }
 
-void SaberStateMachine::setCurrent(int newState)
+void SimpleStateMachine::setCurrent(int newState)
 {
    if (newState >= _statesCount)
    {
@@ -27,7 +27,7 @@ void SaberStateMachine::setCurrent(int newState)
     _currentState = newState;
 }
 
-void SaberStateMachine::next()
+void SimpleStateMachine::next()
 // Increment the state. Rollover to zero if it is at max.
 {
     _currentState ++;
