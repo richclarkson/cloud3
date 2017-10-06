@@ -20,7 +20,7 @@ TapPressButton::TapPressButton(int pin)
 	pressLength = 1000;
 }
 
-// This function should be called repeatedly in the main loop. It assumes a debounced button, though in actual application it will just wait until the button has settled before beginning to count, which won't be noticed by most users.
+// This function should be called repeatedly in the main loop. Setting the tapThreshold variable acts as a debouncer.
 void TapPressButton::check()
 {
 	if (digitalRead(_pin) == HIGH)
