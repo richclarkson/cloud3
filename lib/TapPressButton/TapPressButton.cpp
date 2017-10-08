@@ -1,5 +1,6 @@
 /*
-TapPressButton.cpp - A library to read the button for the Saber music lighting product
+TapPressButton.cpp - A library to read the button for the Saber 
+music lighting product
 Created by Steve Faletti, 2017-09-30
 Proprietary to Richard Clarkson Studio
 */
@@ -20,8 +21,9 @@ TapPressButton::TapPressButton(int pin)
 	pressLength = 1000;
 }
 
-// This function should be called repeatedly in the main loop. Setting the tapThreshold variable acts as a debouncer.
 void TapPressButton::check()
+// This function should be called repeatedly in the main loop. Setting the 
+// tapThreshold variable acts as a debouncer.
 {
 	if (digitalRead(_pin) == HIGH)
 	{
@@ -60,7 +62,8 @@ unsigned long TapPressButton::getPressLength() {
 }
 
 char TapPressButton::_setPressType(char pressType)
-// Prevents press type from being changed back to an earlier state type. Buttons can only go from not pressed -> tapped -> pressed.
+// Prevents press type from being changed back to an earlier state type. 
+// Buttons can only go from not pressed -> tapped -> pressed.
 {
 	if (pressType > _pressType) {
 		_pressType = pressType;
