@@ -1,32 +1,26 @@
-/*
-TapPressButton.h - A library to control the button for the Saber music lighting product
-Created by Steve Faletti, 2017-09-30
-Proprietary to Richard Clarkson Studio
-*/
-
 #ifndef TapPressButton_h
 #define TapPressButton_h
 
-class TapPressButton
-{
+class TapPressButton {
 public:
-	TapPressButton(int pin);
-	void check();
-	char getPressType();
-	unsigned long getPressLength();
-	unsigned long tapThreshold;
-	unsigned long tapLength;
-	unsigned long pressThreshold;
-	unsigned long pressLength;
-	
+  TapPressButton();
+  void update(bool btnVal, unsigned long timerVal);
+  char getPressType();
+  unsigned long getPressLength();
+  unsigned long setDebounce(unsigned long debounceTime);
+  unsigned long setTapLength(unsigned long tapTime);
+  unsigned long setPressThreshold(unsigned long pressThreshold);
+  unsigned long setPressLength(unsigned long pressLength);
+
 private:
-	char _setPressType(char pressType);
-	void _clearPrevMillis();
-	unsigned long _getPressMillis();
-	char _pin;
-	unsigned long _prevMillis;
-	unsigned long _pressMillis;
-	char _pressType;
+  unsigned long prevTimeStamp;
+  unsigned long pressTime;
+  char pressType;
+  int debounceThreshold;
+  int tapLength;
+  int pressThreshold;
+  int pressLength;
+  void updatePressTime(unsigned long newTime);
 };
 
 #endif
