@@ -14,6 +14,7 @@ TapPressButton::TapPressButton() {
 
 void TapPressButton::update(bool btnVal, unsigned long timerVal) {
   // This function should be called repeatedly in the main loop.
+  pressType = 0;
   if (btnVal) {
     updatePressTime(timerVal);
     if (isPress()) {
