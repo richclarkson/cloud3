@@ -32,6 +32,10 @@ bool TapPressButton::isTap() {
          pressTime <= debounceThreshold + tapLength;
 }
 
+bool TapPressButton::isPress(){
+  return pressTime > pressThreshold;
+}
+
 void TapPressButton::resetTimeStamp() { prevTimeStamp = 0; }
 
 void TapPressButton::resetPressTime() { pressTime = 0; }
