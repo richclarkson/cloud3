@@ -16,10 +16,10 @@ private:
   unsigned long prevTimeStamp;
   unsigned long pressTime;
   char pressType;
-  int debounceThreshold;
-  int tapLength;
-  int pressThreshold;
-  int pressLength;
+  unsigned long DEBOUNCE_THRESHOLD;
+  unsigned long TAP_LENGTH;
+  unsigned long PRESS_THRESHOLD;
+  unsigned long PRESS_LENGTH;
   void updatePressTime(unsigned long newTime);
   bool isTap();
   bool isPress();

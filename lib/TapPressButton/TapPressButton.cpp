@@ -5,10 +5,10 @@ TapPressButton::TapPressButton() {
   pressTime = 0;
 
   // set default values for button behavior
-  debounceThreshold = 50;
-  tapLength = 300;
-  pressThreshold = 500;
-  pressLength = 1000;
+  DEBOUNCE_THRESHOLD = 50;
+  TAP_LENGTH = 300;
+  PRESS_THRESHOLD = 500;
+  PRESS_LENGTH = 1000;
 }
 
 void TapPressButton::update(bool btnVal, unsigned long timerVal) {
@@ -28,12 +28,14 @@ void TapPressButton::updatePressTime(unsigned long newTime) {
 }
 
 bool TapPressButton::isTap() {
-  return pressTime > debounceThreshold &&
-         pressTime <= debounceThreshold + tapLength;
+  return pressTime > DEBOUNCE_THRESHOLD &&
+         pressTime <= DEBOUNCE_THRESHOLD + TAP_LENGTH;
 }
 
 bool TapPressButton::isPress(){
-  return pressTime > pressThreshold;
+  return pressTime > PRESS_THRESHOLD;
+}
+
 }
 
 void TapPressButton::resetTimeStamp() { prevTimeStamp = 0; }
