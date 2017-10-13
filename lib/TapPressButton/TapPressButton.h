@@ -23,6 +23,7 @@ private:
   void updatePressTime(unsigned long newTime);
   bool isTap();
   bool isPress();
+  int getPressCount();
   void resetTimeStamp();
   void resetPressTime();
 };

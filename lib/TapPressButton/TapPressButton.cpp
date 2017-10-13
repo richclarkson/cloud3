@@ -32,10 +32,25 @@ bool TapPressButton::isTap() {
          pressTime <= DEBOUNCE_THRESHOLD + TAP_LENGTH;
 }
 
-bool TapPressButton::isPress(){
-  return pressTime > PRESS_THRESHOLD;
-}
+bool TapPressButton::isPress() { return pressTime > PRESS_THRESHOLD; }
 
+int TapPressButton::getPressCount() {
+  int pressCount = 0;
+  int pressLoopCounter = 1;
+  if (isPress()) {
+    while (pressCount == 0) {
+      if (pressTime - PRESS_THRESHOLD <= PRESS_LENGTH * pressLoopCounter) {
+        pressLoopCounter++;
+      } else {
+        pressCount = pressLoopCounter;
+      }
+      // set a max to avoid in infinite loop
+      if (pressLoopCounter > 50) {
+        pressCount = -1;
+      }
+    }
+  }
+  return pressCount;
 }
 
 void TapPressButton::resetTimeStamp() { prevTimeStamp = 0; }
