@@ -27,6 +27,7 @@ private:
   int getPressCount();
   void resetTimeStamp();
   void resetPressTime();
+  bool isDebounced();
 };
 
 #endif

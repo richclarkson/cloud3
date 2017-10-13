@@ -30,6 +30,10 @@ void TapPressButton::update(bool btnVal, unsigned long timerVal) {
   }
 }
 
+bool TapPressButton::isDebounced() {
+  return pressTime > DEBOUNCE_THRESHOLD;
+}
+
 void TapPressButton::updatePressTime(unsigned long newTime) {
   if (newTime > prevTimeStamp) {
     pressTime += newTime - prevTimeStamp;
