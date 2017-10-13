@@ -33,6 +33,7 @@ void TapPressButton::update(bool btnVal, unsigned long timerVal) {
 void TapPressButton::updatePressTime(unsigned long newTime) {
   if (newTime > prevTimeStamp) {
     pressTime += newTime - prevTimeStamp;
+    prevTimeStamp = newTime;
   }
 }
 
