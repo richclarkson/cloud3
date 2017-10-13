@@ -3,6 +3,7 @@
 TapPressButton::TapPressButton() {
   prevTimeStamp = 0;
   pressTime = 0;
+  pressCount = 0;
 
   // set default values for button behavior
   DEBOUNCE_THRESHOLD = 50;
@@ -15,6 +16,10 @@ void TapPressButton::update(bool btnVal, unsigned long timerVal) {
   // This function should be called repeatedly in the main loop.
   if (btnVal) {
     updatePressTime(timerVal);
+    if (isPress()) {
+      pressType = 2;
+      pressCount = getPressCount();
+    }
   } else {
     if (isTap()) {
       pressType = 1;
