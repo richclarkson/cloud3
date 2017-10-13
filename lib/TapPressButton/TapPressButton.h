@@ -21,6 +21,7 @@ private:
   int pressThreshold;
   int pressLength;
   void updatePressTime(unsigned long newTime);
+  bool isTap();
   void resetTimeStamp();
   void resetPressTime();
 };
