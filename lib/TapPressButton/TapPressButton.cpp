@@ -14,12 +14,12 @@ TapPressButton::TapPressButton() {
 void TapPressButton::update(bool btnVal, unsigned long timerVal) {
   // This function should be called repeatedly in the main loop.
   if (btnVal) {
-	updatePressTime(timerVal); 
-  }
+    updatePressTime(timerVal);
+  } 
 }
 
 void TapPressButton::updatePressTime(unsigned long newTime) {
-	if (newTime > prevTimeStamp) {
-		pressTime += newTime - prevTimeStamp;
-	}
+  if (newTime > prevTimeStamp) {
+    pressTime += newTime - prevTimeStamp;
+  }
 }
