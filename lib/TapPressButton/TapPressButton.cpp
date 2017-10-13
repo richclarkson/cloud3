@@ -16,6 +16,9 @@ void TapPressButton::update(bool btnVal, unsigned long timerVal) {
   if (btnVal) {
     updatePressTime(timerVal);
   } else {
+    if (isTap()) {
+      pressType = 1;
+    }
     resetPressTime();
     resetTimeStamp();
   }
