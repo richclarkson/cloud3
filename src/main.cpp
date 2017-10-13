@@ -1,14 +1,19 @@
+#ifndef UNIT_TEST
+
 #include <Arduino.h>
 #include <TapPressButton.h>
 
-TapPressButton capSensor(7);
+TapPressButton capSensor = TapPressButton();
 
-unsigned long pressTime = 0;
+const int btnPin = 7;
+
 
 void setup() {
-    // put your setup code here, to run once:
+    pinMode(btnPin, INPUT);
 }
 
 void loop() {
-    capSensor.check();
+    capSensor.update(digitalRead(btnPin), millis());
 }
+
+#endif
