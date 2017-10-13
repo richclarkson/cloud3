@@ -15,7 +15,10 @@ void TapPressButton::update(bool btnVal, unsigned long timerVal) {
   // This function should be called repeatedly in the main loop.
   if (btnVal) {
     updatePressTime(timerVal);
-  } 
+  } else {
+    resetPressTime();
+    resetTimeStamp();
+  }
 }
 
 void TapPressButton::updatePressTime(unsigned long newTime) {
@@ -23,3 +26,7 @@ void TapPressButton::updatePressTime(unsigned long newTime) {
     pressTime += newTime - prevTimeStamp;
   }
 }
+
+void TapPressButton::resetTimeStamp() { prevTimeStamp = 0; }
+
+void TapPressButton::resetPressTime() { pressTime = 0; }

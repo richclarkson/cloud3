@@ -21,6 +21,8 @@ private:
   int pressThreshold;
   int pressLength;
   void updatePressTime(unsigned long newTime);
+  void resetTimeStamp();
+  void resetPressTime();
 };
 
 #endif
