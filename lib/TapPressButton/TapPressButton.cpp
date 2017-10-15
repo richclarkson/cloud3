@@ -4,6 +4,7 @@ TapPressButton::TapPressButton() {
   prevTimeStamp = 0;
   pressTime = 0;
   pressCount = 0;
+  pressType = 0;
 
   // set default values for button behavior
   DEBOUNCE_THRESHOLD = 50;
@@ -70,3 +71,7 @@ int TapPressButton::getPressCount() {
 void TapPressButton::resetTimeStamp() { prevTimeStamp = 0; }
 
 void TapPressButton::resetPressTime() { pressTime = 0; }
+
+char TapPressButton::getPressType() {
+  return pressType;
+}
