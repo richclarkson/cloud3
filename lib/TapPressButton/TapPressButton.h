@@ -15,7 +15,9 @@ public:
 private:
   unsigned long prevTimeStamp;
   unsigned long pressTime;
-  bool buttonState;
+  char pressType;
+  bool isPressInTapWindow();
+  bool isPressInPressWindow();
   unsigned long DEBOUNCE_THRESHOLD;
   unsigned long TAP_LENGTH;
   unsigned long PRESS_THRESHOLD;
@@ -24,7 +26,6 @@ private:
   int pressCount;
   int getPressCount();
   void resetPressTime();
-  bool isDebounced();
 };
 
 #endif
