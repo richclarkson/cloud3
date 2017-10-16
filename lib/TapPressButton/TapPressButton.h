@@ -7,10 +7,10 @@ public:
   void update(bool btnVal, unsigned long timerVal);
   char getPressType();
   unsigned long getPressLength();
-  unsigned long setDebounce(unsigned long debounceTime);
-  unsigned long setTapLength(unsigned long tapTime);
-  unsigned long setPressThreshold(unsigned long pressThreshold);
-  unsigned long setPressLength(unsigned long pressLength);
+  void setDebounce(unsigned long debounceTime);
+  void setTapLength(unsigned long tapTime);
+  void setPressThreshold(unsigned long pressThreshold);
+  void setPressLength(unsigned long pressLength);
 
 private:
   unsigned long prevTimeStamp;
