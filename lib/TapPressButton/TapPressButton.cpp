@@ -4,7 +4,7 @@ TapPressButton::TapPressButton() {
   prevTimeStamp = 0;
   pressTime = 0;
   pressCount = 0;
-  buttonState = false;
+  pressType = 0;
 
   // set default values for button behavior
   setDebounce(50);
@@ -15,25 +15,18 @@ TapPressButton::TapPressButton() {
 
 void TapPressButton::update(bool btnVal, unsigned long timerVal) {
   // This function should be called repeatedly in the main loop.
-  buttonState = btnVal;
-  if (buttonState) {
+  pressType = 0;
+  if (btnVal) {
     updatePressTime(timerVal);
+    if (isPressInPressWindow()) {
+      pressType = 2;
+    }
   } else {
+    if (isPressInTapWindow()) {
+      pressType = 1;
+    }
     resetPressTime();
   }
-}
-
-bool TapPressButton::isDebounced() {
-  return pressTime > DEBOUNCE_THRESHOLD;
-}
-
-bool TapPressButton::isTap() {
-  return !buttonState && pressTime > DEBOUNCE_THRESHOLD &&
-         pressTime <= DEBOUNCE_THRESHOLD + TAP_LENGTH;
-}
-
-bool TapPressButton::isPress() {
-  return buttonState && pressTime > PRESS_THRESHOLD;
 }
 
 void TapPressButton::updatePressTime(unsigned long newTime) {
@@ -44,6 +37,16 @@ void TapPressButton::updatePressTime(unsigned long newTime) {
 }
 
 void TapPressButton::resetPressTime() { pressTime = 0; }
+
+bool TapPressButton::isPressInTapWindow() {
+  return 
+    pressTime > DEBOUNCE_THRESHOLD
+    && pressTime <= DEBOUNCE_THRESHOLD + TAP_LENGTH;
+}
+
+bool TapPressButton::isPressInPressWindow() {
+  return pressTime > PRESS_THRESHOLD;
+}
 
 int TapPressButton::getPressCount() {
   int pressCount = 0;
@@ -63,8 +66,6 @@ int TapPressButton::getPressCount() {
   }
   return pressCount;
 }
-
-char TapPressButton::getPressType() { return pressType; }
 
 void TapPressButton::setDebounce(unsigned long debounceTime) {
   DEBOUNCE_THRESHOLD = debounceTime;
