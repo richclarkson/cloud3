@@ -49,7 +49,7 @@ bool TapPressButton::isPressInPressWindow() {
 
 bool TapPressButton::isTap() { return pressType == 1; }
 
-bool TapPressButton::isPress() { return pressType = 2; }
+bool TapPressButton::isPress() { return pressType == 2; }
 
 int TapPressButton::getPressCount() {
   int pressCount = 0;
