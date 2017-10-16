@@ -15,6 +15,8 @@ public:
 private:
   unsigned long prevTimeStamp;
   unsigned long pressTime;
+  void updatePressTime(unsigned long newTime);
+  void resetPressTime();
   char pressType;
   bool isPressInTapWindow();
   bool isPressInPressWindow();
@@ -22,10 +24,8 @@ private:
   unsigned long TAP_LENGTH;
   unsigned long PRESS_THRESHOLD;
   unsigned long PRESS_LENGTH;
-  void updatePressTime(unsigned long newTime);
   int pressCount;
   int getPressCount();
-  void resetPressTime();
 };
 
 #endif
