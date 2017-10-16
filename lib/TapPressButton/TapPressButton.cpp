@@ -39,22 +39,17 @@ void TapPressButton::updatePressTime(unsigned long newTime) {
 void TapPressButton::resetPressTime() { pressTime = 0; }
 
 bool TapPressButton::isPressInTapWindow() {
-  return 
-    pressTime > DEBOUNCE_THRESHOLD
-    && pressTime <= DEBOUNCE_THRESHOLD + TAP_LENGTH;
+  return pressTime > DEBOUNCE_THRESHOLD &&
+         pressTime <= DEBOUNCE_THRESHOLD + TAP_LENGTH;
 }
 
 bool TapPressButton::isPressInPressWindow() {
   return pressTime > PRESS_THRESHOLD;
 }
 
-bool TapPressButton::isTap() {
-  return pressType == 1;
-}
+bool TapPressButton::isTap() { return pressType == 1; }
 
-bool TapPressButton::isPress() {
-  return pressType = 2;
-}
+bool TapPressButton::isPress() { return pressType = 2; }
 
 int TapPressButton::getPressCount() {
   int pressCount = 0;
