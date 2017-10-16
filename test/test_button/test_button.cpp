@@ -16,12 +16,23 @@ void test_debounce() {
   }
 }
 
+void test_tap() {
+  TapPressButton btn = TapPressButton();
+  for (int i=0; i<50; i++) {
+    btn.update(true, i);
+    TEST_ASSERT_FALSE(btn.isTap());
+    TEST_ASSERT_FALSE(btn.isPress());
+  }
+  btn.update(false, 51);
+  TEST_ASSERT_TRUE(btn.isTap());
+  TEST_ASSERT_FALSE(btn.isPress());
 }
 
 int main(int argc, char **argv) {
   UNITY_BEGIN();
 
   RUN_TEST(test_debounce);
+  RUN_TEST(test_tap);
 
   UNITY_END();
 }
