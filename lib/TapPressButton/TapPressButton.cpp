@@ -48,6 +48,14 @@ bool TapPressButton::isPressInPressWindow() {
   return pressTime > PRESS_THRESHOLD;
 }
 
+bool TapPressButton::isTap() {
+  return pressType == 1;
+}
+
+bool TapPressButton::isPress() {
+  return pressType = 2;
+}
+
 int TapPressButton::getPressCount() {
   int pressCount = 0;
   int pressLoopCounter = 1;
