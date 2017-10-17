@@ -37,10 +37,12 @@ void TapPressButton::update(bool btnVal, unsigned long timerVal) {
 }
 
 void TapPressButton::updatePressTime(unsigned long newTime) {
-  if (newTime > prevTimeStamp) {
-    pressTime += newTime - prevTimeStamp;
+  // check for unlikely timer rollover
+  if (newTime < prevTimeStamp) {
     prevTimeStamp = newTime;
   }
+  pressTime += newTime - prevTimeStamp;
+  prevTimeStamp = newTime;
 }
 
 void TapPressButton::resetPressTime() { pressTime = 0; }
