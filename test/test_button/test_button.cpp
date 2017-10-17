@@ -4,13 +4,14 @@
 #include <unity.h>
 
 void test_debounce() {
-  int testTimes[8] = {0,20,50,90,1000,1049,50000,50030};
-  int testTimesLen = 8;
-  bool btnSwitch = true;
   TapPressButton btn = TapPressButton();
-  for (int i=testTimes[0]; i<testTimesLen; i++) {
-    btn.update(btnSwitch, testTimes[i]);
-    btn.update(!btnSwitch, testTimes[i]);
+  btn.setDebounce(50);
+  for (int i = 0; i < 200; i++) {
+    if (i % 30 == 0) {
+      btn.update(false, i);
+    } else {
+      btn.update(true, i);
+    }
     TEST_ASSERT_FALSE(btn.isTap());
     TEST_ASSERT_FALSE(btn.isPress());
   }
@@ -18,14 +19,29 @@ void test_debounce() {
 
 void test_tap() {
   TapPressButton btn = TapPressButton();
-  for (int i=0; i<50; i++) {
-    btn.update(true, i);
-    TEST_ASSERT_FALSE(btn.isTap());
-    TEST_ASSERT_FALSE(btn.isPress());
+  btn.setDebounce(20);
+  for (int i = 0; i < 1000; i++) {
+    if (i % 30 == 0) {
+      btn.update(false, i);
+      TEST_ASSERT_TRUE(btn.isTap());
+      TEST_ASSERT_FALSE(btn.isPress());
+    } else {
+      btn.update(true, i);
+      TEST_ASSERT_FALSE(btn.isTap());
+      TEST_ASSERT_FALSE(btn.isPress());
+    }
   }
-  btn.update(false, 51);
-  TEST_ASSERT_TRUE(btn.isTap());
-  TEST_ASSERT_FALSE(btn.isPress());
+}
+
+void test_press() {
+  TapPressButton btn = TapPressButton();
+  for (int i=0; i<1000; i++) {
+    btn.update(true, i);
+    if (i > 500) {
+      TEST_ASSERT_TRUE(btn.isPress());
+    }
+    else TEST_ASSERT_FALSE(btn.isPress());
+  }
 }
 
 int main(int argc, char **argv) {
@@ -33,6 +49,7 @@ int main(int argc, char **argv) {
 
   RUN_TEST(test_debounce);
   RUN_TEST(test_tap);
+  RUN_TEST(test_press);
 
   UNITY_END();
 }
