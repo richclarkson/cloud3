@@ -26,6 +26,7 @@ private:
   unsigned long PRESS_LENGTH;
   int pressCount;
   int getPressCount();
+  bool prevButtonState;
 };
 
 #endif
