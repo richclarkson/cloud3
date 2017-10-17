@@ -1,5 +1,4 @@
 #include "TapPressButton.h"
-#include <iostream>
 
 TapPressButton::TapPressButton() {
   prevTimeStamp = 0;
@@ -18,10 +17,6 @@ TapPressButton::TapPressButton() {
 void TapPressButton::update(bool btnVal, unsigned long timerVal) {
   // This function should be called repeatedly in the main loop.
   pressType = 0;
-  std::cout << pressTime;
-  std::cout << "|";
-  std::cout << prevTimeStamp;
-  std::cout << ", ";
   if (btnVal) {
     if (!prevButtonState) {
       prevTimeStamp = timerVal;
