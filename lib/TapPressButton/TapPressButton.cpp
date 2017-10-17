@@ -5,6 +5,7 @@ TapPressButton::TapPressButton() {
   pressTime = 0;
   pressCount = 0;
   pressType = 0;
+  prevButtonState = false;
 
   // set default values for button behavior
   setDebounce(50);
@@ -17,6 +18,10 @@ void TapPressButton::update(bool btnVal, unsigned long timerVal) {
   // This function should be called repeatedly in the main loop.
   pressType = 0;
   if (btnVal) {
+    if (!prevButtonState) {
+      prevTimeStamp = timerVal;
+      prevButtonState = true;
+    }
     updatePressTime(timerVal);
     if (isPressInPressWindow()) {
       pressType = 2;
@@ -26,6 +31,8 @@ void TapPressButton::update(bool btnVal, unsigned long timerVal) {
       pressType = 1;
     }
     resetPressTime();
+    prevTimeStamp = timerVal;
+    prevButtonState = false;
   }
 }
 
