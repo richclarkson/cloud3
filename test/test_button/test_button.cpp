@@ -3,44 +3,30 @@
 #include <TapPressButton.h>
 #include <unity.h>
 
-void test_debounce() {
-  TapPressButton btn = TapPressButton();
-  btn.setDebounce(50);
-  for (int i = 0; i < 200; i++) {
-    if (i % 30 == 0) {
-      btn.update(false, i);
-    } else {
-      btn.update(true, i);
-    }
-    TEST_ASSERT_FALSE(btn.isTap());
-    TEST_ASSERT_FALSE(btn.isPress());
-  }
-}
+#include <iostream>
 
-void test_tap() {
+void test_debounce() {
+  const int debounceVal = 50;
   TapPressButton btn = TapPressButton();
-  btn.setDebounce(20);
-  for (int i = 0; i < 1000; i++) {
-    if (i % 30 == 0) {
-      btn.update(false, i);
-      TEST_ASSERT_TRUE(btn.isTap());
+  btn.setDebounce(debounceVal);
+  float prevCounter = 0;
+  float counter = 0;
+  for (float factor=.25; factor<=1.0; factor+=.25) {
+    while (counter - prevCounter < debounceVal * factor) {
+      std::cout << counter;
+      std::cout << '\n';
+      btn.update(true, counter);
+      TEST_ASSERT_FALSE(btn.isTap());
       TEST_ASSERT_FALSE(btn.isPress());
-    } else {
-      btn.update(true, i);
+      counter ++;
+    }
+    btn.update(false, counter);
+    if (factor < 1) {
       TEST_ASSERT_FALSE(btn.isTap());
       TEST_ASSERT_FALSE(btn.isPress());
     }
-  }
-}
-
-void test_press() {
-  TapPressButton btn = TapPressButton();
-  for (int i=0; i<1000; i++) {
-    btn.update(true, i);
-    if (i > 500) {
-      TEST_ASSERT_TRUE(btn.isPress());
-    }
-    else TEST_ASSERT_FALSE(btn.isPress());
+    prevCounter += counter;
+    counter ++;
   }
 }
 
@@ -48,8 +34,6 @@ int main(int argc, char **argv) {
   UNITY_BEGIN();
 
   RUN_TEST(test_debounce);
-  RUN_TEST(test_tap);
-  RUN_TEST(test_press);
 
   UNITY_END();
 }
