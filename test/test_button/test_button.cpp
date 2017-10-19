@@ -3,8 +3,6 @@
 #include <TapPressButton.h>
 #include <unity.h>
 
-#include <iostream>
-
 void test_debounce() {
   const int debounceVal = 50;
   TapPressButton btn = TapPressButton();
@@ -13,8 +11,6 @@ void test_debounce() {
   float counter = 0;
   for (float factor=.25; factor<=1.0; factor+=.25) {
     while (counter - prevCounter < debounceVal * factor) {
-      std::cout << counter;
-      std::cout << '\n';
       btn.update(true, counter);
       TEST_ASSERT_FALSE(btn.isTap());
       TEST_ASSERT_FALSE(btn.isPress());
