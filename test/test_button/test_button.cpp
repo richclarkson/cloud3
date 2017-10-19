@@ -7,22 +7,22 @@ void test_debounce() {
   const int debounceVal = 50;
   TapPressButton btn = TapPressButton();
   btn.setDebounce(debounceVal);
-  float prevCounter = 0;
   float counter = 0;
+  float timerVal = 0;
   for (float factor=.25; factor<=1.0; factor+=.25) {
-    while (counter - prevCounter < debounceVal * factor) {
-      btn.update(true, counter);
+    while (timerVal - counter < debounceVal * factor) {
+      btn.update(true, timerVal);
       TEST_ASSERT_FALSE(btn.isTap());
       TEST_ASSERT_FALSE(btn.isPress());
-      counter ++;
+      timerVal ++;
     }
-    btn.update(false, counter);
+    btn.update(false, timerVal);
     if (factor < 1) {
       TEST_ASSERT_FALSE(btn.isTap());
       TEST_ASSERT_FALSE(btn.isPress());
     }
-    prevCounter += counter;
-    counter ++;
+    counter += timerVal;
+    timerVal ++;
   }
 }
 
