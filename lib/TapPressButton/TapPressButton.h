@@ -25,7 +25,6 @@ private:
   unsigned long TAP_LENGTH;
   unsigned long PRESS_THRESHOLD;
   unsigned long PRESS_LENGTH;
-  int pressCount;
   bool prevButtonState;
 };
 

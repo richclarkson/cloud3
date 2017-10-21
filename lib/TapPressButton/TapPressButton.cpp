@@ -3,7 +3,6 @@
 TapPressButton::TapPressButton() {
   prevTimeStamp = 0;
   pressTime = 0;
-  pressCount = 0;
   pressType = 0;
   prevButtonState = false;
 
@@ -61,20 +60,10 @@ bool TapPressButton::isTap() { return pressType == 1; }
 bool TapPressButton::isPress() { return pressType == 2; }
 
 int TapPressButton::getPressCount() {
-  pressCount = 0;
-  int pressLoopCounter = 1;
+  int pressCount = 0;
   if (isPress()) {
-    while (pressCount == 0) {
-      if (pressTime - PRESS_THRESHOLD <= PRESS_LENGTH * pressLoopCounter) {
-        pressLoopCounter++;
-      } else {
-        pressCount = pressLoopCounter;
-      }
-      // set a max to avoid in infinite loop
-      if (pressLoopCounter > 50) {
-        pressCount = -1; // poorly handled error state
-      }
-    }
+    pressCount = int((pressTime - PRESS_THRESHOLD) / PRESS_LENGTH);
+    pressCount += 1; // return values starting at 1
   }
   return pressCount;
 }
