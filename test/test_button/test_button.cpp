@@ -34,13 +34,44 @@ void Test_Debounces() {
   test_debounce(4294967295ul);
 }
 
+void test_tap(unsigned long start, unsigned long interval, bool testFlag) {
+  TapPressButton btn = TapPressButton();
+  unsigned long timerVal = start;
+  unsigned long timerMax = interval + start;
+  while (timerVal < timerMax) {
+    btn.update(true, timerVal);
+    TEST_ASSERT_FALSE(btn.isTap());
+    TEST_ASSERT_FALSE(btn.isPress());
+    timerVal++;
   }
+  btn.update(false, timerVal);
+  if (testFlag) {
+    TEST_ASSERT_TRUE(btn.isTap())
+  } else {
+    TEST_ASSERT_FALSE(btn.isTap());
+  }
+  TEST_ASSERT_FALSE(btn.isPress());
+}
+
+void Test_Taps() {
+  test_tap(0, 30, false);
+  test_tap(0, 50, false);
+  test_tap(0, 51, true);
+  test_tap(0, 350, true);
+  test_tap(0, 351, false);
+  test_tap(300000000, 30, false);
+  test_tap(300000000, 50, false);
+  test_tap(300000000, 51, true);
+  unsigned long startTime = 4294967295ul;
+  test_tap(startTime, 350, true);
+  test_tap(startTime, 351, false);
 }
 
 int main(int argc, char **argv) {
   UNITY_BEGIN();
 
   RUN_TEST(Test_Debounces);
+  RUN_TEST(Test_Taps);
 
   UNITY_END();
 }
