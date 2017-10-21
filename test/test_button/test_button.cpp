@@ -62,9 +62,6 @@ void Test_Taps() {
   test_tap(300000000, 30, false);
   test_tap(300000000, 50, false);
   test_tap(300000000, 51, true);
-  unsigned long startTime = 4294967295ul;
-  test_tap(startTime, 350, true);
-  test_tap(startTime, 351, false);
 }
 
 void test_press(unsigned long start) {
@@ -111,8 +108,6 @@ void Test_Press_Counts() {
   test_press_count(0, 3000, 3);
   test_press_count(100, 4000, 4);
   test_press_count(1000000, 5000, 5);
-  test_press_count(4294967295ul, 6000, 6);
-  test_press_count(4294967295ul, 7000, 7);
 }
 
 int main(int argc, char **argv) {
