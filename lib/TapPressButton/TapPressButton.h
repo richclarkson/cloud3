@@ -7,6 +7,7 @@ public:
   void update(bool btnVal, unsigned long timerVal);
   bool isTap();
   bool isPress();
+  int getPressCount();
   void setDebounce(unsigned long debounceTime);
   void setTapLength(unsigned long tapTime);
   void setPressThreshold(unsigned long pressThreshold);
@@ -25,7 +26,6 @@ private:
   unsigned long PRESS_THRESHOLD;
   unsigned long PRESS_LENGTH;
   int pressCount;
-  int getPressCount();
   bool prevButtonState;
 };
 
