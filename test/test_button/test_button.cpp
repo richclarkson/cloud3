@@ -67,11 +67,33 @@ void Test_Taps() {
   test_tap(startTime, 351, false);
 }
 
+void test_press(unsigned long start) {
+  TapPressButton btn = TapPressButton();
+  unsigned long timerVal = start;
+  unsigned long timerEnd = start + 3000;
+  while (timerVal <= timerEnd) {
+    btn.update(true, timerVal);
+    if (timerVal - start < 500) {
+      TEST_ASSERT_FALSE(btn.isPress());
+    } else {
+      TEST_ASSERT_TRUE(btn.isPress());
+    }
+    timerVal++;
+  }
+}
+
+void Test_Presses() {
+  test_press(0);
+  test_press(1000);
+  test_press(893459837);
+}
+
 int main(int argc, char **argv) {
   UNITY_BEGIN();
 
   RUN_TEST(Test_Debounces);
   RUN_TEST(Test_Taps);
+  RUN_TEST(Test_Presses);
 
   UNITY_END();
 }
