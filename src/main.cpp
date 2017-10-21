@@ -14,6 +14,13 @@ void setup() {
 
 void loop() {
     capSensor.update(digitalRead(btnPin), millis());
+    if (capSensor.isTap()) {
+        // do tap things
+    }
+    else if (capSensor.isPress()) {
+        int pressCount = capSensor.getPressCount();
+        // do press things, likely with pressCount
+    }
 }
 
 #endif
