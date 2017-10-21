@@ -3,29 +3,35 @@
 #include <TapPressButton.h>
 #include <unity.h>
 
-void Given_ButtonCycled_When_BelowDebounceThreshold_Then_TapAndPressIsFalse() {
-  float timerVal = 0;
-  const long timerMax = pow(10, 6);
-  int counter = 0;
-  float factor = .1;
-  const int debounceVal = 50;
+void test_debounce(unsigned long start) {
   TapPressButton btn = TapPressButton();
-  btn.setDebounce(debounceVal);
-  while (timerVal < timerMax) {
-    if (timerVal - counter >= debounceVal * factor) {
-      btn.update(false, timerVal);
-      counter = timerVal;
-      factor += .1;
-    } else {
-      btn.update(true, timerVal);
-    }
-    if (factor > .9) {
-      factor = .1;
+  unsigned long timerVal = start;
+  unsigned long timerEnd = start;
+  int TEST_PATTERN[9] = {10, 2, 10, 3, 30, 10, 45, 35, 50};
+  for (int i = 0; i < 9; i++) {
+    timerEnd += TEST_PATTERN[i];
+  }
+  int testPatternIndex = 0;
+  unsigned long prevTimerTestVal = timerVal;
+  bool btnState = true;
+  while (timerVal < timerEnd) {
+    btn.update(btnState, timerVal);
+    timerVal++;
+    if (timerVal - prevTimerTestVal == TEST_PATTERN[testPatternIndex]) {
+      prevTimerTestVal = timerVal;
+      testPatternIndex++;
+      btnState = !btnState;
     }
     TEST_ASSERT_FALSE(btn.isTap());
     TEST_ASSERT_FALSE(btn.isPress());
-    timerVal++;
   }
+}
+
+void Test_Debounces() {
+  test_debounce(0);
+  test_debounce(300);
+  test_debounce(3287346);
+  test_debounce(4294967295ul);
 }
 
   }
@@ -34,10 +40,7 @@ void Given_ButtonCycled_When_BelowDebounceThreshold_Then_TapAndPressIsFalse() {
 int main(int argc, char **argv) {
   UNITY_BEGIN();
 
-  RUN_TEST(test_debounce);
-  RUN_TEST(
-      Given_ButtonCycled_When_BelowDebounceThreshold_Then_TapAndPressIsFalse);
-  // RUN_TEST(test_tap);
+  RUN_TEST(Test_Debounces);
 
   UNITY_END();
 }
