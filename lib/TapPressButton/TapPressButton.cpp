@@ -72,7 +72,7 @@ int TapPressButton::getPressCount() {
       }
       // set a max to avoid in infinite loop
       if (pressLoopCounter > 50) {
-        pressCount = -1;
+        pressCount = -1; // poorly handled error state
       }
     }
   }
