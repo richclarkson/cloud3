@@ -17,7 +17,7 @@ void TapPressButton::updateInput(bool input, unsigned long timerVal) {
 
 bool TapPressButton::getCurrentState() { return currentButtonState; }
 
-bool TapPressButton::hasStateChanged() {
+bool TapPressButton::stateHasChanged() {
   return currentButtonState != prevButtonState;
 }
 

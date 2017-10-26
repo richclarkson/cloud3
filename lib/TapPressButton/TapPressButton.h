@@ -6,7 +6,7 @@ public:
   TapPressButton();
   void updateInput(bool input, unsigned long timerVal);
   bool getCurrentState();
-  bool hasStateChanged();
+  bool stateHasChanged();
   unsigned long getPressTime();
   bool isPressInTapWindow();
   bool isPressInPressWindow();
