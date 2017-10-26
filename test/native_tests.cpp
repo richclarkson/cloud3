@@ -33,6 +33,7 @@ int main(int argc, char **argv) {
     RUN_TEST(testTapPressButtonExists);
     RUN_TEST(testTapPressButtonInputIsTrue);
     RUN_TEST(testTapPressButtonInputHasChanged);
+    RUN_TEST(testHasPressTimeElapsed);
 
     UNITY_END();
 }
