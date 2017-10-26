@@ -9,6 +9,6 @@
         return currentButtonState;
     }
     
-    bool TapPressButton::hasChanged() {
+    bool TapPressButton::hasStateChanged() {
         return currentButtonState != prevButtonState;
     }
