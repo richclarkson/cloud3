@@ -10,6 +10,7 @@ public:
   unsigned long getPressTime();
   bool isPressInTapWindow();
   bool isPressInPressWindow();
+  bool isTap();
 private:
   bool currentButtonState;
   bool prevButtonState;
