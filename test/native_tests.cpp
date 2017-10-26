@@ -1,22 +1,7 @@
 #ifdef UNIT_TEST
 
 #include <unity.h>
-
-class TapPressButton {
-public:
-    void updateInput(bool input) {
-        prevButtonState = currentButtonState;
-        currentButtonState = input;
-    }
-    bool getCurrentState() {
-        return currentButtonState;
-    }
-    bool hasChanged() {
-        return currentButtonState != prevButtonState;
-    }
-private:
-    bool currentButtonState, prevButtonState;
-};
+#include "TapPressButton.h"
 
 void testTapPressButtonExists() {
     TapPressButton btn;
