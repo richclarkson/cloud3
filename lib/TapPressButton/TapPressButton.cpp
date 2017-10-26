@@ -4,6 +4,7 @@ TapPressButton::TapPressButton() {
   pressTime = 0;
   tapThreshold = 50;
   tapLength = 300;
+  pressThreshold = 500;
   currentButtonState = false;
   prevButtonState = false;
 }
@@ -24,4 +25,8 @@ unsigned long TapPressButton::getPressTime() { return pressTime; }
 
 bool TapPressButton::isPressInTapWindow() {
   return pressTime > tapThreshold && pressTime < tapThreshold + tapLength;
+}
+
+bool TapPressButton::isPressInPressWindow() {
+  return pressTime > pressThreshold;
 }
