@@ -17,7 +17,7 @@ void testTapPressButtonInputHasChanged() {
     TapPressButton btn;
     btn.updateInput(true, 0);
     btn.updateInput(false, 100);
-    TEST_ASSERT_TRUE(btn.hasStateChanged());
+    TEST_ASSERT_TRUE(btn.stateHasChanged());
 }
 
 void testHasPressTimeElapsed() {
