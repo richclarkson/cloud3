@@ -9,15 +9,22 @@ void testTapPressButtonExists() {
 
 void testTapPressButtonInputIsTrue() {
     TapPressButton btn;
-    btn.updateInput(true);
+    btn.updateInput(true, 0);
     TEST_ASSERT_TRUE(btn.getCurrentState());
 }
 
 void testTapPressButtonInputHasChanged() {
     TapPressButton btn;
-    btn.updateInput(true);
-    btn.updateInput(false);
+    btn.updateInput(true, 0);
+    btn.updateInput(false, 100);
     TEST_ASSERT_TRUE(btn.hasStateChanged());
+}
+
+void testHasPressTimeElapsed() {
+    TapPressButton btn;
+    btn.updateInput(true, 0);
+    btn.updateInput(true, 100);
+    TEST_ASSERT_TRUE(btn.getPressTime() > 0);
 }
 
 int main(int argc, char **argv) {
