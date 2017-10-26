@@ -38,6 +38,17 @@ void testPressInTapWindow() {
     TEST_ASSERT_FALSE(btn.isPressInTapWindow());
 }
 
+void testPressInPressWindow() {
+    TapPressButton btn;
+    btn.updateInput(true, 0);
+    btn.updateInput(true, 500);
+    TEST_ASSERT_FALSE(btn.isPressInPressWindow());
+    btn.updateInput(true, 501);
+    TEST_ASSERT_TRUE(btn.isPressInPressWindow());
+    btn.updateInput(true, 1500);
+    TEST_ASSERT_TRUE(btn.isPressInPressWindow());
+}
+
 int main(int argc, char **argv) {
     UNITY_BEGIN();
 
@@ -46,6 +57,7 @@ int main(int argc, char **argv) {
     RUN_TEST(testTapPressButtonInputHasChanged);
     RUN_TEST(testHasPressTimeElapsed);
     RUN_TEST(testPressInTapWindow);
+    RUN_TEST(testPressInPressWindow);
 
     UNITY_END();
 }
