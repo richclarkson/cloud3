@@ -30,6 +30,8 @@ void TapPressButton::setStates(bool btnInput) {
 void TapPressButton::setPressType() {
   if (stateHasChanged() && !currentButtonState && isPressInTapWindow()) {
     pressType = 1; // pressType 1 = Tap
+  } else if (currentButtonState && isPressInPressWindow()) {
+    pressType = 2; // pressType 2 = Press
   } else {
     pressType = 0;
   }
@@ -48,3 +50,5 @@ bool TapPressButton::isPressInPressWindow() {
 }
 
 bool TapPressButton::isTap() { return pressType == 1; }
+
+bool TapPressButton::isPress() { return pressType == 2; }

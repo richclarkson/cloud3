@@ -7,6 +7,7 @@ public:
   void updateInput(bool input, unsigned long timerVal);
   bool isPressInPressWindow();
   bool isTap();
+  bool isPress();
   
 private:
   bool currentButtonState;
