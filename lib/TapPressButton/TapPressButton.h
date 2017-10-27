@@ -15,6 +15,7 @@ private:
   bool currentButtonState;
   bool prevButtonState;
   unsigned long pressTime;
+  unsigned long prevTimerVal;
   unsigned long tapThreshold;
   unsigned long tapLength;
   unsigned long pressThreshold;

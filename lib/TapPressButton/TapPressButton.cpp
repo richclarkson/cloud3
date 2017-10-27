@@ -2,6 +2,7 @@
 
 TapPressButton::TapPressButton() {
   pressTime = 0;
+  prevTimerVal = 0;
   tapThreshold = 50;
   tapLength = 300;
   pressThreshold = 500;
@@ -12,7 +13,8 @@ TapPressButton::TapPressButton() {
 
 void TapPressButton::updateInput(bool input, unsigned long timerVal) {
   setStates(input);
-  pressTime += timerVal;
+  pressTime += timerVal - prevTimerVal;
+  prevTimerVal = timerVal;
   setPressType();
   if (stateHasChanged() || currentButtonState == false) {
     pressTime = 0;
