@@ -5,12 +5,6 @@
 
 void testTapPressButtonExists() { TapPressButton btn; }
 
-void testTapPressButtonInputIsTrue() {
-  TapPressButton btn;
-  btn.updateInput(true, 0);
-  TEST_ASSERT_TRUE(btn.getCurrentState());
-}
-
 void testTapPressButtonInputHasChanged() {
   TapPressButton btn;
   btn.updateInput(true, 0);
@@ -82,7 +76,6 @@ int main(int argc, char **argv) {
   UNITY_BEGIN();
 
   RUN_TEST(testTapPressButtonExists);
-  RUN_TEST(testTapPressButtonInputIsTrue);
   RUN_TEST(testTapPressButtonInputHasChanged);
   RUN_TEST(testHasPressTimeElapsed);
   RUN_TEST(testPressInTapWindow);
