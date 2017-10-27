@@ -6,7 +6,6 @@ public:
   TapPressButton();
   void updateInput(bool input, unsigned long timerVal);
   unsigned long getPressTime();
-  bool isPressInTapWindow();
   bool isPressInPressWindow();
   bool isTap();
   
@@ -18,6 +17,7 @@ private:
   unsigned long prevTimerVal;
   unsigned long tapThreshold;
   unsigned long tapLength;
+  bool isPressInTapWindow();
   unsigned long pressThreshold;
   void setStates(bool btnInput);
   void setPressType();
