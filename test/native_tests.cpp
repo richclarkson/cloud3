@@ -54,7 +54,7 @@ void testPressInPressWindow() {
   TEST_ASSERT_TRUE(btn.isPressInPressWindow());
 }
 
-void testTapAfterInterval(TapPressButton &btn, unsigned long startTime, int interval, bool testType) {
+void test_TapAfterInterval(TapPressButton &btn, unsigned long startTime, int interval, bool testType) {
     unsigned long timerVal = startTime;
     unsigned long endTime = startTime + interval;
     while (timerVal < endTime) {
