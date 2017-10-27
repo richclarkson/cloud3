@@ -72,10 +72,10 @@ void test_TapAfterInterval(TapPressButton &btn, unsigned long startTime, int int
 
 void testMultipleDebounces() {
     TapPressButton btn;
-    testTapAfterInterval(btn, 0, 30, false);
-    testTapAfterInterval(btn, 0, 20, false);
-    testTapAfterInterval(btn, 5000, 40, false);
-    testTapAfterInterval(btn, 87465439876, 30, false);
+    test_TapAfterInterval(btn, 0, 30, false);
+    test_TapAfterInterval(btn, 0, 20, false);
+    test_TapAfterInterval(btn, 5000, 40, false);
+    test_TapAfterInterval(btn, 87465439876, 30, false);
 }
 
 int main(int argc, char **argv) {
