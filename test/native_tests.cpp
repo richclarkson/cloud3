@@ -48,6 +48,31 @@ void testMultipleTaps() {
   test_TapAfterInterval(btn, 49876123478163, 100, true);
 }
 
+void test_PressAfterInterval(TapPressButton &btn, unsigned long startTime,
+                             int interval, bool testType) {
+  unsigned long timerVal = startTime;
+  unsigned long endTime = startTime + interval;
+  while (timerVal < endTime) {
+    btn.updateInput(true, timerVal);
+    if (timerVal > interval) {
+      if (testType == true) {
+        TEST_ASSERT_TRUE(btn.isPress());
+      } else {
+        TEST_ASSERT_FALSE(btn.isPress());
+      }
+    }
+    TEST_ASSERT_FALSE(btn.isPress());
+    timerVal++;
+  }
+}
+
+void testOnePress() {
+  TapPressButton btn;
+  btn.updateInput(true, 0);
+  btn.updateInput(true, 1000);
+  TEST_ASSERT_TRUE(btn.isPress());
+}
+
 int main(int argc, char **argv) {
   UNITY_BEGIN();
 
@@ -55,6 +80,7 @@ int main(int argc, char **argv) {
   RUN_TEST(testPressInPressWindow);
   RUN_TEST(testMultipleDebounces);
   RUN_TEST(testMultipleTaps);
+  RUN_TEST(testOnePress);
 
   UNITY_END();
 }
