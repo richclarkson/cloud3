@@ -40,12 +40,20 @@ void testMultipleDebounces() {
     test_TapAfterInterval(btn, 87465439876, 30, false);
 }
 
+void testMultipleTaps() {
+  TapPressButton btn;
+  test_TapAfterInterval(btn, 0, 60, true);
+  test_TapAfterInterval(btn, 1000, 300, true);
+  test_TapAfterInterval(btn, 49876123478163, 100, true);
+}
+
 int main(int argc, char **argv) {
   UNITY_BEGIN();
 
   RUN_TEST(testTapPressButtonExists);
   RUN_TEST(testPressInPressWindow);
   RUN_TEST(testMultipleDebounces);
+  RUN_TEST(testMultipleTaps);
 
   UNITY_END();
 }
