@@ -5,13 +5,6 @@
 
 void testTapPressButtonExists() { TapPressButton btn; }
 
-void testHasPressTimeElapsed() {
-  TapPressButton btn;
-  btn.updateInput(true, 0);
-  btn.updateInput(true, 100);
-  TEST_ASSERT_TRUE(btn.getPressTime() > 0);
-}
-
 void testPressInPressWindow() {
   TapPressButton btn;
   btn.updateInput(true, 0);
@@ -51,7 +44,6 @@ int main(int argc, char **argv) {
   UNITY_BEGIN();
 
   RUN_TEST(testTapPressButtonExists);
-  RUN_TEST(testHasPressTimeElapsed);
   RUN_TEST(testPressInPressWindow);
   RUN_TEST(testMultipleDebounces);
 
