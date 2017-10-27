@@ -5,7 +5,6 @@ class TapPressButton {
 public:
   TapPressButton();
   void updateInput(bool input, unsigned long timerVal);
-  bool getCurrentState();
   bool stateHasChanged();
   unsigned long getPressTime();
   bool isPressInTapWindow();

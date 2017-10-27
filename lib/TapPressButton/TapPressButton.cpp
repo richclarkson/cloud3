@@ -39,8 +39,6 @@ bool TapPressButton::stateHasChanged() {
   return currentButtonState != prevButtonState;
 }
 
-bool TapPressButton::getCurrentState() { return currentButtonState; }
-
 unsigned long TapPressButton::getPressTime() { return pressTime; }
 
 bool TapPressButton::isPressInTapWindow() {
