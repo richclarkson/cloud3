@@ -18,6 +18,9 @@ private:
   unsigned long tapThreshold;
   unsigned long tapLength;
   unsigned long pressThreshold;
+  void setStates(bool btnInput);
+  void setPressType();
+  char pressType;
 };
 
 #endif

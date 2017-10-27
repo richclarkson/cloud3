@@ -7,19 +7,37 @@ TapPressButton::TapPressButton() {
   pressThreshold = 500;
   currentButtonState = false;
   prevButtonState = false;
+  pressType = 0;
 }
 
 void TapPressButton::updateInput(bool input, unsigned long timerVal) {
-  prevButtonState = currentButtonState;
-  currentButtonState = input;
+  setStates(input);
   pressTime += timerVal;
+  setPressType();
+  if (stateHasChanged() || currentButtonState == false) {
+    pressTime = 0;
+  } else {
+  }
 }
 
-bool TapPressButton::getCurrentState() { return currentButtonState; }
+void TapPressButton::setStates(bool btnInput) {
+  prevButtonState = currentButtonState;
+  currentButtonState = btnInput;
+}
+
+void TapPressButton::setPressType() {
+  if (stateHasChanged() && !currentButtonState && isPressInTapWindow()) {
+    pressType = 1; // pressType 1 = Tap
+  } else {
+    pressType = 0;
+  }
+}
 
 bool TapPressButton::stateHasChanged() {
   return currentButtonState != prevButtonState;
 }
+
+bool TapPressButton::getCurrentState() { return currentButtonState; }
 
 unsigned long TapPressButton::getPressTime() { return pressTime; }
 
@@ -31,6 +49,4 @@ bool TapPressButton::isPressInPressWindow() {
   return pressTime > pressThreshold;
 }
 
-bool TapPressButton::isTap() {
-  return stateHasChanged() && isPressInTapWindow() && !getCurrentState();
-}
+bool TapPressButton::isTap() { return pressType == 1; }
