@@ -54,28 +54,28 @@ void testPressInPressWindow() {
   TEST_ASSERT_TRUE(btn.isPressInPressWindow());
 }
 
-void testButtonTapped() {
-  TapPressButton btn;
-  btn.updateInput(true, 0);
-  TEST_ASSERT_FALSE(btn.isTap());
-  btn.updateInput(true, 60);
-  TEST_ASSERT_FALSE(btn.isTap());
-  btn.updateInput(false, 70);
-  TEST_ASSERT_TRUE(btn.isTap());
+void testTapAfterInterval(TapPressButton &btn, unsigned long startTime, int interval, bool testType) {
+    unsigned long timerVal = startTime;
+    unsigned long endTime = startTime + interval;
+    while (timerVal < endTime) {
+        btn.updateInput(true, timerVal);
+        TEST_ASSERT_FALSE(btn.isTap());
+        timerVal ++;
+    }
+    btn.updateInput(false, timerVal);
+    if (testType == true) {
+        TEST_ASSERT_TRUE(btn.isTap());
+    } else {
+        TEST_ASSERT_FALSE(btn.isTap());
+    }
 }
 
-void testButtonTappedTwice() {
-  TapPressButton btn;
-  btn.updateInput(true, 0);
-  btn.updateInput(true, 60);
-  TEST_ASSERT_FALSE(btn.isTap());
-  btn.updateInput(false, 70);
-  TEST_ASSERT_TRUE(btn.isTap());
-  btn.updateInput(true, 100);
-  btn.updateInput(true, 160);
-  TEST_ASSERT_FALSE(btn.isTap());
-  btn.updateInput(false, 165);
-  TEST_ASSERT_TRUE(btn.isTap());
+void testMultipleDebounces() {
+    TapPressButton btn;
+    testTapAfterInterval(btn, 0, 30, false);
+    testTapAfterInterval(btn, 0, 20, false);
+    testTapAfterInterval(btn, 5000, 40, false);
+    testTapAfterInterval(btn, 87465439876, 30, false);
 }
 
 int main(int argc, char **argv) {
@@ -87,8 +87,7 @@ int main(int argc, char **argv) {
   RUN_TEST(testHasPressTimeElapsed);
   RUN_TEST(testPressInTapWindow);
   RUN_TEST(testPressInPressWindow);
-  RUN_TEST(testButtonTapped);
-  RUN_TEST(testButtonTappedTwice);
+  RUN_TEST(testMultipleDebounces);
 
   UNITY_END();
 }
