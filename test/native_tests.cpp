@@ -57,9 +57,24 @@ void testPressInPressWindow() {
 void testButtonTapped() {
   TapPressButton btn;
   btn.updateInput(true, 0);
+  TEST_ASSERT_FALSE(btn.isTap());
   btn.updateInput(true, 60);
   TEST_ASSERT_FALSE(btn.isTap());
   btn.updateInput(false, 70);
+  TEST_ASSERT_TRUE(btn.isTap());
+}
+
+void testButtonTappedTwice() {
+  TapPressButton btn;
+  btn.updateInput(true, 0);
+  btn.updateInput(true, 60);
+  TEST_ASSERT_FALSE(btn.isTap());
+  btn.updateInput(false, 70);
+  TEST_ASSERT_TRUE(btn.isTap());
+  btn.updateInput(true, 100);
+  btn.updateInput(true, 160);
+  TEST_ASSERT_FALSE(btn.isTap());
+  btn.updateInput(false, 165);
   TEST_ASSERT_TRUE(btn.isTap());
 }
 
@@ -73,6 +88,7 @@ int main(int argc, char **argv) {
   RUN_TEST(testPressInTapWindow);
   RUN_TEST(testPressInPressWindow);
   RUN_TEST(testButtonTapped);
+  RUN_TEST(testButtonTappedTwice);
 
   UNITY_END();
 }
