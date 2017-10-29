@@ -73,6 +73,21 @@ void testOnePress() {
   TEST_ASSERT_TRUE(btn.isPress());
 }
 
+void testIsPressAfterFiveHundredTimerValueIncrements() {
+  TapPressButton btn;
+  int timerVal = 0;
+  int endVal = 5000;
+  while (timerVal < endVal) {
+    btn.updateInput(true, timerVal);
+    if (timerVal > 500) {
+      TEST_ASSERT_TRUE(btn.isPress());
+    } else {
+      TEST_ASSERT_FALSE(btn.isPress());
+    }
+    timerVal ++;
+  }
+}
+
 int main(int argc, char **argv) {
   UNITY_BEGIN();
 
@@ -81,6 +96,7 @@ int main(int argc, char **argv) {
   RUN_TEST(testMultipleDebounces);
   RUN_TEST(testMultipleTaps);
   RUN_TEST(testOnePress);
+  RUN_TEST(testIsPressAfterFiveHundredTimerValueIncrements);
 
   UNITY_END();
 }
