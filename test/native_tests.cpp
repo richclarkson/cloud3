@@ -66,13 +66,6 @@ void test_PressAfterInterval(TapPressButton &btn, unsigned long startTime,
   }
 }
 
-void testOnePress() {
-  TapPressButton btn;
-  btn.updateInput(true, 0);
-  btn.updateInput(true, 1000);
-  TEST_ASSERT_TRUE(btn.isPress());
-}
-
 void testIsPressAfterFiveHundredTimerValueIncrements() {
   TapPressButton btn;
   int timerVal = 0;
@@ -95,7 +88,6 @@ int main(int argc, char **argv) {
   RUN_TEST(testPressInPressWindow);
   RUN_TEST(testMultipleDebounces);
   RUN_TEST(testMultipleTaps);
-  RUN_TEST(testOnePress);
   RUN_TEST(testIsPressAfterFiveHundredTimerValueIncrements);
 
   UNITY_END();
