@@ -14,7 +14,7 @@ void setup() {
 }
 
 void loop() {
-    capSensor.update(digitalRead(btnPin), millis());
+    capSensor.updateInput(digitalRead(btnPin), millis());
     if (capSensor.isTap()) {
         LEDVal = !LEDVal;
         // do tap things
