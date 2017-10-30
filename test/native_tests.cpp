@@ -63,6 +63,19 @@ void testIsPressAfterFiveHundredTimerValueIncrements() {
   }
 }
 
+void testPressCountIsOneAfterOneThousandTimerIntervals() {
+  TapPressButton btn;
+  int timerVal = 0;
+  int endVal = 1500;
+  while (timerVal < endVal) {
+    btn.updateInput(true, timerVal);
+    if (timerVal > 1000) {
+      TEST_ASSERT_EQUAL(1, btn.getPressCount());
+    }
+    timerVal ++;
+  }
+}
+
 int main(int argc, char **argv) {
   UNITY_BEGIN();
 
@@ -71,6 +84,7 @@ int main(int argc, char **argv) {
   RUN_TEST(testMultipleDebounces);
   RUN_TEST(testMultipleTaps);
   RUN_TEST(testIsPressAfterFiveHundredTimerValueIncrements);
+  RUN_TEST(testPressCountIsOneAfterOneThousandTimerIntervals);
 
   UNITY_END();
 }

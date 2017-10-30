@@ -8,6 +8,7 @@ public:
   bool isPressInPressWindow();
   bool isTap();
   bool isPress();
+  int getPressCount();
   
 private:
   bool currentButtonState;
@@ -19,6 +20,7 @@ private:
   unsigned long tapLength;
   bool isPressInTapWindow();
   unsigned long pressThreshold;
+  int pressLength;
   void setStates(bool btnInput);
   void setPressType();
   char pressType;
