@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include <TapPressButton.h>
 
-TapPressButton capSensor = TapPressButton();
+TapPressButton capSensor;
 
 const int btnPin = 7;
 bool LEDVal = false;
@@ -11,19 +11,18 @@ bool LEDVal = false;
 void setup() {
     pinMode(btnPin, INPUT);
     pinMode(LED_BUILTIN, OUTPUT);
+    Serial.begin(9600);
 }
 
 void loop() {
     capSensor.updateInput(digitalRead(btnPin), millis());
+    delay(5);
     if (capSensor.isTap()) {
         LEDVal = !LEDVal;
-        // do tap things
+        Serial.println("Tap");
+    } else if (capSensor.isPress()) {
+        Serial.println("Press");
     }
-    else if (capSensor.isPress()) {
-        // int pressCount = capSensor.getPressCount();
-        // do press things, likely with pressCount
-    }
-
     digitalWrite(LED_BUILTIN, LEDVal);
 }
 
