@@ -59,7 +59,7 @@ void testIsPressAfterFiveHundredTimerValueIncrements() {
     } else {
       TEST_ASSERT_FALSE(btn.isPress());
     }
-    timerVal ++;
+    timerVal++;
   }
 }
 
