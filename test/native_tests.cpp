@@ -48,25 +48,6 @@ void testMultipleTaps() {
   test_TapAfterInterval(btn, 49876123478163, 100, true);
 }
 
-void test_press_after_interval(TapPressButton &btn, unsigned long startTime,
-                             int interval, bool testType) {
-  unsigned long timerVal = startTime;
-  unsigned long endTime = startTime + interval;
-  while (timerVal < endTime) {
-    btn.updateInput(true, timerVal);
-    if (timerVal > interval) {
-      if (testType == true) {
-        TEST_ASSERT_TRUE(btn.isPress());
-      } else {
-        TEST_ASSERT_FALSE(btn.isPress());
-      }
-    } else { 
-      TEST_ASSERT_FALSE(btn.isPress());
-    }
-    timerVal++;
-  }
-}
-
 void testIsPressAfterFiveHundredTimerValueIncrements() {
   TapPressButton btn;
   int timerVal = 0;
