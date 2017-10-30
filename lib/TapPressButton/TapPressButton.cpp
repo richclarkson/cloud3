@@ -6,6 +6,7 @@ TapPressButton::TapPressButton() {
   tapThreshold = 50;
   tapLength = 300;
   pressThreshold = 500;
+  pressLength = 1000;
   currentButtonState = false;
   prevButtonState = false;
   pressType = 0;
@@ -52,3 +53,11 @@ bool TapPressButton::isPressInPressWindow() {
 bool TapPressButton::isTap() { return pressType == 1; }
 
 bool TapPressButton::isPress() { return pressType == 2; }
+
+int TapPressButton::getPressCount() {
+  int pressCount = 0;
+  if (isPress()) {
+    pressCount = int(pressTime / (pressThreshold + pressLength)) + 1;
+  }
+  return pressCount;
+}
