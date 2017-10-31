@@ -5,7 +5,6 @@ class TapPressButton {
 public:
   TapPressButton();
   void updateInput(bool input, unsigned long timerVal);
-  bool isPressInPressWindow();
   bool isTap();
   bool isPress();
   int getPressCount();
@@ -19,6 +18,7 @@ private:
   unsigned long tapThreshold;
   unsigned long tapLength;
   bool isPressInTapWindow();
+  bool isPressInPressWindow();
   unsigned long pressThreshold;
   int pressLength;
   void setStates(bool btnInput);

@@ -5,17 +5,6 @@
 
 void testTapPressButtonExists() { TapPressButton btn; }
 
-void testPressInPressWindow() {
-  TapPressButton btn;
-  btn.updateInput(true, 0);
-  btn.updateInput(true, 500);
-  TEST_ASSERT_FALSE(btn.isPressInPressWindow());
-  btn.updateInput(true, 501);
-  TEST_ASSERT_TRUE(btn.isPressInPressWindow());
-  btn.updateInput(true, 1500);
-  TEST_ASSERT_TRUE(btn.isPressInPressWindow());
-}
-
 void test_TapAfterInterval(TapPressButton &btn, unsigned long startTime,
                            int interval, bool testType) {
   unsigned long timerVal = startTime;
@@ -91,7 +80,6 @@ int main(int argc, char **argv) {
   UNITY_BEGIN();
 
   RUN_TEST(testTapPressButtonExists);
-  RUN_TEST(testPressInPressWindow);
   RUN_TEST(testMultipleDebounces);
   RUN_TEST(testMultipleTaps);
   RUN_TEST(testIsPressAfterFiveHundredTimerValueIncrements);
