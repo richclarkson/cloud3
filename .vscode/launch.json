@@ -6,8 +6,8 @@
             "request": "launch",
             "cwd": "${workspaceRoot}",
             "name": "PlatformIO Debugger",
-            "target": "/Users/sfaletti/Development/Sabre/.pioenvs/metro/firmware.elf",
-            "gdbpath": "/Users/sfaletti/.platformio/penv/bin/piodebuggdb",
+            "target": "/Users/richardclarkson/Development/Sabre/.pioenvs/metro/firmware.elf",
+            "gdbpath": "/Users/richardclarkson/.platformio/penv/bin/piodebuggdb",
             "autorun": [ "source .pioinit" ]
         }
     ]
