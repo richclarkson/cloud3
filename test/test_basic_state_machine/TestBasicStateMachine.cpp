@@ -16,7 +16,7 @@ void test_state_machine_should_return_state(void) {
     TEST_ASSERT_EQUAL(0, stateMachine.getState());
 }
 
-int main(int argc, char **argv) {
+int main(void) {
   UNITY_BEGIN();
 
   RUN_TEST(test_state_machine_should_return_state);
