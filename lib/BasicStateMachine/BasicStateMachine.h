@@ -4,8 +4,10 @@
 class BasicStateMachine {
 public:
   BasicStateMachine();
+  int getState();
 
 private:
+  int currentState;
 };
 
 #endif

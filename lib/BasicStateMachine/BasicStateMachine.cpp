@@ -1,5 +1,9 @@
 #include "BasicStateMachine.h"
 
 BasicStateMachine::BasicStateMachine() {
-    int thing = 0;
+    currentState = 0;
+}
+
+int BasicStateMachine::getState() {
+    return currentState;
 }
