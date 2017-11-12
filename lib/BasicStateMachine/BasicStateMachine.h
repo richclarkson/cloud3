@@ -5,6 +5,7 @@ class BasicStateMachine {
 public:
   BasicStateMachine();
   int getState();
+  void next();
 
 private:
   int currentState;

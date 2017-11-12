@@ -7,3 +7,7 @@ BasicStateMachine::BasicStateMachine() {
 int BasicStateMachine::getState() {
     return currentState;
 }
+
+void BasicStateMachine::next() {
+    currentState ++;
+}
