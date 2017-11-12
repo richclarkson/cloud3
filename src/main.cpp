@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 #include <TapPressButton.h>
+#include <BasicStateMachine.h>
 
 TapPressButton capSensor;
 
