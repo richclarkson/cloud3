@@ -21,4 +21,7 @@ void BasicStateMachine::next() {
 
 void BasicStateMachine::prev() {
     currentState --;
+    if (currentState < 0) {
+        currentState = stateCount - 1;
+    }
 }
