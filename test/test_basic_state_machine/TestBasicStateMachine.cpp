@@ -22,11 +22,18 @@ void test_state_machine_increment(void) {
   TEST_ASSERT_EQUAL(2, stateMachine.getState());
 }
 
+void test_state_machine_decrement() {
+  TEST_ASSERT_EQUAL(0, stateMachine.getState());
+  stateMachine.prev();
+  TEST_ASSERT_EQUAL(-1, stateMachine.getState());
+}
+
 int main(void) {
   UNITY_BEGIN();
 
   RUN_TEST(test_state_machine_should_return_initial_state);
   RUN_TEST(test_state_machine_increment);
+  RUN_TEST(test_state_machine_decrement);
 
   UNITY_END();
 }

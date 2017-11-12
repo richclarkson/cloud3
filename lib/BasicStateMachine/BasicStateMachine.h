@@ -6,7 +6,8 @@ public:
   BasicStateMachine();
   int getState();
   void next();
-
+  void prev();
+  
 private:
   int currentState;
 };

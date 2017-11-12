@@ -11,3 +11,7 @@ int BasicStateMachine::getState() {
 void BasicStateMachine::next() {
     currentState ++;
 }
+
+void BasicStateMachine::prev() {
+    currentState --;
+}
