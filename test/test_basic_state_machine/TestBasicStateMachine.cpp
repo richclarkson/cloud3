@@ -6,6 +6,7 @@
 BasicStateMachine stateMachine;
 
 void setUp(void) {
+  stateMachine = BasicStateMachine();
 }
 
 void tearDown(void) {
