@@ -9,12 +9,12 @@ void setUp(void) {
   stateMachine = BasicStateMachine();
 }
 
-void tearDown(void) {
-
-}
+void tearDown(void) {}
 
 void test_state_machine_should_return_initial_state(void) {
-    TEST_ASSERT_EQUAL(0, stateMachine.getState());
+  TEST_ASSERT_EQUAL(0, stateMachine.getState());
+}
+
 }
 
 int main(void) {
