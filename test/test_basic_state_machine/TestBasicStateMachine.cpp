@@ -32,6 +32,19 @@ void test_state_machine_rollback_on_decrement() {
   TEST_ASSERT_EQUAL(1, stateMachine.getState());
 }
 
+void test_state_machine_state_setter() {
+  stateMachine.setState(1);
+  TEST_ASSERT_EQUAL(1, stateMachine.getState());
+  stateMachine.setState(0);
+  TEST_ASSERT_EQUAL(0, stateMachine.getState());
+  stateMachine.setState(-10);
+  TEST_ASSERT_EQUAL(0, stateMachine.getState());
+  stateMachine.setState(50);
+  TEST_ASSERT_EQUAL(1, stateMachine.getState());
+  stateMachine.setState(2);
+  TEST_ASSERT_EQUAL(1, stateMachine.getState());
+}
+
 int main(void) {
   UNITY_BEGIN();
 
@@ -39,6 +52,7 @@ int main(void) {
   RUN_TEST(test_state_machine_increment);
   RUN_TEST(test_state_machine_rollover_on_increment);
   RUN_TEST(test_state_machine_rollback_on_decrement);
+  RUN_TEST(test_state_machine_state_setter);
 
   UNITY_END();
 }

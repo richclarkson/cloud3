@@ -6,6 +6,7 @@ public:
   BasicStateMachine();
   BasicStateMachine(int _stateCount);
   int getState();
+  void setState(int newState);
   void next();
   void prev();
   

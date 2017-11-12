@@ -23,3 +23,12 @@ void BasicStateMachine::prev() {
   }
 }
 
+void BasicStateMachine::setState(int newState) {
+  if (newState < 0) {
+    newState = 0;
+  } else if (newState >= stateCount) {
+    newState = stateCount - 1;
+  }
+  currentState = newState;
+}
+
