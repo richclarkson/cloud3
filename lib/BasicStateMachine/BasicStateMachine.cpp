@@ -14,6 +14,9 @@ int BasicStateMachine::getState() {
 
 void BasicStateMachine::next() {
     currentState ++;
+    if (currentState >= stateCount) {
+        currentState = 0;
+    }
 }
 
 void BasicStateMachine::prev() {
