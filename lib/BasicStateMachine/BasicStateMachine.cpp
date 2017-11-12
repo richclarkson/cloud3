@@ -1,27 +1,25 @@
 #include "BasicStateMachine.h"
 
-BasicStateMachine::BasicStateMachine() {
-}
+BasicStateMachine::BasicStateMachine() {}
 
 BasicStateMachine::BasicStateMachine(int _stateCount) {
-    currentState = 0;
-    stateCount = _stateCount;
+  currentState = 0;
+  stateCount = _stateCount;
 }
 
-int BasicStateMachine::getState() {
-    return currentState;
-}
+int BasicStateMachine::getState() { return currentState; }
 
 void BasicStateMachine::next() {
-    currentState ++;
-    if (currentState >= stateCount) {
-        currentState = 0;
-    }
+  currentState++;
+  if (currentState >= stateCount) {
+    currentState = 0;
+  }
 }
 
 void BasicStateMachine::prev() {
-    currentState --;
-    if (currentState < 0) {
-        currentState = stateCount - 1;
-    }
+  currentState--;
+  if (currentState < 0) {
+    currentState = stateCount - 1;
+  }
 }
+
