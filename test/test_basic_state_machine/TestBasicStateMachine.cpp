@@ -5,9 +5,7 @@
 
 BasicStateMachine stateMachine;
 
-void setUp(void) {
-  stateMachine = BasicStateMachine(2);
-}
+void setUp(void) { stateMachine = BasicStateMachine(2); }
 
 void tearDown(void) {}
 
