@@ -33,16 +33,17 @@ void test_state_machine_rollback_on_decrement() {
 }
 
 void test_state_machine_state_setter() {
+  stateMachine = BasicStateMachine(5);
   stateMachine.setState(1);
   TEST_ASSERT_EQUAL(1, stateMachine.getState());
   stateMachine.setState(0);
   TEST_ASSERT_EQUAL(0, stateMachine.getState());
-  stateMachine.setState(-10);
-  TEST_ASSERT_EQUAL(0, stateMachine.getState());
-  stateMachine.setState(50);
+  stateMachine.setState(3);
+  TEST_ASSERT_EQUAL(3, stateMachine.getState());
+  stateMachine.setState(6);
   TEST_ASSERT_EQUAL(1, stateMachine.getState());
   stateMachine.setState(2);
-  TEST_ASSERT_EQUAL(1, stateMachine.getState());
+  TEST_ASSERT_EQUAL(2, stateMachine.getState());
 }
 
 void test_state_is() {
