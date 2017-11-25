@@ -9,6 +9,10 @@ BasicStateMachine::BasicStateMachine(int _stateCount) {
 
 int BasicStateMachine::getState() { return currentState; }
 
+bool BasicStateMachine::is(int checkState) {
+  return getState() == checkState;
+}
+
 void BasicStateMachine::next() {
   currentState++;
   if (currentState >= stateCount) {
@@ -31,4 +35,3 @@ void BasicStateMachine::setState(int newState) {
   }
   currentState = newState;
 }
-
