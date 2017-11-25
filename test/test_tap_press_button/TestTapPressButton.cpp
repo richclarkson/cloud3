@@ -76,6 +76,28 @@ void testPressCounterGoesToTen() {
   test_press_counts(btn, 10, 0);
 }
 
+void test_press_count() {
+  btn.update(true, 0);
+  btn.update(true, 500);
+  TEST_ASSERT_FALSE(btn.isPress());
+  TEST_ASSERT_EQUAL(0, btn.getPressCount());
+  btn.update(true, 501);
+  TEST_ASSERT_TRUE(btn.isPress());
+  TEST_ASSERT_EQUAL(1, btn.getPressCount());
+  btn.update(true, 999);
+  TEST_ASSERT_EQUAL(1, btn.getPressCount());
+  btn.update(true, 1499);
+  TEST_ASSERT_EQUAL(1, btn.getPressCount());
+  btn.update(true, 1500);
+  TEST_ASSERT_EQUAL(2, btn.getPressCount());
+  btn.update(true, 2500);
+  TEST_ASSERT_EQUAL(3, btn.getPressCount());
+  btn.update(true, 3499);
+  TEST_ASSERT_EQUAL(3, btn.getPressCount());
+  btn.update(true, 3500);
+  TEST_ASSERT_EQUAL(4, btn.getPressCount());
+}
+
 int main(int argc, char **argv) {
   UNITY_BEGIN();
 
@@ -83,6 +105,7 @@ int main(int argc, char **argv) {
   RUN_TEST(testMultipleTaps);
   RUN_TEST(testIsPressAfterFiveHundredTimerValueIncrements);
   RUN_TEST(testPressCounterGoesToTen);
+  RUN_TEST(test_press_count);
 
   UNITY_END();
 }

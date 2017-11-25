@@ -57,7 +57,7 @@ bool TapPressButton::isPress() { return pressType == 2; }
 int TapPressButton::getPressCount() {
   int pressCount = 0;
   if (isPress()) {
-    pressCount = int(pressTime / (pressThreshold + pressLength)) + 1;
+    pressCount = int((pressTime - pressThreshold) / pressLength) + 1;
   }
   return pressCount;
 }
