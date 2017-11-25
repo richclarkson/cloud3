@@ -12,7 +12,7 @@ TapPressButton::TapPressButton() {
   pressType = 0;
 }
 
-void TapPressButton::updateInput(bool input, unsigned long timerVal) {
+void TapPressButton::update(bool input, unsigned long timerVal) {
   setStates(input);
   pressTime += timerVal - prevTimerVal;
   prevTimerVal = timerVal;

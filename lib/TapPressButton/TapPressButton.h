@@ -4,7 +4,7 @@
 class TapPressButton {
 public:
   TapPressButton();
-  void updateInput(bool input, unsigned long timerVal);
+  void update(bool input, unsigned long timerVal);
   bool isTap();
   bool isPress();
   int getPressCount();
