@@ -20,6 +20,12 @@ void BasicStateMachine::next() {
   }
 }
 
+void BasicStateMachine::next(int interval) {
+  for (int i=0; i<interval; i++) {
+    next();
+  }
+}
+
 void BasicStateMachine::prev() {
   currentState--;
   if (currentState < 0) {

@@ -53,6 +53,17 @@ void test_state_is() {
   TEST_ASSERT_TRUE(stateMachine.is(0));
 }
 
+void test_state_machine_is_advanced_multiple_times() {
+  stateMachine = BasicStateMachine(5);
+  TEST_ASSERT_TRUE(stateMachine.is(0));
+  stateMachine.next(2);
+  TEST_ASSERT_TRUE(stateMachine.is(2));
+  stateMachine.next();
+  TEST_ASSERT_TRUE(stateMachine.is(3));
+  stateMachine.next(2);
+  TEST_ASSERT_TRUE(stateMachine.is(0));
+}
+
 int main(void) {
   UNITY_BEGIN();
 
@@ -62,6 +73,7 @@ int main(void) {
   RUN_TEST(test_state_machine_rollback_on_decrement);
   RUN_TEST(test_state_machine_state_setter);
   RUN_TEST(test_state_is);
+  RUN_TEST(test_state_machine_is_advanced_multiple_times);
 
   UNITY_END();
 }

@@ -9,6 +9,7 @@ public:
   bool is(int checkState);
   void setState(int newState);
   void next();
+  void next(int intervals);
   void prev();
   
 private:
