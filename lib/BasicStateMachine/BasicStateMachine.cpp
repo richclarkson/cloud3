@@ -9,9 +9,7 @@ BasicStateMachine::BasicStateMachine(int _stateCount) {
 
 int BasicStateMachine::getState() { return currentState; }
 
-bool BasicStateMachine::is(int checkState) {
-  return getState() == checkState;
-}
+bool BasicStateMachine::is(int checkState) { return getState() == checkState; }
 
 void BasicStateMachine::next() {
   currentState++;
@@ -21,7 +19,7 @@ void BasicStateMachine::next() {
 }
 
 void BasicStateMachine::next(int interval) {
-  for (int i=0; i<interval; i++) {
+  for (int i = 0; i < interval; i++) {
     next();
   }
 }
