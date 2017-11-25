@@ -1,7 +1,6 @@
 #ifndef UNIT_TEST
 
 #include <Arduino.h>
-#include <NeoPixelBus.h>
 #include <TapPressButton.h>
 #include <BasicStateMachine.h>
 
@@ -15,10 +14,11 @@ void setup() {
     mainState = BasicStateMachine(7);
     settingState = BasicStateMachine(5);
     lampState = BasicStateMachine(4);
+    capSensor = TapPressButton();
 }
 
 void loop() {
-    
+
 }
 
 #endif
