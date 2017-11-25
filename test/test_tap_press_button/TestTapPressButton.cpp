@@ -3,9 +3,13 @@
 #include "TapPressButton.h"
 #include <unity.h>
 
-void testTapPressButtonExists() { TapPressButton btn; }
+TapPressButton btn;
 
-void test_TapAfterInterval(TapPressButton &btn, unsigned long startTime,
+void setUp() {
+  btn = TapPressButton();
+}
+
+void test_tap_after_interval(TapPressButton &btn, unsigned long startTime,
                            int interval, bool testType) {
   unsigned long timerVal = startTime;
   unsigned long endTime = startTime + interval;
@@ -23,22 +27,19 @@ void test_TapAfterInterval(TapPressButton &btn, unsigned long startTime,
 }
 
 void testMultipleDebounces() {
-  TapPressButton btn;
-  test_TapAfterInterval(btn, 0, 30, false);
-  test_TapAfterInterval(btn, 0, 20, false);
-  test_TapAfterInterval(btn, 5000, 40, false);
-  test_TapAfterInterval(btn, 87465439876, 30, false);
+  test_tap_after_interval(btn, 0, 30, false);
+  test_tap_after_interval(btn, 0, 20, false);
+  test_tap_after_interval(btn, 5000, 40, false);
+  test_tap_after_interval(btn, 87465439876, 30, false);
 }
 
 void testMultipleTaps() {
-  TapPressButton btn;
-  test_TapAfterInterval(btn, 0, 60, true);
-  test_TapAfterInterval(btn, 1000, 300, true);
-  test_TapAfterInterval(btn, 49876123478163, 100, true);
+  test_tap_after_interval(btn, 0, 60, true);
+  test_tap_after_interval(btn, 1000, 300, true);
+  test_tap_after_interval(btn, 49876123478163, 100, true);
 }
 
 void testIsPressAfterFiveHundredTimerValueIncrements() {
-  TapPressButton btn;
   int timerVal = 0;
   int endVal = 5000;
   while (timerVal < endVal) {
@@ -72,14 +73,12 @@ void test_press_counts(TapPressButton &btn, int count, unsigned long startVal) {
 }
 
 void testPressCounterGoesToTen() {
-  TapPressButton btn;
   test_press_counts(btn, 10, 0);
 }
 
 int main(int argc, char **argv) {
   UNITY_BEGIN();
 
-  RUN_TEST(testTapPressButtonExists);
   RUN_TEST(testMultipleDebounces);
   RUN_TEST(testMultipleTaps);
   RUN_TEST(testIsPressAfterFiveHundredTimerValueIncrements);
