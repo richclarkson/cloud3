@@ -14,11 +14,11 @@ void test_tap_after_interval(TapPressButton &btn, unsigned long startTime,
   unsigned long timerVal = startTime;
   unsigned long endTime = startTime + interval;
   while (timerVal < endTime) {
-    btn.updateInput(true, timerVal);
+    btn.update(true, timerVal);
     TEST_ASSERT_FALSE(btn.isTap());
     timerVal++;
   }
-  btn.updateInput(false, timerVal);
+  btn.update(false, timerVal);
   if (testType == true) {
     TEST_ASSERT_TRUE(btn.isTap());
   } else {
@@ -43,7 +43,7 @@ void testIsPressAfterFiveHundredTimerValueIncrements() {
   int timerVal = 0;
   int endVal = 5000;
   while (timerVal < endVal) {
-    btn.updateInput(true, timerVal);
+    btn.update(true, timerVal);
     if (timerVal > 500) {
       TEST_ASSERT_TRUE(btn.isPress());
     } else {
@@ -59,7 +59,7 @@ void test_press_counts(TapPressButton &btn, int count, unsigned long startVal) {
   int pressCountCounter = 1;
   int timerCounter = 0;
   while (timerVal < endVal) {
-    btn.updateInput(true, timerVal);
+    btn.update(true, timerVal);
     if (timerVal - startVal > 1000 * pressCountCounter) {
       TEST_ASSERT_EQUAL(pressCountCounter, btn.getPressCount());
     }
