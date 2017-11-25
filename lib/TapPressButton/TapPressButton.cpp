@@ -23,9 +23,9 @@ void TapPressButton::update(bool input, unsigned long timerVal) {
   }
 }
 
-void TapPressButton::setStates(bool btnInput) {
+void TapPressButton::setStates(bool buttonInput) {
   prevButtonState = currentButtonState;
-  currentButtonState = btnInput;
+  currentButtonState = buttonInput;
 }
 
 void TapPressButton::setPressType() {
