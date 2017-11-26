@@ -8,6 +8,7 @@ public:
   SaberStateHandler();
   int getMainState();
   int getNormalMode();
+  int getSettingMode();
   void tap();
   void press();
 

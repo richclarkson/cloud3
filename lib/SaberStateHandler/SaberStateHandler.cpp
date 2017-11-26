@@ -10,9 +10,16 @@ int SaberStateHandler::getMainState() { return this->mainState.getState(); }
 
 int SaberStateHandler::getNormalMode() { return this->normalModes.getState(); }
 
+int SaberStateHandler::getSettingMode(void) {
+  return this->settingModes.getState();
+}
+
 void SaberStateHandler::tap() {
   if (this->mainState.is(0)) {
     normalModes.next();
+  } 
+  else if (this->mainState.is(1)) {
+    settingModes.next();
   }
 }
 
