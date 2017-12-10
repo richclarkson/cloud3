@@ -9,103 +9,77 @@ void setUp() {
   btn = TapPressButton();
 }
 
-void test_tap_after_interval(TapPressButton &btn, unsigned long startTime,
-                           int interval, bool testType) {
-  unsigned long timerVal = startTime;
-  unsigned long endTime = startTime + interval;
-  while (timerVal < endTime) {
-    btn.update(true, timerVal);
-    TEST_ASSERT_FALSE(btn.isTap());
-    timerVal++;
-  }
-  btn.update(false, timerVal);
-  if (testType == true) {
-    TEST_ASSERT_TRUE(btn.isTap());
-  } else {
-    TEST_ASSERT_FALSE(btn.isTap());
-  }
-}
-
-void testMultipleDebounces() {
-  test_tap_after_interval(btn, 0, 30, false);
-  test_tap_after_interval(btn, 0, 20, false);
-  test_tap_after_interval(btn, 5000, 40, false);
-  test_tap_after_interval(btn, 87465439876, 30, false);
-}
-
-void testMultipleTaps() {
-  test_tap_after_interval(btn, 0, 60, true);
-  test_tap_after_interval(btn, 1000, 300, true);
-  test_tap_after_interval(btn, 49876123478163, 100, true);
-}
-
-void testIsPressAfterFiveHundredTimerValueIncrements() {
-  int timerVal = 0;
-  int endVal = 5000;
-  while (timerVal < endVal) {
-    btn.update(true, timerVal);
-    if (timerVal > 500) {
-      TEST_ASSERT_TRUE(btn.isPress());
-    } else {
-      TEST_ASSERT_FALSE(btn.isPress());
-    }
-    timerVal++;
-  }
-}
-
-void test_press_counts(TapPressButton &btn, int count, unsigned long startVal) {
-  unsigned long timerVal = startVal;
-  unsigned long endVal = startVal + 600 + (count * 1000);
-  int pressCountCounter = 1;
-  int timerCounter = 0;
-  while (timerVal < endVal) {
-    btn.update(true, timerVal);
-    if (timerVal - startVal > 1000 * pressCountCounter) {
-      TEST_ASSERT_EQUAL(pressCountCounter, btn.getPressCount());
-    }
-    timerVal++;
-    timerCounter++;
-    if (timerCounter >= 1000) {
-      pressCountCounter++;
-      timerCounter = 0;
-    }
-  }
-}
-
-void testPressCounterGoesToTen() {
-  test_press_counts(btn, 10, 0);
-}
-
-void test_press_count() {
-  btn.update(true, 0);
-  btn.update(true, 500);
+void test_no_flag_in_debounce_time() {
+  btn.update(false, 0);
+  btn.update(true, 3);
+  btn.update(true, 15);
+  btn.update(true, 30);
+  TEST_ASSERT_FALSE(btn.isTap());
   TEST_ASSERT_FALSE(btn.isPress());
-  TEST_ASSERT_EQUAL(0, btn.getPressCount());
+  btn.update(false, 31);
+  //pretend a long time has passed
+  btn.update(true, 300);
+  btn.update(true, 310);
+  btn.update(true, 330);
+  TEST_ASSERT_FALSE(btn.isTap());
+  TEST_ASSERT_FALSE(btn.isPress());
+}
+
+void test_tap_between_50_and_300_timercounts() {
+  btn.update(true, 0);
+  btn.update(true, 50);
+  TEST_ASSERT_FALSE(btn.isTap());
+  btn.update(false, 51);
+  TEST_ASSERT_TRUE(btn.isTap());
+  // pretend a long time has passed
+  btn.update(true, 5000);
+  btn.update(true, 5300);
+  TEST_ASSERT_FALSE(btn.isTap());
+  btn.update(false, 5301);
+  TEST_ASSERT_TRUE(btn.isTap());
+}
+
+void test_no_tap_before_51_timercounts() {
+  btn.update(true, 0);
+  btn.update(true, 49);
+  TEST_ASSERT_FALSE(btn.isTap());
+  btn.update(false, 50);
+  TEST_ASSERT_FALSE(btn.isTap());
+}
+
+void test_tap_times_out_after_300_timercounts() {
+  btn.update(true, 0);
+  btn.update(true, 50);
+  TEST_ASSERT_FALSE(btn.isTap());
+  btn.update(false, 350);
+  TEST_ASSERT_FALSE(btn.isTap());
+}
+
+void test_press_flag_can_be_accessed() {
+  btn.update(true, 0);
   btn.update(true, 501);
   TEST_ASSERT_TRUE(btn.isPress());
-  TEST_ASSERT_EQUAL(1, btn.getPressCount());
-  btn.update(true, 999);
-  TEST_ASSERT_EQUAL(1, btn.getPressCount());
-  btn.update(true, 1499);
-  TEST_ASSERT_EQUAL(1, btn.getPressCount());
-  btn.update(true, 1500);
-  TEST_ASSERT_EQUAL(2, btn.getPressCount());
-  btn.update(true, 2500);
-  TEST_ASSERT_EQUAL(3, btn.getPressCount());
-  btn.update(true, 3499);
-  TEST_ASSERT_EQUAL(3, btn.getPressCount());
-  btn.update(true, 3500);
-  TEST_ASSERT_EQUAL(4, btn.getPressCount());
+}
+
+void test_press_flag_is_cleared_after_access() {
+  btn.update(true, 0);
+  btn.update(true, 501);
+  TEST_ASSERT_TRUE(btn.isPress());
+  TEST_ASSERT_FALSE(btn.isPress());
+  btn.update(true, 2000);
+  TEST_ASSERT_TRUE(btn.isPress());
+  TEST_ASSERT_FALSE(btn.isPress());
 }
 
 int main(int argc, char **argv) {
   UNITY_BEGIN();
 
-  RUN_TEST(testMultipleDebounces);
-  RUN_TEST(testMultipleTaps);
-  RUN_TEST(testIsPressAfterFiveHundredTimerValueIncrements);
-  RUN_TEST(testPressCounterGoesToTen);
-  RUN_TEST(test_press_count);
+  RUN_TEST(test_tap_between_50_and_300_timercounts);
+  RUN_TEST(test_no_tap_before_51_timercounts);
+  RUN_TEST(test_tap_times_out_after_300_timercounts);
+  RUN_TEST(test_no_flag_in_debounce_time);
+  RUN_TEST(test_press_flag_can_be_accessed);
+  RUN_TEST(test_press_flag_is_cleared_after_access);
 
   UNITY_END();
 }
