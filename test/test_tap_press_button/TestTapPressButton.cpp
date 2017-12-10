@@ -72,12 +72,6 @@ void press_does_not_start_until_after_500_timercounts() {
   TEST_ASSERT_FALSE(btn.isPress());
 }
 
-void test_press_flag_can_be_accessed() {
-  btn.update(true, 0);
-  btn.update(true, 501);
-  TEST_ASSERT_TRUE(btn.isPress());
-}
-
 void test_press_flag_is_cleared_after_access() {
   btn.update(true, 0);
   btn.update(true, 501);
@@ -97,7 +91,6 @@ int main(int argc, char **argv) {
   RUN_TEST(test_no_flag_in_debounce_time);
   RUN_TEST(test_press_starts_after_500_timercounts);
   RUN_TEST(press_does_not_start_until_after_500_timercounts);
-  RUN_TEST(test_press_flag_can_be_accessed);
   RUN_TEST(test_press_flag_is_cleared_after_access);
 
   UNITY_END();
