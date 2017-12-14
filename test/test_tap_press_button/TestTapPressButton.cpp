@@ -67,9 +67,13 @@ void test_tap_after_50_counts() {
   TEST_ASSERT_TRUE(btn.isTap());
 }
 
+void test_no_press_before_500_counts() {
+  PRESS_BUTTON(500);
   TEST_ASSERT_FALSE(btn.isPress());
 }
 
+void test_press_after_500_counts() {
+  PRESS_BUTTON(501);
   TEST_ASSERT_TRUE(btn.isPress());
 }
 
@@ -79,6 +83,8 @@ int main(int argc, char **argv) {
   RUN_TEST(test_debounce);
   RUN_TEST(test_no_tap_before_50_counts);
   RUN_TEST(test_tap_after_50_counts);
+  RUN_TEST(test_no_press_before_500_counts);
+  RUN_TEST(test_press_after_500_counts);
 
   UNITY_END();
 }
