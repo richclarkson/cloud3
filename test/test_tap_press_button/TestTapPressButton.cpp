@@ -13,9 +13,7 @@ TapPressButton btn;
   for (int i = strt; i < strt + end; i++)                                      \
     btn.update(false, i)
 
-void setUp() {
-  btn = TapPressButton();
-}
+void setUp() { btn = TapPressButton(); }
 
 void test_no_flag_in_debounce_time() {
   btn.update(false, 0);
