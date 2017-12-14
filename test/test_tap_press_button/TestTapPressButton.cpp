@@ -84,7 +84,7 @@ void test_tap_at_200_counts() {
 
 void test_tap_at_250_press_counts_and_30_count_release_delay() {
   PRESS_BUTTON_FOR(250);
-  btn.update(false, 280);
+  RELEASE_BUTTON_AFTER(30);
   TEST_ASSERT_TRUE(btn.isTap());
 }
 
