@@ -16,17 +16,17 @@ TapPressButton btn;
 void setUp() { btn = TapPressButton(); }
 
 void test_no_flag_in_debounce_time() {
-  btn.update(false, 0);
-  btn.update(true, 3);
-  btn.update(true, 15);
-  btn.update(true, 30);
+  PRESS_BUTTON(0, 3);
+  RELEASE_BUTTON(3, 15);
+  PRESS_BUTTON(15, 20);
+  RELEASE_BUTTON(20, 22);
+  PRESS_BUTTON(22, 30);
   TEST_ASSERT_FALSE(btn.isTap());
   TEST_ASSERT_FALSE(btn.isPress());
+  RELEASE_BUTTON(30, 31);
   btn.update(false, 31);
-  //pretend a long time has passed
-  btn.update(true, 300);
-  btn.update(true, 310);
-  btn.update(true, 330);
+  // pretend a long time has passed
+  PRESS_BUTTON(300, 330);
   TEST_ASSERT_FALSE(btn.isTap());
   TEST_ASSERT_FALSE(btn.isPress());
 }
