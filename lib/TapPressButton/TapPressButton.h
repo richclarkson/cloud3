@@ -15,7 +15,6 @@ private:
   unsigned long TAP_THRESHOLD;
   unsigned long TAP_LENGTH;
   unsigned long PRESS_THRESHOLD;
-  int PRESS_LENGTH;
   unsigned long pressTime;
   unsigned long prevTimerVal;
   bool isPressInTapWindow();

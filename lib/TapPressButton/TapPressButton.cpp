@@ -4,7 +4,6 @@ TapPressButton::TapPressButton() {
   TAP_THRESHOLD = 50;
   TAP_LENGTH = 300;
   PRESS_THRESHOLD = 500;
-  PRESS_LENGTH = 1000;
   pressTime = 0;
   prevTimerVal = 0;
   currentButtonState = false;
