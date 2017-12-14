@@ -67,6 +67,30 @@ void test_tap_after_50_counts() {
   TEST_ASSERT_TRUE(btn.isTap());
 }
 
+void test_tap_at_200_counts() {
+  PRESS_BUTTON(200);
+  RELEASE_BUTTON(1);
+  TEST_ASSERT_TRUE(btn.isTap());
+}
+
+void test_tap_at_250_press_counts_and_30_count_release_delay() {
+  PRESS_BUTTON(250);
+  btn.update(false, 280);
+  TEST_ASSERT_TRUE(btn.isTap());
+}
+
+void test_tap_at_350_counts() {
+  PRESS_BUTTON(349);
+  RELEASE_BUTTON(1);
+  TEST_ASSERT_TRUE(btn.isTap());
+}
+
+void test_no_tap_after_350_counts() {
+  PRESS_BUTTON(350);
+  RELEASE_BUTTON(1);
+  TEST_ASSERT_FALSE(btn.isTap());
+}
+
 void test_no_press_before_500_counts() {
   PRESS_BUTTON(500);
   TEST_ASSERT_FALSE(btn.isPress());
@@ -81,8 +105,12 @@ int main(int argc, char **argv) {
   UNITY_BEGIN();
 
   RUN_TEST(test_debounce);
+  RUN_TEST(test_tap_at_200_counts);
+  RUN_TEST(test_tap_at_250_press_counts_and_30_count_release_delay);
   RUN_TEST(test_no_tap_before_50_counts);
   RUN_TEST(test_tap_after_50_counts);
+  RUN_TEST(test_tap_at_350_counts);
+  RUN_TEST(test_no_tap_after_350_counts);
   RUN_TEST(test_no_press_before_500_counts);
   RUN_TEST(test_press_after_500_counts);
 
