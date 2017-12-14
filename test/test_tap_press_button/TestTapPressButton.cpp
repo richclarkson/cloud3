@@ -3,9 +3,6 @@
 #include "TapPressButton.h"
 #include <unity.h>
 
-#include <iostream>
-using namespace std;
-
 TapPressButton btn;
 unsigned long timer_val;
 
@@ -23,11 +20,8 @@ void setUp() {
 }
 
 void test_no_flag_in_debounce_time() {
-  cout << "timer val: " << timer_val << ", ";
   PRESS_BUTTON(3);
-  cout << timer_val << ", ";
   RELEASE_BUTTON(10);
-  cout << timer_val << "\n";
   PRESS_BUTTON(5);
   RELEASE_BUTTON(2);
   PRESS_BUTTON(8);
