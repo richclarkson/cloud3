@@ -6,11 +6,11 @@
 TapPressButton btn;
 unsigned long timer_val;
 
-#define PRESS_BUTTON(length)                                                   \
+#define PRESS_BUTTON_FOR(length)                                                   \
   for (int i = timer_val; timer_val < i + length; timer_val++)                 \
   btn.update(true, timer_val)
 
-#define RELEASE_BUTTON(length)                                                 \
+#define RELEASE_BUTTON_FOR(length)                                                 \
   for (int i = timer_val; timer_val < i + length; timer_val++)                 \
   btn.update(false, timer_val)
 
@@ -20,31 +20,31 @@ void setUp() {
 }
 
 void test_no_tap_no_press_after_10_counts() {
-  PRESS_BUTTON(10);
-  RELEASE_BUTTON(1);
+  PRESS_BUTTON_FOR(10);
+  RELEASE_BUTTON_FOR(1);
   TEST_ASSERT_FALSE(btn.isTap());
   TEST_ASSERT_FALSE(btn.isPress());
 }
 
 void test_no_tap_no_press_after_49_counts() {
-  PRESS_BUTTON(49);
-  RELEASE_BUTTON(1);
+  PRESS_BUTTON_FOR(49);
+  RELEASE_BUTTON_FOR(1);
   TEST_ASSERT_FALSE(btn.isTap());
   TEST_ASSERT_FALSE(btn.isPress());
 }
 
 void test_no_tap_no_press_after_multiple_presses() {
-  PRESS_BUTTON(10);
-  RELEASE_BUTTON(5);
+  PRESS_BUTTON_FOR(10);
+  RELEASE_BUTTON_FOR(5);
   TEST_ASSERT_FALSE(btn.isTap());
   TEST_ASSERT_FALSE(btn.isPress());
-  PRESS_BUTTON(40);
-  RELEASE_BUTTON(1);
+  PRESS_BUTTON_FOR(40);
+  RELEASE_BUTTON_FOR(1);
   TEST_ASSERT_FALSE(btn.isTap());
   TEST_ASSERT_FALSE(btn.isPress());
-  RELEASE_BUTTON(447865);
-  PRESS_BUTTON(45);
-  RELEASE_BUTTON(12);
+  RELEASE_BUTTON_FOR(447865);
+  PRESS_BUTTON_FOR(45);
+  RELEASE_BUTTON_FOR(12);
   TEST_ASSERT_FALSE(btn.isTap());
   TEST_ASSERT_FALSE(btn.isPress());
 }
@@ -56,48 +56,48 @@ void test_debounce() {
 }
 
 void test_no_tap_before_50_counts() {
-  PRESS_BUTTON(49);
-  RELEASE_BUTTON(1);
+  PRESS_BUTTON_FOR(49);
+  RELEASE_BUTTON_FOR(1);
   TEST_ASSERT_FALSE(btn.isTap());
 }
 
 void test_tap_after_50_counts() {
-  PRESS_BUTTON(50);
-  RELEASE_BUTTON(1);
+  PRESS_BUTTON_FOR(50);
+  RELEASE_BUTTON_FOR(1);
   TEST_ASSERT_TRUE(btn.isTap());
 }
 
 void test_tap_at_200_counts() {
-  PRESS_BUTTON(200);
-  RELEASE_BUTTON(1);
+  PRESS_BUTTON_FOR(200);
+  RELEASE_BUTTON_FOR(1);
   TEST_ASSERT_TRUE(btn.isTap());
 }
 
 void test_tap_at_250_press_counts_and_30_count_release_delay() {
-  PRESS_BUTTON(250);
+  PRESS_BUTTON_FOR(250);
   btn.update(false, 280);
   TEST_ASSERT_TRUE(btn.isTap());
 }
 
 void test_tap_at_350_counts() {
-  PRESS_BUTTON(349);
-  RELEASE_BUTTON(1);
+  PRESS_BUTTON_FOR(349);
+  RELEASE_BUTTON_FOR(1);
   TEST_ASSERT_TRUE(btn.isTap());
 }
 
 void test_no_tap_after_350_counts() {
-  PRESS_BUTTON(350);
-  RELEASE_BUTTON(1);
+  PRESS_BUTTON_FOR(350);
+  RELEASE_BUTTON_FOR(1);
   TEST_ASSERT_FALSE(btn.isTap());
 }
 
 void test_no_press_before_500_counts() {
-  PRESS_BUTTON(500);
+  PRESS_BUTTON_FOR(500);
   TEST_ASSERT_FALSE(btn.isPress());
 }
 
 void test_press_after_500_counts() {
-  PRESS_BUTTON(501);
+  PRESS_BUTTON_FOR(501);
   TEST_ASSERT_TRUE(btn.isPress());
 }
 
