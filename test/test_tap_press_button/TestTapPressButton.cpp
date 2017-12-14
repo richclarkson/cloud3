@@ -33,24 +33,21 @@ void test_no_flag_in_debounce_time() {
 }
 
 void test_tap_between_50_and_300_timercounts() {
-  btn.update(true, 0);
-  btn.update(true, 50);
+  PRESS_BUTTON(0, 55);
   TEST_ASSERT_FALSE(btn.isTap());
-  btn.update(false, 51);
+  RELEASE_BUTTON(56, 57);
   TEST_ASSERT_TRUE(btn.isTap());
   // pretend a long time has passed
-  btn.update(true, 5000);
-  btn.update(true, 5300);
+  PRESS_BUTTON(5000, 5300);
   TEST_ASSERT_FALSE(btn.isTap());
-  btn.update(false, 5301);
+  RELEASE_BUTTON(5301, 5302);
   TEST_ASSERT_TRUE(btn.isTap());
 }
 
 void test_no_tap_before_51_timercounts() {
-  btn.update(true, 0);
-  btn.update(true, 49);
+  PRESS_BUTTON(0, 49);
   TEST_ASSERT_FALSE(btn.isTap());
-  btn.update(false, 50);
+  RELEASE_BUTTON(49, 50);
   TEST_ASSERT_FALSE(btn.isTap());
 }
 
