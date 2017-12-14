@@ -12,14 +12,14 @@ private:
   bool currentButtonState;
   bool prevButtonState;
   bool stateHasChanged();
+  unsigned long TAP_THRESHOLD;
+  unsigned long TAP_LENGTH;
+  unsigned long PRESS_THRESHOLD;
+  int PRESS_LENGTH;
   unsigned long pressTime;
   unsigned long prevTimerVal;
-  unsigned long tapThreshold;
-  unsigned long tapLength;
   bool isPressInTapWindow();
   bool isPressInPressWindow();
-  unsigned long pressThreshold;
-  int pressLength;
   void setStates(bool btnInput);
   void setPressType();
   char pressType;

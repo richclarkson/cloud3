@@ -1,12 +1,12 @@
 #include "TapPressButton.h"
 
 TapPressButton::TapPressButton() {
+  TAP_THRESHOLD = 50;
+  TAP_LENGTH = 300;
+  PRESS_THRESHOLD = 500;
+  PRESS_LENGTH = 1000;
   pressTime = 0;
   prevTimerVal = 0;
-  tapThreshold = 50;
-  tapLength = 300;
-  pressThreshold = 500;
-  pressLength = 1000;
   currentButtonState = false;
   prevButtonState = false;
   pressType = 0;
@@ -43,11 +43,11 @@ bool TapPressButton::stateHasChanged() {
 }
 
 bool TapPressButton::isPressInTapWindow() {
-  return pressTime >= tapThreshold && pressTime < tapThreshold + tapLength;
+  return pressTime >= TAP_THRESHOLD && pressTime < TAP_THRESHOLD + TAP_LENGTH;
 }
 
 bool TapPressButton::isPressInPressWindow() {
-  return pressTime >= pressThreshold;
+  return pressTime >= PRESS_THRESHOLD;
 }
 
 bool TapPressButton::isTap() { return pressType == 1; }
