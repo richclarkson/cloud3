@@ -28,6 +28,7 @@ void test_no_flag_in_debounce_time() {
   // pretend a long time has passed
   PRESS_BUTTON(300, 330);
   TEST_ASSERT_FALSE(btn.isTap());
+  RELEASE_BUTTON(330, 331);
   TEST_ASSERT_FALSE(btn.isPress());
 }
 
