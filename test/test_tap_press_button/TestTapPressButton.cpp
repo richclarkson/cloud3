@@ -6,13 +6,22 @@
 TapPressButton btn;
 unsigned long timer_val;
 
-#define PRESS_BUTTON_FOR(length)                                                   \
+#define PRESS_BUTTON_FOR(length)                                               \
   for (int i = timer_val; timer_val < i + length; timer_val++)                 \
   btn.update(true, timer_val)
 
-#define RELEASE_BUTTON_FOR(length)                                                 \
+#define RELEASE_BUTTON_FOR(length)                                             \
   for (int i = timer_val; timer_val < i + length; timer_val++)                 \
   btn.update(false, timer_val)
+
+unsigned long _add_time(unsigned long timedelta) {
+  timer_val += timedelta;
+  return timer_val;
+}
+
+#define PRESS_BUTTON_AFTER(length) btn.update(true, _add_time(length))
+
+#define RELEASE_BUTTON_AFTER(length) btn.update(false, _add_time(length))
 
 void setUp() {
   btn = TapPressButton();
