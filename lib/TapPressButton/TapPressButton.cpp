@@ -43,7 +43,7 @@ bool TapPressButton::stateHasChanged() {
 }
 
 bool TapPressButton::isPressInTapWindow() {
-  return pressTime > tapThreshold && pressTime < tapThreshold + tapLength;
+  return pressTime >= tapThreshold && pressTime < tapThreshold + tapLength;
 }
 
 bool TapPressButton::isPressInPressWindow() {
