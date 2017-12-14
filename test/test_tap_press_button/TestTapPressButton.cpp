@@ -3,59 +3,73 @@
 #include "TapPressButton.h"
 #include <unity.h>
 
+#include <iostream>
+using namespace std;
+
 TapPressButton btn;
+unsigned long timer_val;
 
-#define PRESS_BUTTON(strt, end)                                                 \
-  for (int i = strt; i < end; i++)                                      \
-  btn.update(true, i)
+#define PRESS_BUTTON(length)                                                   \
+  for (int i = timer_val; timer_val < i + length; timer_val++)                 \
+  btn.update(true, timer_val)
 
-#define RELEASE_BUTTON(strt, end)                                              \
-  for (int i = strt; i < end; i++)                                      \
-    btn.update(false, i)
+#define RELEASE_BUTTON(length)                                                 \
+  for (int i = timer_val; timer_val < i + length; timer_val++)                 \
+  btn.update(false, timer_val)
 
-void setUp() { btn = TapPressButton(); }
+void setUp() {
+  btn = TapPressButton();
+  timer_val = 0;
+}
 
 void test_no_flag_in_debounce_time() {
-  PRESS_BUTTON(0, 3);
-  RELEASE_BUTTON(3, 15);
-  PRESS_BUTTON(15, 20);
-  RELEASE_BUTTON(20, 22);
-  PRESS_BUTTON(22, 30);
+  cout << "timer val: " << timer_val << ", ";
+  PRESS_BUTTON(3);
+  cout << timer_val << ", ";
+  RELEASE_BUTTON(10);
+  cout << timer_val << "\n";
+  PRESS_BUTTON(5);
+  RELEASE_BUTTON(2);
+  PRESS_BUTTON(8);
+  RELEASE_BUTTON(1);
   TEST_ASSERT_FALSE(btn.isTap());
   TEST_ASSERT_FALSE(btn.isPress());
-  RELEASE_BUTTON(30, 31);
   btn.update(false, 31);
   // pretend a long time has passed
-  PRESS_BUTTON(300, 330);
+  RELEASE_BUTTON(300);
+  PRESS_BUTTON(30);
+  RELEASE_BUTTON(1);
   TEST_ASSERT_FALSE(btn.isTap());
-  RELEASE_BUTTON(330, 331);
   TEST_ASSERT_FALSE(btn.isPress());
 }
 
 void test_tap_between_50_and_300_timercounts() {
-  PRESS_BUTTON(0, 55);
+  PRESS_BUTTON(55);
   TEST_ASSERT_FALSE(btn.isTap());
-  RELEASE_BUTTON(56, 57);
+  RELEASE_BUTTON(1);
   TEST_ASSERT_TRUE(btn.isTap());
   // pretend a long time has passed
-  PRESS_BUTTON(5000, 5300);
+  RELEASE_BUTTON(5000);
+  PRESS_BUTTON(300);
   TEST_ASSERT_FALSE(btn.isTap());
-  RELEASE_BUTTON(5301, 5302);
+  RELEASE_BUTTON(1);
   TEST_ASSERT_TRUE(btn.isTap());
 }
 
 void test_no_tap_before_51_timercounts() {
-  PRESS_BUTTON(0, 49);
+  PRESS_BUTTON(49);
   TEST_ASSERT_FALSE(btn.isTap());
-  RELEASE_BUTTON(49, 50);
+  RELEASE_BUTTON(1);
   TEST_ASSERT_FALSE(btn.isTap());
 }
 
 void test_tap_times_out_after_300_timercounts() {
-  btn.update(true, 0);
-  btn.update(true, 50);
+  // btn.update(true, 0);
+  // btn.update(true, 50);
+  PRESS_BUTTON(350);
   TEST_ASSERT_FALSE(btn.isTap());
-  btn.update(false, 350);
+  // btn.update(false, 350);
+  RELEASE_BUTTON(1);
   TEST_ASSERT_FALSE(btn.isTap());
 }
 
