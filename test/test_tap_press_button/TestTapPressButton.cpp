@@ -6,11 +6,11 @@
 TapPressButton btn;
 
 #define PRESS_BUTTON(strt, end)                                                 \
-  for (int i = strt; i < strt + end; i++)                                      \
+  for (int i = strt; i < end; i++)                                      \
   btn.update(true, i)
 
 #define RELEASE_BUTTON(strt, end)                                              \
-  for (int i = strt; i < strt + end; i++)                                      \
+  for (int i = strt; i < end; i++)                                      \
     btn.update(false, i)
 
 void setUp() { btn = TapPressButton(); }
