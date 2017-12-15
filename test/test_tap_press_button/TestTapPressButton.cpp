@@ -124,6 +124,45 @@ void test_hold_550_check_press_hold_550_is_press() {
   TEST_ASSERT_TRUE(btn.isPress());
 }
 
+void test_press_flag_cleared_when_read() {
+  PRESS_BUTTON_FOR(501);
+  btn.isPress();
+  PRESS_BUTTON_FOR(1);
+  TEST_ASSERT_FALSE(btn.isPress());
+}
+
+void test_hold_550_check_press_hold_350_release_not_tap() {
+  PRESS_BUTTON_FOR(550);
+  btn.isPress();
+  PRESS_BUTTON_FOR(350);
+  RELEASE_BUTTON_FOR(1);
+  TEST_ASSERT_FALSE(btn.isTap());
+}
+
+void test_press_detected_after_multiple_holds_and_reads() {
+  PRESS_BUTTON_FOR(501);
+  TEST_ASSERT_TRUE(btn.isPress());
+  PRESS_BUTTON_FOR(1);
+  TEST_ASSERT_FALSE(btn.isPress());
+  PRESS_BUTTON_FOR(200);
+  TEST_ASSERT_FALSE(btn.isPress());
+  PRESS_BUTTON_FOR(350);
+  TEST_ASSERT_TRUE(btn.isPress());
+  PRESS_BUTTON_FOR(1000);
+  TEST_ASSERT_TRUE(btn.isPress());
+}
+
+void test_tap_not_triggering_after_press() {
+  PRESS_BUTTON_FOR(501);
+  TEST_ASSERT_TRUE(btn.isPress());
+  PRESS_BUTTON_FOR(51);
+  TEST_ASSERT_FALSE(btn.isTap());
+  TEST_ASSERT_FALSE(btn.isPress());
+  RELEASE_BUTTON_FOR(1);
+  TEST_ASSERT_FALSE(btn.isTap());
+  TEST_ASSERT_FALSE(btn.isPress());
+}
+
 int main(int argc, char **argv) {
   UNITY_BEGIN();
 
@@ -138,6 +177,10 @@ int main(int argc, char **argv) {
   RUN_TEST(test_press_after_500_counts);
   RUN_TEST(test_hold_100_check_tap_hold_500_is_press);
   RUN_TEST(test_hold_550_check_press_hold_550_is_press);
+  RUN_TEST(test_press_flag_cleared_when_read);
+  RUN_TEST(test_hold_550_check_press_hold_350_release_not_tap);
+  RUN_TEST(test_press_detected_after_multiple_holds_and_reads);
+  RUN_TEST(test_tap_not_triggering_after_press);
 
   UNITY_END();
 }
