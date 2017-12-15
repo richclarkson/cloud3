@@ -3,8 +3,10 @@
 #include "StateManager.h"
 #include <unity.h>
 
-void setUp(void) {
+StateManager sm;
 
+void setUp(void) {
+    sm = StateManager();
 }
 
 void tearDown(void) {
