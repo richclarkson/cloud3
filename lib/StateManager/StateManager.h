@@ -2,9 +2,13 @@
 #define StateManager_h
 
 class StateManager {
-    public:
-    StateManager();
+public:
+  StateManager();
 };
 
+class Event {
+public:
+  Event();
+};
 
 #endif

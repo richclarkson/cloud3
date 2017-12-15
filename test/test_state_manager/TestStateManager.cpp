@@ -4,19 +4,20 @@
 #include <unity.h>
 
 StateManager sm;
+Event testEvt1, testEvt2;
 
 void setUp(void) {
-    sm = StateManager();
+  sm = StateManager();
+  testEvt1 = Event();
+  testEvt2 = Event();
 }
 
-void tearDown(void) {
-
-}
+void tearDown(void) {}
 
 int main() {
-    UNITY_BEGIN();
+  UNITY_BEGIN();
 
-    UNITY_END();
+  UNITY_END();
 }
 
 #endif
