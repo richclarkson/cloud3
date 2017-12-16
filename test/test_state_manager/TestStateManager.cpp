@@ -4,18 +4,25 @@
 #include <unity.h>
 
 StateManager sm;
-Event testEvt1, testEvt2;
 
 void setUp(void) {
   sm = StateManager();
-  testEvt1 = Event();
-  testEvt2 = Event();
 }
 
 void tearDown(void) {}
 
+void test_machine_can_handle_taps() {
+    sm.tap();
+    sm.tap();
+    sm.press();
+    // sm.tap();
+    // sm.press();
+}
+
 int main() {
   UNITY_BEGIN();
+
+  RUN_TEST(test_machine_can_handle_taps);
 
   UNITY_END();
 }
