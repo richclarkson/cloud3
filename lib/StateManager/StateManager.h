@@ -34,6 +34,42 @@ public:
   void tap(StateManager *sm);
 };
 
+class MiddleOut : public State {
+public:
+  MiddleOut(){};
+  ~MiddleOut(){};
+  void tap(StateManager *sm);
+};
+
+class Ripple : public State {
+public:
+  Ripple(){};
+  ~Ripple(){};
+  void tap(StateManager *sm);
+};
+
+class BangAndFade : public State {
+public:
+  BangAndFade(){};
+  ~BangAndFade(){};
+  void tap(StateManager *sm);
+};
+
+class Rainbow : public State {
+public:
+  Rainbow(){};
+  ~Rainbow(){};
+  void tap(StateManager *sm);
+};
+
+class LampMode : public State {
+public:
+  LampMode(){};
+  ~LampMode(){};
+  void tap(StateManager *sm);
+  StateManager lampState
+};
+
 class SettingsOff : public State {
 public:
   SettingsOff(){};
