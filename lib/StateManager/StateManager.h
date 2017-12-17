@@ -21,6 +21,10 @@ public:
 };
 
 class NormalOff : public State {
+// ===========================
+// Declare system states here
+// ===========================
+
 public:
   NormalOff(){};
   ~NormalOff(){};
