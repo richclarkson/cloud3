@@ -2,6 +2,7 @@
 #define StateManager_h
 
 #include <iostream>
+using namespace std;
 
 class StateManager {
   class State *current;
