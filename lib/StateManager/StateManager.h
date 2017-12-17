@@ -72,7 +72,6 @@ public:
   LampMode(){};
   ~LampMode(){};
   void tap(StateManager *sm);
-  StateManager lampState
 };
 
 class SettingsOff : public State {
