@@ -27,6 +27,7 @@ void test_machine_can_handle_taps() {
     sm.tap();
     sm.tap();
     sm.press();
+    sm.press();
 }
 
 int main() {
