@@ -108,4 +108,18 @@ public:
   void press(StateManager *sm);
 };
 
+class Ombre : public State {
+public:
+  Ombre() { PRINT_MSG("Ombre Color Selected"); }
+  ~Ombre(){};
+  void press(StateManager *sm);
+};
+
+class Fire : public State {
+public:
+  Fire() { PRINT_MSG("Fire Color Selected"); }
+  ~Fire(){};
+  void press(StateManager *sm);
+};
+
 #endif

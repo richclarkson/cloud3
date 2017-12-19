@@ -53,7 +53,17 @@ void Neon::press(StateManager *sm) {
 }
 
 void White::press(StateManager *sm) {
-    sm->setColor(new Neon());
+    sm->setColor(new Ombre());
+    delete this;
+}
+
+void Ombre::press(StateManager *sm) {
+    sm->setColor(new Fire());
+    delete this;
+}
+
+void Fire::press(StateManager *sm) {
+    sm->setColor(new White());
     delete this;
 }
 
