@@ -79,15 +79,47 @@ public:
 class LampMode : public State {
 public:
   LampMode() { PRINT_MSG("Lamp Mode Entered"); }
-  ~LampMode(){};
+  ~LampMode() { PRINT_MSG("Lamp Mode Left"); }
   void tap(StateManager *sm);
   void press(StateManager *sm);
 };
+
+// =====================
+// Setting Modes
+// =====================
 
 class SettingsOff : public State {
 public:
   SettingsOff() { PRINT_MSG("Settings Off Entered"); }
   ~SettingsOff(){};
+  void press(StateManager *sm);
+};
+
+class Channel : public State {
+public:
+  Channel() { PRINT_MSG("Channel Setting Entered"); }
+  ~Channel(){};
+  void press(StateManager *sm);
+};
+
+class Sensitivity : public State {
+public:
+  Sensitivity() { PRINT_MSG("Sensitivity Setting Entered"); }
+  ~Sensitivity(){};
+  void press(StateManager *sm);
+};
+
+class Brightness : public State {
+public:
+  Brightness() { PRINT_MSG("Brightness Setting Entered"); }
+  ~Brightness(){};
+  void press(StateManager *sm);
+};
+
+class Reset : public State {
+public:
+  Reset() { PRINT_MSG("Reset Settings Entered"); }
+  ~Reset(){};
   void press(StateManager *sm);
 };
 
