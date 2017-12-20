@@ -25,9 +25,9 @@ public:
 
 class State {
 public:
-  virtual void tap(StateManager *sm) {}
-  virtual void press(StateManager *sm) {}
   virtual ~State(){};
+  virtual void tap(StateManager *sm) { PRINT_MSG("Unregistered Tap"); }
+  virtual void press(StateManager *sm) { PRINT_MSG("Unregistered Press"); }
 };
 
 // ===========================
