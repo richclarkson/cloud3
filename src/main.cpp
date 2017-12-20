@@ -15,7 +15,7 @@ bool isTouch;
 void setup() {
     loopTime = 0;
     capSensor = TapPressButton();
-    // mainState = StateManager();
+    mainState = StateManager();
     // Serial.begin(9600);
     isTouch = false;
 }
@@ -24,12 +24,12 @@ void loop() {
     isTouch = touchRead(capPin) > touchTime;
     loopTime = millis();
     capSensor.update(isTouch, loopTime);
-    // if (capSensor.isTap()) {
-        // mainState.tap();
-    // }
-    // if (capSensor.isPress()) {
-    //     mainState.press();
-    // }
+    if (capSensor.isTap()) {
+        mainState.tap();
+    }
+    if (capSensor.isPress()) {
+        mainState.press();
+    }
 }
 
 #endif
