@@ -1,8 +1,5 @@
 #include "StateManager.h"
 
-#include <iostream>
-using namespace std;
-
 void NormalOff::tap(StateManager *sm) {
     sm->setCurrent(new FallingDot());
     delete this;
