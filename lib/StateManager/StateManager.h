@@ -27,6 +27,7 @@ class State {
 public:
   virtual void tap(StateManager *sm) {}
   virtual void press(StateManager *sm) {}
+  virtual ~State(){};
 };
 
 // ===========================
