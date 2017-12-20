@@ -6,7 +6,7 @@
 StateManager sm;
 
 void setUp(void) {
-//   sm = StateManager();
+  sm = StateManager();
 }
 
 void tearDown(void) {}
@@ -15,6 +15,7 @@ void test_machine_can_handle_taps() {
     sm.tap();
     sm.tap();
     sm.tap();
+    sm.press();
     sm.tap();
     sm.tap();
     sm.tap();
