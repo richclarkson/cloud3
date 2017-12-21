@@ -64,9 +64,50 @@ void Fire::press(StateManager *sm) {
     delete this;
 }
 
+void SettingsOff::tap(StateManager *sm) {
+    sm->setCurrent(new Channel());
+    delete this;
+}
+
 void SettingsOff::press(StateManager *sm) {
     sm->setCurrent(new NormalOff());
     delete this;
+}
+
+void Channel::tap(StateManager *sm) {
+    sm->setCurrent(new Sensitivity());
+    delete this;
+}
+
+void Channel::press(StateManager *sm) {
+    sm->advanceChannel();
+}
+
+void Sensitivity::tap(StateManager *sm) {
+    sm->setCurrent(new Brightness());
+    delete this;
+}
+
+void Sensitivity::press(StateManager *sm) {
+    sm->advanceSensitivity();
+}
+
+void Brightness::tap(StateManager *sm) {
+    sm->setCurrent(new Reset());
+    delete this;
+}
+
+void Brightness::press(StateManager *sm) {
+    sm->advanceBrightness();
+}
+
+void Reset::tap(StateManager *sm) {
+    sm->setCurrent(new SettingsOff());
+    delete this;
+}
+
+void Reset::press(StateManager *sm) {
+    sm->resetSettings();
 }
 
 StateManager::StateManager() {
@@ -84,4 +125,34 @@ void StateManager::press() {
 
 void StateManager::advanceColor() {
     colorSetting->press(this);
+}
+
+void StateManager::advanceChannel() {
+    this->channel ++;
+    if (this->channel > 8) {
+        this->channel = 0;
+    }
+    //TODO: save this value to EEPROM
+}
+
+void StateManager::advanceSensitivity() {
+    this->sensitvity ++;
+    if (this->sensitvity >= 8) {
+        this->sensitvity = 0;
+    }
+    //TODO: save this value to EEPOM
+}
+
+void StateManager::advanceBrightness() {
+    this->brightness ++;
+    if (this->brightness >= 8) {
+        this->brightness = 0;
+    }
+    //TODO: save this value to EEPOM
+}
+
+void StateManager::resetSettings() {
+    this->channel = 0;
+    this->sensitvity = 0;
+    this->brightness = 0;
 }

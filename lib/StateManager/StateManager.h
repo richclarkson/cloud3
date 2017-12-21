@@ -13,12 +13,19 @@
 class StateManager {
   class State *current;
   class State *colorSetting;
+  int channel;
+  int sensitvity;
+  int brightness;
 
 public:
   StateManager();
   void setCurrent(State *s) { current = s; }
   void setColor(State *s) { colorSetting = s; }
   void advanceColor();
+  void advanceChannel();
+  void advanceSensitivity();
+  void advanceBrightness();
+  void resetSettings();
   void tap();
   void press();
 };
@@ -93,6 +100,7 @@ class SettingsOff : public State {
 public:
   SettingsOff() { PRINT_MSG("Settings Off Entered"); }
   ~SettingsOff(){};
+  void tap(StateManager *sm);
   void press(StateManager *sm);
 };
 
@@ -100,6 +108,7 @@ class Channel : public State {
 public:
   Channel() { PRINT_MSG("Channel Setting Entered"); }
   ~Channel(){};
+  void tap(StateManager *sm);
   void press(StateManager *sm);
 };
 
@@ -107,6 +116,7 @@ class Sensitivity : public State {
 public:
   Sensitivity() { PRINT_MSG("Sensitivity Setting Entered"); }
   ~Sensitivity(){};
+  void tap(StateManager *sm);
   void press(StateManager *sm);
 };
 
@@ -114,6 +124,7 @@ class Brightness : public State {
 public:
   Brightness() { PRINT_MSG("Brightness Setting Entered"); }
   ~Brightness(){};
+  void tap(StateManager *sm);
   void press(StateManager *sm);
 };
 
@@ -121,6 +132,7 @@ class Reset : public State {
 public:
   Reset() { PRINT_MSG("Reset Settings Entered"); }
   ~Reset(){};
+  void tap(StateManager *sm);
   void press(StateManager *sm);
 };
 
