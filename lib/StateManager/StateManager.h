@@ -33,8 +33,8 @@ public:
 class State {
 public:
   virtual ~State(){};
-  virtual void tap(StateManager *sm) { PRINT_MSG("Unregistered Tap"); }
-  virtual void press(StateManager *sm) { PRINT_MSG("Unregistered Press"); }
+  virtual void tap(StateManager *sm){};
+  virtual void press(StateManager *sm){};
 };
 
 // ===========================
@@ -43,7 +43,7 @@ public:
 
 class NormalOff : public State {
 public:
-  NormalOff() { PRINT_MSG("Normal Off Entered"); }
+  NormalOff(){};
   ~NormalOff(){};
   void tap(StateManager *sm);
   void press(StateManager *sm);
@@ -51,43 +51,43 @@ public:
 
 class FallingDot : public State {
 public:
-  FallingDot() { PRINT_MSG("Falling Dot Entered"); }
+  FallingDot(){};
   ~FallingDot(){};
   void tap(StateManager *sm);
 };
 
 class MiddleOut : public State {
 public:
-  MiddleOut() { PRINT_MSG("Middle Out Entered"); }
+  MiddleOut(){};
   ~MiddleOut(){};
   void tap(StateManager *sm);
 };
 
 class Ripple : public State {
 public:
-  Ripple() { PRINT_MSG("Ripple Entered"); }
+  Ripple(){};
   ~Ripple(){};
   void tap(StateManager *sm);
 };
 
 class BangAndFade : public State {
 public:
-  BangAndFade() { PRINT_MSG("Bang and Fade Entered"); }
+  BangAndFade(){};
   ~BangAndFade(){};
   void tap(StateManager *sm);
 };
 
 class Rainbow : public State {
 public:
-  Rainbow() { PRINT_MSG("Rainbow Entered"); }
+  Rainbow(){};
   ~Rainbow(){};
   void tap(StateManager *sm);
 };
 
 class LampMode : public State {
 public:
-  LampMode() { PRINT_MSG("Lamp Mode Entered"); }
-  ~LampMode() { PRINT_MSG("Lamp Mode Left"); }
+  LampMode(){};
+  ~LampMode(){};
   void tap(StateManager *sm);
   void press(StateManager *sm);
 };
@@ -98,7 +98,7 @@ public:
 
 class SettingsOff : public State {
 public:
-  SettingsOff() { PRINT_MSG("Settings Off Entered"); }
+  SettingsOff(){};
   ~SettingsOff(){};
   void tap(StateManager *sm);
   void press(StateManager *sm);
@@ -106,7 +106,7 @@ public:
 
 class Channel : public State {
 public:
-  Channel() { PRINT_MSG("Channel Setting Entered"); }
+  Channel(){};
   ~Channel(){};
   void tap(StateManager *sm);
   void press(StateManager *sm);
@@ -114,7 +114,7 @@ public:
 
 class Sensitivity : public State {
 public:
-  Sensitivity() { PRINT_MSG("Sensitivity Setting Entered"); }
+  Sensitivity(){};
   ~Sensitivity(){};
   void tap(StateManager *sm);
   void press(StateManager *sm);
@@ -122,7 +122,7 @@ public:
 
 class Brightness : public State {
 public:
-  Brightness() { PRINT_MSG("Brightness Setting Entered"); }
+  Brightness(){};
   ~Brightness(){};
   void tap(StateManager *sm);
   void press(StateManager *sm);
@@ -130,7 +130,7 @@ public:
 
 class Reset : public State {
 public:
-  Reset() { PRINT_MSG("Reset Settings Entered"); }
+  Reset(){};
   ~Reset(){};
   void tap(StateManager *sm);
   void press(StateManager *sm);
@@ -141,28 +141,28 @@ public:
 // =====================
 class Neon : public State {
 public:
-  Neon() { PRINT_MSG("Neon Color Selected"); }
+  Neon(){};
   ~Neon(){};
   void press(StateManager *sm);
 };
 
 class White : public State {
 public:
-  White() { PRINT_MSG("White Color Selected"); }
+  White(){};
   ~White(){};
   void press(StateManager *sm);
 };
 
 class Ombre : public State {
 public:
-  Ombre() { PRINT_MSG("Ombre Color Selected"); }
+  Ombre(){};
   ~Ombre(){};
   void press(StateManager *sm);
 };
 
 class Fire : public State {
 public:
-  Fire() { PRINT_MSG("Fire Color Selected"); }
+  Fire(){};
   ~Fire(){};
   void press(StateManager *sm);
 };
