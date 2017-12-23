@@ -9,6 +9,9 @@
   #define PRINT_MSG(msg) 
 #endif
 
+// =======================
+// Class definitions
+// =======================
 
 class StateManager {
   class State *current;
@@ -139,6 +142,7 @@ public:
 // =====================
 // Color Settings
 // =====================
+
 class Neon : public State {
 public:
   Neon(){};
