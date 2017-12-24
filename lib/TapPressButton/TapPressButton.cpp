@@ -57,10 +57,8 @@ void TapPressButton::setStates(bool buttonInput) {
 }
 
 bool TapPressButton::pressTypeIsTap() {
-  return 
-    stateHasChanged() && 
-    currentButtonState == false &&
-    isPressInTapWindow();
+  return stateHasChanged() && currentButtonState == false &&
+         isPressInTapWindow();
 }
 
 bool TapPressButton::pressTypeIsPress() {
