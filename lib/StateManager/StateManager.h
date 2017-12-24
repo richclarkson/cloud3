@@ -17,7 +17,7 @@ class StateManager {
   class State *current;
   class State *colorSetting;
   int channel;
-  int sensitvity;
+  int sensitivity;
   int brightness;
 
 public:

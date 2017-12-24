@@ -136,11 +136,11 @@ void StateManager::advanceChannel() {
 }
 
 void StateManager::advanceSensitivity() {
-    this->sensitvity ++;
-    if (this->sensitvity >= 8) {
-        this->sensitvity = 0;
-    }
-    //TODO: save this value to EEPROM
+  this->sensitivity++;
+  if (this->sensitivity >= 8) {
+    this->sensitivity = 0;
+  }
+  // TODO: save this value to EEPROM
 }
 
 void StateManager::advanceBrightness() {
@@ -152,8 +152,8 @@ void StateManager::advanceBrightness() {
 }
 
 void StateManager::resetSettings() {
-    this->channel = 0;
-    this->sensitvity = 0;
-    this->brightness = 0;
-    //TODO: Saves values to EEPROM
+  this->channel = 0;
+  this->sensitivity = 0;
+  this->brightness = 0;
+  // TODO: Saves values to EEPROM
 }
