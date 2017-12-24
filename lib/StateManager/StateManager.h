@@ -1,14 +1,6 @@
 #ifndef StateManager_h
 #define StateManager_h
 
-#if defined UNIT_TEST
-  #include <iostream>
-  using namespace std;
-  #define PRINT_MSG(msg) cout << msg << "\n"
-#else
-  #define PRINT_MSG(msg) 
-#endif
-
 // =======================
 // Class definitions
 // =======================
@@ -26,6 +18,9 @@ public:
   void setColor(State *s) { colorSetting = s; }
   void advanceColor();
   void advanceChannel();
+  int getChannel() { return channel; }
+  int getSensitivity() { return sensitivity; }
+  int getBrightness() { return brightness; }
   void advanceSensitivity();
   void advanceBrightness();
   void resetSettings();
@@ -46,7 +41,7 @@ public:
 
 class NormalOff : public State {
 public:
-  NormalOff(){};
+  NormalOff();
   ~NormalOff(){};
   void tap(StateManager *sm);
   void press(StateManager *sm);
@@ -54,42 +49,42 @@ public:
 
 class FallingDot : public State {
 public:
-  FallingDot(){};
+  FallingDot();
   ~FallingDot(){};
   void tap(StateManager *sm);
 };
 
 class MiddleOut : public State {
 public:
-  MiddleOut(){};
+  MiddleOut();
   ~MiddleOut(){};
   void tap(StateManager *sm);
 };
 
 class Ripple : public State {
 public:
-  Ripple(){};
+  Ripple();
   ~Ripple(){};
   void tap(StateManager *sm);
 };
 
 class BangAndFade : public State {
 public:
-  BangAndFade(){};
+  BangAndFade();
   ~BangAndFade(){};
   void tap(StateManager *sm);
 };
 
 class Rainbow : public State {
 public:
-  Rainbow(){};
+  Rainbow();
   ~Rainbow(){};
   void tap(StateManager *sm);
 };
 
 class LampMode : public State {
 public:
-  LampMode(){};
+  LampMode();
   ~LampMode(){};
   void tap(StateManager *sm);
   void press(StateManager *sm);
@@ -101,7 +96,7 @@ public:
 
 class SettingsOff : public State {
 public:
-  SettingsOff(){};
+  SettingsOff();
   ~SettingsOff(){};
   void tap(StateManager *sm);
   void press(StateManager *sm);
@@ -109,7 +104,7 @@ public:
 
 class Channel : public State {
 public:
-  Channel(){};
+  Channel();
   ~Channel(){};
   void tap(StateManager *sm);
   void press(StateManager *sm);
@@ -117,7 +112,7 @@ public:
 
 class Sensitivity : public State {
 public:
-  Sensitivity(){};
+  Sensitivity();
   ~Sensitivity(){};
   void tap(StateManager *sm);
   void press(StateManager *sm);
@@ -125,7 +120,7 @@ public:
 
 class Brightness : public State {
 public:
-  Brightness(){};
+  Brightness();
   ~Brightness(){};
   void tap(StateManager *sm);
   void press(StateManager *sm);
@@ -133,7 +128,7 @@ public:
 
 class Reset : public State {
 public:
-  Reset(){};
+  Reset();
   ~Reset(){};
   void tap(StateManager *sm);
   void press(StateManager *sm);
@@ -145,28 +140,28 @@ public:
 
 class Neon : public State {
 public:
-  Neon(){};
+  Neon();
   ~Neon(){};
   void press(StateManager *sm);
 };
 
 class White : public State {
 public:
-  White(){};
+  White();
   ~White(){};
   void press(StateManager *sm);
 };
 
 class Ombre : public State {
 public:
-  Ombre(){};
+  Ombre();
   ~Ombre(){};
   void press(StateManager *sm);
 };
 
 class Fire : public State {
 public:
-  Fire(){};
+  Fire();
   ~Fire(){};
   void press(StateManager *sm);
 };
