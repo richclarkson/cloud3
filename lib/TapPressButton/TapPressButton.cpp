@@ -13,6 +13,20 @@ TapPressButton::TapPressButton() {
   pressType = 0;
 }
 
+TapPressButton::TapPressButton(int tap_threshold, int tap_length,
+                               int press_threshold, int press_length) {
+  TAP_THRESHOLD = tap_threshold;
+  TAP_LENGTH = tap_length;
+  PRESS_THRESHOLD = press_threshold;
+  PRESS_LENGTH = press_length;
+  tapTimer = 0;
+  pressTimer = 0;
+  prevTimerVal = 0;
+  currentButtonState = false;
+  prevButtonState = false;
+  pressType = 0;
+}
+
 void TapPressButton::update(bool input, unsigned long timerVal) {
   setStates(input);
   setTimers(timerVal);

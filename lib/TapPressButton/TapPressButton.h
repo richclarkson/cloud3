@@ -4,10 +4,11 @@
 class TapPressButton {
 public:
   TapPressButton();
+  TapPressButton(int tap_threshold, int tap_length, int press_threshold, int press_length);
   void update(bool input, unsigned long timerVal);
   bool isTap();
   bool isPress();
-  
+
 private:
   bool currentButtonState;
   bool prevButtonState;
