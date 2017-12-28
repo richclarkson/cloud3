@@ -1,6 +1,9 @@
 
 /*
- Music Mode One - Falling Dot: White bar filled to soundpoint with floating blue dot at top.
+ Animations
+
+ Muisc Modes:
+ 1 - Falling Dot: White bar filled to soundpoint with floating blue dot at top.
 
  Variables:
   SoundLevel - the current sound level reading 
@@ -51,10 +54,15 @@ void setup() {
 }
 
 
+void loop() {
+
+  musicmode1();
+  //musicmode2();
+}
 
 
 
-void loop() {  
+void musicmode1() {  
 
  if (soundLevel > dot) dot = soundLevel; // Keep dot on top of soundLevel
  if (dot > NUM_LEDS) dot = NUM_LEDS; // Keep dot from going out of frame
