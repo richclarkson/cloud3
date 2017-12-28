@@ -9,17 +9,13 @@
     4 - Fade: Whole saber filled to brightness level scaled with soundpoint. Has a minimum brightness point.
     5 - Rainbow: Rainbow colored bar filled to soundpoint. *Color can be changed by a push and hold.
 
-  Variables:
-   SoundLevel - the current sound level reading 
-   dot - the slowing falling upper level pixel
-   singleChannel - array of FFT values for each channel
-   musicVariable3 - start position of Rainbow color wheel
-
   Fucntions from FastLED library:
     fadeToBlackBy
     fill_rainbow
     fill_solid
     blur1d
+    setRGB
+    CHSV
 */
 
 #include <Arduino.h>
@@ -29,10 +25,10 @@
 FASTLED_USING_NAMESPACE
 
 //Sound Variables
-int soundLevel;       // this is the output of the FFT after being EQ
-int dot = 100;        //
-int singleChannel[8]; //
-int RainbowVariable = 0;
+int soundLevel;          // this is the output of the FFT after being EQ
+int dot = 100;           // this is a slowly falling value based on the peaks of soundLevel, used by musicMode1 and musicMode4
+int singleChannel[8];    // array of FFT values for each channel used in musicMode3
+int RainbowVariable = 0; // start position of Rainbow color wheel used in musicMode5
 
 //LED Variables
 #define DATA_PIN 11 //MOSI  //11 Green
@@ -136,9 +132,9 @@ void musicmode2()
 void musicmode3()
 { // Ripple
 
-  fadeToBlackBy(leds, NUM_LEDS, 10);
+  fadeToBlackBy(leds, NUM_LEDS, 10); // start by fading out old values
 
-  for (int y = 0; y < 8; y++)
+  for (int y = 0; y < 8; y++) // create 8 different LED sections of saber each based on the 8 FFT channels
   {
     int bottomOfRipple = ((y * 15) + 6) - (singleChannel[y] / 10);
     if (bottomOfRipple <= 0)
@@ -156,9 +152,9 @@ void musicmode3()
 
     for (int led = bottomOfRipple; led < topOfRipple; led++)
     {
-      leds[led] = CHSV(0, 0, rippleBrightness);
+      leds[led] = CHSV(0, 0, rippleBrightness); // fill in LEDs according to the top and bottom of each section deffined above
     }
-    blur1d(leds, NUM_LEDS, singleChannel[y]);
+    blur1d(leds, NUM_LEDS, singleChannel[y]);  // blur LEDs for smoother transitions
   }
 
   FastLED.show();
