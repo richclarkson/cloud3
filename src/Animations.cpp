@@ -71,6 +71,9 @@ void loop() {
 
 
 
+<<<<<<< HEAD
+  fadeToBlackBy(leds, NUM_LEDS, 30); // fade all LEDs to black slowly (new readings will maintain soundLevel at a constant level of fade)
+=======
 void musicmode1() {   // Falling Dot
 
  if (soundLevel > dot) dot = soundLevel; // Keep dot on top of soundLevel
@@ -79,6 +82,7 @@ void musicmode1() {   // Falling Dot
  for (int led = 0; led < soundLevel; led++) { // Start by Filling LEDS up to the soundLevel with dim white
     leds[led].setRGB( 80, 80, 80);       
   }
+>>>>>>> parent of 6f0eced... restructure branch to focus on Animations.cpp
 
  // NO SOUND
   if (soundLevel <= 0) {       // If no sound (dot = 0)
@@ -106,6 +110,19 @@ void musicmode1() {   // Falling Dot
 
 
 
+<<<<<<< HEAD
+  //Start by filling in the LEDs with the soundLevel either side of the center with dim white
+  for (int led = (NUM_LEDS - soundLevel) / 2; led < (soundLevel / 2) + NUM_LEDS / 2; led++)
+  {
+    leds[led].setRGB(50, 50, 50);
+  }
+
+  // NO SOUND
+  if (soundLevel <= 0)
+  {                                    // If no sound (dot = 0)
+    fadeToBlackBy(leds, NUM_LEDS, 30); // fade all leds to black slowly
+    leds[NUM_LEDS / 2].setRGB(80, 80, 80); // keep center dot illuminated
+=======
 
 
 void musicmode2() {   // Middle Out - similar to musicmode1 but from the center and no dot
@@ -116,6 +133,7 @@ void musicmode2() {   // Middle Out - similar to musicmode1 but from the center 
  //Start by filling in the LEDs with the soundLevel either side of the center with dim white     
  for (int led = (NUM_LEDS - soundLevel) / 2; led < (soundLevel / 2) + NUM_LEDS / 2; led++) {
     leds[led].setRGB( 50, 50, 50);
+>>>>>>> parent of 6f0eced... restructure branch to focus on Animations.cpp
   }
 
  // NO SOUND
@@ -124,6 +142,9 @@ void musicmode2() {   // Middle Out - similar to musicmode1 but from the center 
     leds[NUM_LEDS / 2].setRGB( 80, 80, 80);  
   }
 
+<<<<<<< HEAD
+  FastLED.show(); // send data to LEDs to display
+=======
  // SOME SOUND
   if (soundLevel < NUM_LEDS) { // Partial column
     fadeToBlackBy( leds, NUM_LEDS, 30); // fade all LEDs to black slowly (new readings will maintain soundLevel at a constant level of fade)
@@ -134,6 +155,7 @@ void musicmode2() {   // Middle Out - similar to musicmode1 but from the center 
   if (dot > 0) {   // Let the dot drop by one each loop untill it is eventually bumped up by soundLevel 
     dot--;
   }
+>>>>>>> parent of 6f0eced... restructure branch to focus on Animations.cpp
 }
 
 
@@ -167,6 +189,17 @@ void musicmode3() {     // Ripple
 
 
 
+<<<<<<< HEAD
+void musicmode4()
+{ // Fade
+  
+  if (soundLevel > dot)
+    dot = soundLevel; // Keep dot on top of soundLevel
+  if (dot > NUM_LEDS)
+    dot = NUM_LEDS; // Keep dot from going out of frame
+      
+=======
+>>>>>>> parent of 6f0eced... restructure branch to focus on Animations.cpp
 
 
 void musicmode4() {   // Fade
@@ -185,8 +218,15 @@ void musicmode4() {   // Fade
 
 
 
+<<<<<<< HEAD
+  for (int led = 0; led < soundLevel; led++)
+  { // Start by Filling LEDS up to the soundLevel with coulor spectrum
+    fill_rainbow(leds, soundLevel, (RainbowVariable * 30), 1);
+  }
+=======
 
   void musicmode5() {   // Rainbow - similar to musicmode1 but with color and no dot
+>>>>>>> parent of 6f0eced... restructure branch to focus on Animations.cpp
 
  if (soundLevel > dot) dot = soundLevel; // Keep dot on top of soundLevel
  if (dot > NUM_LEDS) dot = NUM_LEDS; // Keep dot from going out of frame
@@ -200,6 +240,10 @@ void musicmode4() {   // Fade
     fadeToBlackBy( leds, NUM_LEDS, 50);   // fade all leds to black slowly  
   }
 
+<<<<<<< HEAD
+  FastLED.show(); // send data to LEDs to display
+}
+=======
  // SOME SOUND
   if (soundLevel < NUM_LEDS) { // Partial column
     fadeToBlackBy( leds, NUM_LEDS, 50); // fade all LEDs to black slowly (new readings will maintain soundLevel at a constant level of fade)
@@ -217,3 +261,4 @@ void musicmode4() {   // Fade
     dot--;
   }
 }
+>>>>>>> parent of 6f0eced... restructure branch to focus on Animations.cpp
