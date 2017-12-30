@@ -4,7 +4,7 @@
 #include <iostream>
 using namespace std;
 #define PRINT_MSG(msg) cout << msg << "\n"
-#elif defined ARDUINO
+#elif defined ARDUINO && STATE_MSG
 #include <Arduino.h>
 #define PRINT_MSG(msg) Serial.println(msg);
 #else
