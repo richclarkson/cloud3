@@ -15,18 +15,18 @@
     3 - Ombre: Rainbow color gradient with linear cycle
     4 - Fire: Visualization of linear fire
 
-  Fucntions from FastLED library
-  External (i assume are somewhere in lib?)
-    fadeToBlackBy
-    fill_rainbow
-    fill_solid
-    blur1d
-    setRGB
-    CHSV
-  Internal (writen in here)
-    rainbow
-    Fire2012
-    HeatColor2 - required as part of Fire2012
+  Fucntions used that are from FastLED library:
+   External (i assume are somewhere in lib?):
+     fadeToBlackBy
+     fill_rainbow
+     fill_solid
+     blur1d
+     setRGB
+     CHSV
+   Internal (writen in here):
+     rainbow
+     Fire2012
+     HeatColor2 - required as part of Fire2012
 
 */
 
@@ -49,6 +49,7 @@ uint8_t gHue = 0;           // rotating "base color" used by many of the pattern
 int COOLINGarray[] = {100, 90, 85, 80, 75, 90, 85, 100, 90}; // Fire Mode varriable
 int COOLING = 90;         // Fire Mode varriable
 #define SPARKING 100      // Fire Mode varriable
+int capture[100];
 
 //LED Variables
 #define DATA_PIN 11 //MOSI  //11 Green
@@ -72,6 +73,7 @@ void lampmode4();
 
 void rainbow(int startPos, int number, float deltaHue);
 void Fire2012();
+CRGB HeatColor2( uint8_t temperature);
 
 
 void setup()
@@ -94,21 +96,24 @@ void setup()
 
   rainbow(0,NUM_LEDS,1);
   Fire2012();
+  HeatColor2(10);
 
 }
 
 void loop()         //random loop code
 {
-  musicmode1();
-  musicmode2();
-  musicmode3();
-  musicmode4();
-  musicmode5();
+  // musicmode1();
+  // musicmode2();
+  // musicmode3();
+  // musicmode4();
+  // musicmode5();
 
-  lampmode1();
-  lampmode2();
-  lampmode3();
+  //lampmode1();
+  //lampmode2();
+  //lampmode3();
   lampmode4();
+
+  delay(10);
 }
 
 
@@ -254,6 +259,10 @@ void musicmode5()     // Rainbow - similar to musicmode1 but with color and no d
 
 
 
+
+
+
+
 void lampmode1()  // Neon
 {
   rainbow(0, NUM_LEDS, 0.1);
@@ -305,8 +314,7 @@ void rainbow(int startPos, int number, float deltaHue) {
   {
     // Array of temperature readings at each simulation cell
     //static byte heat[100];
-    capture[NUM_LEDS - 15];
-  
+    //capture[NUM_LEDS - 15];
   
   
     // Step 1.  Cool down every cell a little
@@ -374,3 +382,6 @@ void rainbow(int startPos, int number, float deltaHue) {
   
     return heatcolor2;
   }
+
+  
+
