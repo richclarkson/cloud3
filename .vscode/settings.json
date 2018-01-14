@@ -1,0 +1,5 @@
+{
+    "terminal.integrated.env.osx": {
+        "PATH": "/Users/richardclarkson/.platformio/penv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+    }
+}
