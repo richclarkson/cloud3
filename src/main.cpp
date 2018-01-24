@@ -7,7 +7,7 @@
 TapPressButton capSensor;
 StateManager mainState;
 
-const int capPin = 23;
+const int capPin = 19;
 const int touchTime = 1000;
 unsigned long loopTime;
 bool isTouch;
