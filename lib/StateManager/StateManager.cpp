@@ -200,3 +200,8 @@ void StateManager::resetSettings() {
   this->brightness = 0;
   // TODO: Saves values to EEPROM
 }
+
+void StateManager::registerFFTCallback(void (*cb)()) { this->fftCallBack = cb; }
+
+void StateManager::callFFTCallback() { this->fftCallBack(); }
+

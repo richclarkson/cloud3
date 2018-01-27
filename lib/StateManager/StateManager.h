@@ -11,6 +11,7 @@ class StateManager {
   int channel;
   int sensitivity;
   int brightness;
+  void (*fftCallBack) ();
 
 public:
   StateManager();
@@ -26,6 +27,8 @@ public:
   void resetSettings();
   void tap();
   void press();
+  void registerFFTCallback(void (*cb)());
+  void callFFTCallback();
 };
 
 class State {
