@@ -5,14 +5,16 @@
 
 StateManager sm;
 
-int testVal = 0;
+enum testState {none, fft, level};
+
+testState testVal = none;
 
 void fftCallBack() {
-  testVal = 1;
+  testVal = fft;
 }
 
 void levelCallback() {
-  testVal = 2;
+  testVal = level;
 }
 
 void setUp(void) {
@@ -45,18 +47,18 @@ void test_machine_can_handle_taps() {
 
 void test_fft_callback() {
   sm.callFFTCallback();
-  TEST_ASSERT_EQUAL(1, testVal);
+  TEST_ASSERT_EQUAL(fft, testVal);
 }
 
 void test_level_callback() {
   sm.callLevelCallback();
-  TEST_ASSERT_EQUAL(2, testVal);
+  TEST_ASSERT_EQUAL(level, testVal);
 }
 
 void test_fallingdot_updates_level() {
   sm.tap();
   sm.update();
-  TEST_ASSERT_EQUAL(2, testVal);
+  TEST_ASSERT_EQUAL(level, testVal);
 }
 
 void test_ripple_updates_fft() {
@@ -64,7 +66,7 @@ void test_ripple_updates_fft() {
   sm.tap();
   sm.tap();
   sm.update();
-  TEST_ASSERT_EQUAL(1, testVal);
+  TEST_ASSERT_EQUAL(fft, testVal);
 }
 
 int main() {
