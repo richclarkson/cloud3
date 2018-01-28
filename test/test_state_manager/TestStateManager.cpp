@@ -8,8 +8,12 @@ StateManager sm;
 
 using namespace std;
 
+int testVal = 0;
+
 void fftCallBack() {
-  cout << "fft call back called" << "\n";
+  testVal = 1;
+}
+
 }
 
 void setUp(void) {
@@ -39,15 +43,16 @@ void test_machine_can_handle_taps() {
     sm.press();
 }
 
-void test_call_back_called() {
+void test_fft_callback() {
   sm.callFFTCallback();
+  TEST_ASSERT_EQUAL(1, testVal);
 }
 
 int main() {
   UNITY_BEGIN();
 
   RUN_TEST(test_machine_can_handle_taps);
-  RUN_TEST(test_call_back_called);
+  RUN_TEST(test_fft_callback);
 
   UNITY_END();
 }
