@@ -211,12 +211,16 @@ void StateManager::resetSettings() {
   // TODO: Saves values to EEPROM
 }
 
-void StateManager::registerFFTCallback(void (*cb)()) { this->fftCallBack = cb; }
+void StateManager::registerFFTCallback(void (*cb)(), float* fftArrayPointer) {
+  this->fftCallBack = cb;
+  this->fftArrayPtr = fftArrayPointer;
+}
 
 void StateManager::callFFTCallback() { this->fftCallBack(); }
 
-void StateManager::registerLevelCallback(void (*cb)()) {
+void StateManager::registerLevelCallback(void (*cb)(), float* levelValPointer) {
   this->levelCallback = cb;
+  this->levelValPtr = levelValPointer;
 }
 
 void StateManager::callLevelCallback() { this->levelCallback(); }

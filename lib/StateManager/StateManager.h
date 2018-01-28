@@ -13,6 +13,9 @@ class StateManager {
   int brightness;
   void (*fftCallBack) ();
   void (*levelCallback) ();
+  float* levelValPtr;
+  float* fftArrayPtr;
+
 
 public:
   StateManager();
@@ -28,9 +31,9 @@ public:
   void resetSettings();
   void tap();
   void press();
-  void registerFFTCallback(void (*cb)());
+  void registerFFTCallback(void (*cb)(), float* fftArrayPointer);
   void callFFTCallback();
-  void registerLevelCallback(void (*cb)());
+  void registerLevelCallback(void (*cb)(), float* levelValPointer);
   void callLevelCallback();
   void update();
 };
