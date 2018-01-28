@@ -2,11 +2,8 @@
 
 #include "StateManager.h"
 #include <unity.h>
-#include <iostream>
 
 StateManager sm;
-
-using namespace std;
 
 int testVal = 0;
 
