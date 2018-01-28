@@ -73,6 +73,11 @@ void test_ripple_updates_fft() {
   TEST_ASSERT_EQUAL(TEST_FFT, fftArray[56]);
 }
 
+void test_lamp_mode_update_runs() {
+  sm.press();
+  sm.update();
+}
+
 int main() {
   UNITY_BEGIN();
 
@@ -81,6 +86,7 @@ int main() {
   RUN_TEST(test_level_callback);
   RUN_TEST(test_fallingdot_updates_level);
   RUN_TEST(test_ripple_updates_fft);
+  RUN_TEST(test_lamp_mode_update_runs);
 
   UNITY_END();
 }
