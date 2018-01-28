@@ -210,3 +210,7 @@ void StateManager::registerLevelCallback(void (*cb)()) {
 }
 
 void StateManager::callLevelCallback() { this->levelCallback(); }
+
+void StateManager::update() {
+  current->update();
+}
