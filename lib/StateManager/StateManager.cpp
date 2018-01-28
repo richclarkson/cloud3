@@ -30,12 +30,16 @@ void FallingDot::tap(StateManager *sm) {
   delete this;
 }
 
+void FallingDot::update(StateManager *sm) { sm->callLevelCallback(); }
+
 MiddleOut::MiddleOut() { PRINT_MSG("Middle Out entered"); }
 
 void MiddleOut::tap(StateManager *sm) {
   sm->setCurrent(new Ripple());
   delete this;
 }
+
+void MiddleOut::update(StateManager *sm) { sm->callLevelCallback(); }
 
 Ripple::Ripple() { PRINT_MSG("Ripple entered"); }
 
@@ -44,6 +48,8 @@ void Ripple::tap(StateManager *sm) {
   delete this;
 }
 
+void Ripple::update(StateManager *sm) { sm->callFFTCallback(); }
+
 BangAndFade::BangAndFade() { PRINT_MSG("Bang and Fade entered"); }
 
 void BangAndFade::tap(StateManager *sm) {
@@ -51,12 +57,16 @@ void BangAndFade::tap(StateManager *sm) {
   delete this;
 }
 
+void BangAndFade::update(StateManager *sm) { sm->callLevelCallback(); }
+
 Rainbow::Rainbow() { PRINT_MSG("Rainbow entered"); }
 
 void Rainbow::tap(StateManager *sm) {
   sm->setCurrent(new LampMode());
   delete this;
 }
+
+void Rainbow::update(StateManager *sm) { sm->callLevelCallback(); }
 
 LampMode::LampMode() { PRINT_MSG("Lamp Mode entered"); }
 
@@ -200,3 +210,19 @@ void StateManager::resetSettings() {
   this->brightness = 0;
   // TODO: Saves values to EEPROM
 }
+
+void StateManager::registerFFT(void (*cb)(), float* fftArrayPointer) {
+  this->fftCallBack = cb;
+  this->fftArrayPtr = fftArrayPointer;
+}
+
+void StateManager::callFFTCallback() { this->fftCallBack(); }
+
+void StateManager::registerLevel(void (*cb)(), float* levelValPointer) {
+  this->levelCallback = cb;
+  this->levelValPtr = levelValPointer;
+}
+
+void StateManager::callLevelCallback() { this->levelCallback(); }
+
+void StateManager::update() { current->update(this); }

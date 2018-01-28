@@ -11,6 +11,11 @@ class StateManager {
   int channel;
   int sensitivity;
   int brightness;
+  void (*fftCallBack) ();
+  void (*levelCallback) ();
+  float* levelValPtr;
+  float* fftArrayPtr;
+
 
 public:
   StateManager();
@@ -26,6 +31,11 @@ public:
   void resetSettings();
   void tap();
   void press();
+  void registerFFT(void (*cb)(), float* fftArrayPointer);
+  void callFFTCallback();
+  void registerLevel(void (*cb)(), float* levelValPointer);
+  void callLevelCallback();
+  void update();
 };
 
 class State {
@@ -33,6 +43,7 @@ public:
   virtual ~State(){};
   virtual void tap(StateManager *sm){};
   virtual void press(StateManager *sm){};
+  virtual void update(StateManager *sm){};
 };
 
 // ===========================
@@ -52,6 +63,7 @@ public:
   FallingDot();
   ~FallingDot(){};
   void tap(StateManager *sm);
+  void update(StateManager *sm);
 };
 
 class MiddleOut : public State {
@@ -59,6 +71,7 @@ public:
   MiddleOut();
   ~MiddleOut(){};
   void tap(StateManager *sm);
+  void update(StateManager *sm);
 };
 
 class Ripple : public State {
@@ -66,6 +79,7 @@ public:
   Ripple();
   ~Ripple(){};
   void tap(StateManager *sm);
+  void update(StateManager *sm);
 };
 
 class BangAndFade : public State {
@@ -73,6 +87,7 @@ public:
   BangAndFade();
   ~BangAndFade(){};
   void tap(StateManager *sm);
+  void update(StateManager *sm);
 };
 
 class Rainbow : public State {
@@ -80,6 +95,7 @@ public:
   Rainbow();
   ~Rainbow(){};
   void tap(StateManager *sm);
+  void update(StateManager *sm);
 };
 
 class LampMode : public State {
