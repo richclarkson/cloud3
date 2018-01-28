@@ -12,6 +12,7 @@ class StateManager {
   int sensitivity;
   int brightness;
   void (*fftCallBack) ();
+  void (*levelCallback) ();
 
 public:
   StateManager();
@@ -29,6 +30,8 @@ public:
   void press();
   void registerFFTCallback(void (*cb)());
   void callFFTCallback();
+  void registerLevelCallback(void (*cb)());
+  void callLevelCallback();
 };
 
 class State {

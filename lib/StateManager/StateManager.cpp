@@ -205,3 +205,8 @@ void StateManager::registerFFTCallback(void (*cb)()) { this->fftCallBack = cb; }
 
 void StateManager::callFFTCallback() { this->fftCallBack(); }
 
+void StateManager::registerLevelCallback(void (*cb)()) {
+  this->levelCallback = cb;
+}
+
+void StateManager::callLevelCallback() { this->levelCallback(); }
