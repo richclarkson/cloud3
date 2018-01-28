@@ -56,12 +56,28 @@ void test_level_callback() {
   TEST_ASSERT_EQUAL(2, testVal);
 }
 
+void test_fallingdot_updates_level() {
+  sm.tap();
+  sm.update();
+  TEST_ASSERT_EQUAL(2, testVal);
+}
+
+void test_ripple_updates_fft() {
+  sm.tap();
+  sm.tap();
+  sm.tap();
+  sm.update();
+  TEST_ASSERT_EQUAL(1, testVal);
+}
+
 int main() {
   UNITY_BEGIN();
 
   RUN_TEST(test_machine_can_handle_taps);
   RUN_TEST(test_fft_callback);
   RUN_TEST(test_level_callback);
+  RUN_TEST(test_fallingdot_updates_level);
+  RUN_TEST(test_ripple_updates_fft);
 
   UNITY_END();
 }
