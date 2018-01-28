@@ -23,8 +23,8 @@ void levelCallback() {
 
 void setUp(void) {
   sm = StateManager();
-  sm.registerFFTCallback(fftCallBack, &fftArray[0]);
-  sm.registerLevelCallback(levelCallback, &levelVal);
+  sm.registerFFT(fftCallBack, &fftArray[0]);
+  sm.registerLevel(levelCallback, &levelVal);
 }
 
 void tearDown(void) {}

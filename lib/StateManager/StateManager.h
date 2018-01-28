@@ -31,9 +31,9 @@ public:
   void resetSettings();
   void tap();
   void press();
-  void registerFFTCallback(void (*cb)(), float* fftArrayPointer);
+  void registerFFT(void (*cb)(), float* fftArrayPointer);
   void callFFTCallback();
-  void registerLevelCallback(void (*cb)(), float* levelValPointer);
+  void registerLevel(void (*cb)(), float* levelValPointer);
   void callLevelCallback();
   void update();
 };
