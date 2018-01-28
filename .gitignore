@@ -74,3 +74,7 @@ eagle.epf
 .pioenvs/*
 .piolibdeps/*
 .vscode/*
+.pioenvs
+.piolibdeps
+.vscode/c_cpp_properties.json
+.vscode/launch.json
