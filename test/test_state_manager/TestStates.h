@@ -9,17 +9,17 @@ public:
   int getID();
 };
 
-class TestState1 : public TestState {
+class TestStateOne : public TestState {
 public:
-  TestState1();
-  ~TestState1();
+  TestStateOne();
+  ~TestStateOne();
   void tap(StateManager *sm);
 };
 
-class TestState2 : public TestState {
+class TestStateTwo : public TestState {
 public:
-  TestState2();
-  ~TestState2();
+  TestStateTwo();
+  ~TestStateTwo();
   void tap(StateManager *sm);
 };
 

@@ -6,33 +6,33 @@ int TestState::getID() {
   return id;
 }
 
-TestState1::TestState1() { 
+TestStateOne::TestStateOne() { 
   cout << "\nTest State 1 created\n"; 
   this->id = 1;
 }
 
-TestState1::~TestState1() { 
+TestStateOne::~TestStateOne() { 
   cout << "\nTest State 1 destroyed\n"; 
 }
 
-void TestState1::tap(StateManager *sm) {
+void TestStateOne::tap(StateManager *sm) {
   cout << "1 tapped: " << sm << "\n";
-  // TestState2* ts = new TestState2;
+  // TestStateTwo* ts = new TestStateTwo;
   delete this;
-  sm->setCurrent(new TestState2());
+  sm->setCurrent(new TestStateTwo());
 }
 
-TestState2::TestState2() { 
+TestStateTwo::TestStateTwo() { 
   cout << "\nTest State 2 created\n"; 
   this->id = 2;
 }
 
-TestState2::~TestState2() { 
+TestStateTwo::~TestStateTwo() { 
   cout << "\nTest State 2 destroyed\n"; 
 }
 
-void TestState2::tap(StateManager *sm) {
+void TestStateTwo::tap(StateManager *sm) {
   cout << "2 tapped: " << sm << "\n";
   delete this;
-  sm->setCurrent(new TestState1());
+  sm->setCurrent(new TestStateOne());
 }

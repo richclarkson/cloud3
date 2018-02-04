@@ -18,10 +18,10 @@ public:
 };
 
 TestStateManager *sm;
-TestState *ts = new TestState1();
+TestState *ts = new TestStateOne();
 
 void setUp(void) {
-  sm = new TestStateManager(new TestState1);
+  sm = new TestStateManager(new TestStateOne);
 }
 
 void test_test_state_id_exists() { TEST_ASSERT_EQUAL(1, ts->getID()); }
