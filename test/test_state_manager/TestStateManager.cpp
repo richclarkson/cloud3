@@ -5,7 +5,9 @@
 #include <unity.h>
 
 class TestStateManager : public StateManager {
+  TestState *current;
 public:
+  TestStateManager(TestState *starting) { current = starting; }
   int getCurrentID() { return current->getID(); }
 };
 
