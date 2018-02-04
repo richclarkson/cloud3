@@ -1,92 +1,47 @@
 #ifdef UNIT_TEST
 
 #include "StateManager.h"
+#include "TestStates.h"
 #include <unity.h>
 
-StateManager sm;
+class TestStateManager : public StateManager {
+  class TestState *current;
 
-const float TEST_FFT = .5;
-const float TEST_LEVEL = .9;
+public:
+  TestStateManager() {}
+  TestStateManager(TestState *starting) { current = starting; }
+  int getCurrentStateTestVal() { return current->getTestVal(); }
+  void deleteState() { delete current; }
+};
 
-float levelVal = 0;
-float fftArray[128];
+TestStateManager *sm;
+TestState1 *ts = new TestState1();
 
-void fftCallBack() {
-  for (int i=0; i<128; i++) {
-    fftArray[i] = TEST_FFT;
-  }
+void setUp(void) { 
+  sm = new TestStateManager(new TestState1());
 }
 
-void levelCallback() {
-  levelVal = TEST_LEVEL;
+void tearDown(void) { 
+  delete sm; 
 }
 
-void setUp(void) {
-  sm = StateManager();
-  sm.registerFFT(fftCallBack, &fftArray[0]);
-  sm.registerLevel(levelCallback, &levelVal);
+void test_test_state_id_exists() { TEST_ASSERT_EQUAL(1, ts->testVal); }
+
+void test_starting_state_val_is_1() {
+  TEST_ASSERT_EQUAL(1, sm->getCurrentStateTestVal());
 }
 
-void tearDown(void) {}
-
-void test_machine_can_handle_taps() {
-    sm.tap();
-    sm.tap();
-    sm.tap();
-    sm.press();
-    sm.tap();
-    sm.tap();
-    sm.tap();
-    sm.press();
-    sm.tap();
-    sm.tap();
-    sm.tap();
-    sm.tap();
-    sm.tap();
-    sm.tap();
-    sm.tap();
-    sm.press();
-    sm.press();
-}
-
-void test_fft_callback() {
-  sm.callFFTCallback();
-  TEST_ASSERT_EQUAL(TEST_FFT, fftArray[10]);
-}
-
-void test_level_callback() {
-  sm.callLevelCallback();
-  TEST_ASSERT_EQUAL(TEST_LEVEL, levelVal);
-}
-
-void test_fallingdot_updates_level() {
-  sm.tap();
-  sm.update();
-  TEST_ASSERT_EQUAL(TEST_LEVEL, levelVal);
-}
-
-void test_ripple_updates_fft() {
-  sm.tap();
-  sm.tap();
-  sm.tap();
-  sm.update();
-  TEST_ASSERT_EQUAL(TEST_FFT, fftArray[56]);
-}
-
-void test_lamp_mode_update_runs() {
-  sm.press();
-  sm.update();
+void test_tap_moves_state() {
+  sm->tap();
+  TEST_ASSERT_EQUAL(2, sm->getCurrentStateTestVal());
 }
 
 int main() {
   UNITY_BEGIN();
 
-  RUN_TEST(test_machine_can_handle_taps);
-  RUN_TEST(test_fft_callback);
-  RUN_TEST(test_level_callback);
-  RUN_TEST(test_fallingdot_updates_level);
-  RUN_TEST(test_ripple_updates_fft);
-  RUN_TEST(test_lamp_mode_update_runs);
+  RUN_TEST(test_test_state_id_exists);
+  RUN_TEST(test_starting_state_val_is_1);
+  RUN_TEST(test_tap_moves_state);
 
   UNITY_END();
 }
