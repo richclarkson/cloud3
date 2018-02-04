@@ -16,8 +16,10 @@ TestState1::~TestState1() {
 }
 
 void TestState1::tap(StateManager *sm) {
-  sm->setCurrent(new TestState2());
+  cout << "1 tapped: " << sm << "\n";
+  // TestState2* ts = new TestState2;
   delete this;
+  sm->setCurrent(new TestState2());
 }
 
 TestState2::TestState2() { 
@@ -30,6 +32,7 @@ TestState2::~TestState2() {
 }
 
 void TestState2::tap(StateManager *sm) {
-  sm->setCurrent(new TestState1());
+  cout << "2 tapped: " << sm << "\n";
   delete this;
+  sm->setCurrent(new TestState1());
 }

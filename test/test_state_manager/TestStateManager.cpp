@@ -4,19 +4,28 @@
 #include "TestStates.h"
 #include <unity.h>
 
+#include <iostream>
+using namespace std;
+
 class TestStateManager : public StateManager {
   TestState *current;
 
 public:
-  TestStateManager(TestState *starting) { current = starting; }
+  TestStateManager(TestState *starting) { setCurrent(starting); }
   void tap() { current->tap(this); }
+  void setCurrent(TestState *s) { current = s; }
   int getCurrentID() { return current->getID(); }
 };
 
 TestStateManager *sm;
-TestState1 *ts = new TestState1();
+TestState *ts = new TestState1();
 
-void setUp(void) { sm = new TestStateManager(new TestState1()); }
+void setUp(void) {
+  cout << "\n===setup====";
+  sm = new TestStateManager(new TestState1);
+  sm->tap();
+  cout << "====end setup====\n";
+}
 
 void test_test_state_id_exists() { TEST_ASSERT_EQUAL(1, ts->getID()); }
 
@@ -25,8 +34,15 @@ void test_starting_state_val_is_1() {
 }
 
 void test_tap_moves_state() {
+  cout << "\n===================\n";
+  cout << "initial: " << sm << "\n\n";
+  TEST_ASSERT_EQUAL(1, sm->getCurrentID());
   sm->tap();
   TEST_ASSERT_EQUAL(2, sm->getCurrentID());
+  sm->tap();
+  sm->tap();
+  cout << "test done\n";
+  cout << "===================\n\n";
 }
 
 int main() {
