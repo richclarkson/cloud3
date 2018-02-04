@@ -2,6 +2,7 @@
 #define StateManager_h
 
 class StateManager {
+  friend class TestStateManager;
   class State *current;
   class State *colorSetting;
   int channel;
