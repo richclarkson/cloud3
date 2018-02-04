@@ -21,6 +21,14 @@ public:
   TestStateTwo();
   ~TestStateTwo();
   void tap(StateManager *sm);
+  void press(StateManager *sm);
+};
+
+class TestStateThree : public TestState {
+  public:
+  TestStateThree();
+  // ~TestStateThree();
+  void press(StateManager *sm);
 };
 
 #endif

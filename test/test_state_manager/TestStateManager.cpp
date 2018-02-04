@@ -13,6 +13,7 @@ class TestStateManager : public StateManager {
 public:
   TestStateManager(TestState *starting) { setCurrent(starting); }
   void tap() { current->tap(this); }
+  void press() { current->press(this); }
   void setCurrent(TestState *s) { current = s; }
   int getCurrentID() { return current->getID(); }
 };
@@ -43,6 +44,19 @@ void test_tap_moves_state_from_two_to_one() {
   TEST_ASSERT_EQUAL(1, sm->getCurrentID());
 }
 
+void test_press_moves_two_to_three() {
+  sm->tap(); //go to Two
+  sm->press();
+  TEST_ASSERT_EQUAL(3, sm->getCurrentID());
+}
+
+void test_press_moves_three_to_one() {
+  sm->tap();
+  sm->press();
+  sm->press();
+  TEST_ASSERT_EQUAL(1, sm->getCurrentID());
+}
+
 int main() {
   UNITY_BEGIN();
 
@@ -50,6 +64,8 @@ int main() {
   RUN_TEST(test_starting_state_val_is_1);
   RUN_TEST(test_tap_moves_state_from_one_to_two);
   RUN_TEST(test_tap_moves_state_from_two_to_one);
+  RUN_TEST(test_press_moves_two_to_three);
+  RUN_TEST(test_press_moves_three_to_one);
 
   UNITY_END();
 }

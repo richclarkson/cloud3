@@ -36,3 +36,17 @@ void TestStateTwo::tap(StateManager *sm) {
   delete this;
   sm->setCurrent(new TestStateOne());
 }
+
+void TestStateTwo::press(StateManager *sm) {
+  delete this;
+  sm->setCurrent(new TestStateThree());
+}
+
+TestStateThree::TestStateThree() {
+  this->id = 3;
+}
+
+void TestStateThree::press(StateManager *sm) {
+  delete this;
+  sm->setCurrent(new TestStateOne());
+}
