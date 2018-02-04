@@ -33,7 +33,6 @@ void test_starting_state_val_is_1() {
   TEST_ASSERT_EQUAL(1, sm->getCurrentID());
 }
 
-void test_tap_moves_state() {
   cout << "\n===================\n";
   cout << "initial: " << sm << "\n\n";
 void test_tap_moves_state_from_one_to_two() {
