@@ -6,8 +6,10 @@
 
 class TestStateManager : public StateManager {
   TestState *current;
+
 public:
   TestStateManager(TestState *starting) { current = starting; }
+  void tap() { current->tap(this); }
   int getCurrentID() { return current->getID(); }
 };
 
