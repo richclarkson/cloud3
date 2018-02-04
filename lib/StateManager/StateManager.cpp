@@ -4,11 +4,15 @@
 StateManager::StateManager() {}
 
 StateManager::StateManager(State *starting) {  
-  current = starting;
+  setCurrent(starting);
   colorSetting = new Neon();
   channel = 8;
   sensitivity = 4;
   brightness = 4;
+}
+
+void StateManager::setCurrent(State *s) {
+  this->current = s;
 }
 
 void StateManager::tap() { current->tap(this); }

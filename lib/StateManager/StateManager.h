@@ -16,7 +16,7 @@ class StateManager {
 public:
   StateManager();
   StateManager(State *starting);
-  void setCurrent(State *s) { current = s; }
+  void setCurrent(State *s);
   void setColor(State *s) { colorSetting = s; }
   void advanceColor();
   void advanceChannel();
