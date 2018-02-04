@@ -1,8 +1,10 @@
 #include "StateManager.h"
 #include "States.h"
 
-StateManager::StateManager() {  
-  current = new NormalOff();
+StateManager::StateManager() {}
+
+StateManager::StateManager(State *starting) {  
+  current = starting;
   colorSetting = new Neon();
   channel = 8;
   sensitivity = 4;
