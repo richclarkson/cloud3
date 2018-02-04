@@ -32,7 +32,7 @@
 
 #include <Arduino.h>
 #include <FastLED.h>
-#include <SPI.h>
+//#include <SPI.h>
 
 FASTLED_USING_NAMESPACE
 
@@ -49,11 +49,12 @@ uint8_t gHue = 0;           // rotating "base color" used by many of the pattern
 int COOLINGarray[] = {100, 90, 85, 80, 75, 90, 85, 100, 90}; // Fire Mode varriable
 int COOLING = 90;         // Fire Mode varriable
 #define SPARKING 100      // Fire Mode varriable
+static byte heat[100];
 int capture[100];
 
 //LED Variables
-#define DATA_PIN 11 //MOSI  //11 Green
-#define CLK_PIN 13  //SCK  //13 Blue
+#define DATA_PIN 2 //MOSI  //11 Green
+#define CLK_PIN 3  //SCK  //13 Blue
 #define LED_TYPE APA102
 #define COLOR_ORDER BRG
 #define NUM_LEDS 115 //115 for normal Saber, 48 for half saber
