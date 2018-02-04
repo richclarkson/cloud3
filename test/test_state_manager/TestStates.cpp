@@ -2,13 +2,13 @@
 #include <iostream>
 using namespace std;
 
-int TestState::getTestVal() {
-  return testVal;
+int TestState::getID() {
+  return id;
 }
 
 TestState1::TestState1() { 
   cout << "\nTest State 1 created\n"; 
-  this->testVal = 1;
+  this->id = 1;
 }
 
 TestState1::~TestState1() { 
@@ -22,7 +22,7 @@ void TestState1::tap(StateManager *sm) {
 
 TestState2::TestState2() { 
   cout << "\nTest State 2 created\n"; 
-  this->testVal = 2;
+  this->id = 2;
 }
 
 TestState2::~TestState2() { 

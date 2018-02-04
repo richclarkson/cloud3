@@ -5,8 +5,8 @@
 
 class TestState : public State {
 public:
-  int testVal;
-  int getTestVal();
+  int id;
+  int getID();
 };
 
 class TestState1 : public TestState {

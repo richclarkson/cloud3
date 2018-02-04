@@ -5,35 +5,24 @@
 #include <unity.h>
 
 class TestStateManager : public StateManager {
-  class TestState *current;
-
 public:
-  TestStateManager() {}
-  TestStateManager(TestState *starting) { current = starting; }
-  int getCurrentStateTestVal() { return current->getTestVal(); }
-  void deleteState() { delete current; }
+  int getCurrentID() { return current->getID(); }
 };
 
 TestStateManager *sm;
 TestState1 *ts = new TestState1();
 
-void setUp(void) { 
-  sm = new TestStateManager(new TestState1());
-}
+void setUp(void) { sm = new TestStateManager(new TestState1()); }
 
-void tearDown(void) { 
-  delete sm; 
-}
-
-void test_test_state_id_exists() { TEST_ASSERT_EQUAL(1, ts->testVal); }
+void test_test_state_id_exists() { TEST_ASSERT_EQUAL(1, ts->getID()); }
 
 void test_starting_state_val_is_1() {
-  TEST_ASSERT_EQUAL(1, sm->getCurrentStateTestVal());
+  TEST_ASSERT_EQUAL(1, sm->getCurrentID());
 }
 
 void test_tap_moves_state() {
   sm->tap();
-  TEST_ASSERT_EQUAL(2, sm->getCurrentStateTestVal());
+  TEST_ASSERT_EQUAL(2, sm->getCurrentID());
 }
 
 int main() {
