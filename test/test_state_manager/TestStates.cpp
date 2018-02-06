@@ -1,4 +1,5 @@
 #include "TestStates.h"
+
 #include <iostream>
 using namespace std;
 
@@ -49,4 +50,32 @@ TestStateThree::TestStateThree() {
 void TestStateThree::press(StateManager *sm) {
   delete this;
   sm->setCurrent(new TestStateOne());
+}
+
+void TestStateThree::tap(TestStateManager *sm) {
+  cout << "\nThree tapped, sm: " << sm << "\n";
+  sm->speak();
+  // sm->advanceColor();
+}
+
+ColorStateOne::ColorStateOne() {
+  cout << "\nColor One created\n";
+  this->id = 11;
+}
+
+void ColorStateOne::advance(StateManager *sm) {
+  cout << "\nState One advance called\n";
+  delete this;
+  sm->setColor(new ColorStateTwo());
+}
+
+ColorStateTwo::ColorStateTwo() {
+  cout << "\nColor Two created\n";
+  this->id = 12;
+}
+
+void ColorStateTwo::advance(StateManager *sm) {
+  cout << "\nState Two advance called\n";
+  delete this;
+  sm->setColor(new ColorStateOne());
 }

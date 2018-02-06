@@ -2,6 +2,10 @@
 #define TestStates_h
 
 #include "StateManager.h"
+#include "TestStateManager.h"
+
+#include <iostream>
+using namespace std;
 
 class TestState : public State {
 public:
@@ -25,9 +29,28 @@ public:
 };
 
 class TestStateThree : public TestState {
-  public:
+public:
   TestStateThree();
   void press(StateManager *sm);
+  void tap(StateManager *sm);
 };
+
+class ColorState : public TestState {
+public:
+  void advance(StateManager *sm) {}
+};
+
+class ColorStateOne : public ColorState {
+public:
+  ColorStateOne();
+  void advance(StateManager *sm);
+};
+
+class ColorStateTwo : public ColorState {
+public:
+  ColorStateTwo();
+  void advance(StateManager *sm);
+};
+
 
 #endif
