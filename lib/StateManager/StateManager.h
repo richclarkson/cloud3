@@ -17,7 +17,7 @@ public:
   StateManager();
   StateManager(State *starting, State *startingColor);
   void setCurrent(State *s);
-  State *getCurrentState();
+  void getCurrentState(State *externalPtr);
   void setColor(State *s);
   State *getcurrentColor();
   void advanceColor();
