@@ -11,7 +11,7 @@ StateManager *sm;
 TestState *ts = new TestStateOne();
 
 void setUp(void) {
-  sm = new StateManager(new TestStateOne);
+  sm = new StateManager(new TestStateOne, new ColorStateOne);
 }
 
 int main() {

@@ -52,10 +52,9 @@ void TestStateThree::press(StateManager *sm) {
   sm->setCurrent(new TestStateOne());
 }
 
-void TestStateThree::tap(TestStateManager *sm) {
+void TestStateThree::tap(StateManager *sm) {
   cout << "\nThree tapped, sm: " << sm << "\n";
-  sm->speak();
-  // sm->advanceColor();
+  sm->advanceColor();
 }
 
 ColorStateOne::ColorStateOne() {

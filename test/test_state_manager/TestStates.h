@@ -2,7 +2,6 @@
 #define TestStates_h
 
 #include "StateManager.h"
-#include "TestStateManager.h"
 
 #include <iostream>
 using namespace std;
