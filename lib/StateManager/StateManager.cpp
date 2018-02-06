@@ -11,9 +11,7 @@ StateManager::StateManager(State *starting, State *startingColor) {
   brightness = 4;
 }
 
-void StateManager::setCurrent(State *s) {
-  this->current = s;
-}
+void StateManager::setCurrent(State *s) { this->current = s; }
 
 void StateManager::setColor(State *s) { this->colorSetting = s; }
 
@@ -54,14 +52,14 @@ void StateManager::resetSettings() {
   // TODO: Saves values to EEPROM
 }
 
-void StateManager::registerFFT(void (*cb)(), float* fftArrayPointer) {
+void StateManager::registerFFT(void (*cb)(), float *fftArrayPointer) {
   this->fftCallBack = cb;
   this->fftArrayPtr = fftArrayPointer;
 }
 
 void StateManager::callFFTCallback() { this->fftCallBack(); }
 
-void StateManager::registerLevel(void (*cb)(), float* levelValPointer) {
+void StateManager::registerLevel(void (*cb)(), float *levelValPointer) {
   this->levelCallback = cb;
   this->levelValPtr = levelValPointer;
 }
