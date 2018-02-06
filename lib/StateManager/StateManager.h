@@ -17,7 +17,9 @@ public:
   StateManager();
   StateManager(State *starting, State *startingColor);
   void setCurrent(State *s);
+  State *getCurrentState();
   void setColor(State *s);
+  State *getcurrentColor();
   void advanceColor();
   void advanceChannel();
   int getChannel() { return channel; }

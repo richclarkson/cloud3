@@ -15,6 +15,14 @@ void StateManager::setCurrent(State *s) { this->current = s; }
 
 void StateManager::setColor(State *s) { this->colorSetting = s; }
 
+void StateManager::getCurrentState(State *externalPtr) {
+  externalPtr = this->current;
+} 
+
+State* StateManager::getcurrentColor() {
+  return this->colorSetting;
+}
+
 void StateManager::tap() { current->tap(this); }
 
 void StateManager::press() { current->press(this); }
