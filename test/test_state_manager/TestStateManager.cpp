@@ -7,18 +7,7 @@
 #include <iostream>
 using namespace std;
 
-class TestStateManager : public StateManager {
-  TestState *current;
-
-public:
-  TestStateManager(TestState *starting) { setCurrent(starting); }
-  void tap() { current->tap(this); }
-  void press() { current->press(this); }
-  void setCurrent(TestState *s) { current = s; }
-  int getCurrentID() { return current->getID(); }
-};
-
-TestStateManager *sm;
+StateManager *sm;
 TestState *ts = new TestStateOne();
 
 void setUp(void) {
