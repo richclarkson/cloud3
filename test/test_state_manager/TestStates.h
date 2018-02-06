@@ -27,7 +27,6 @@ public:
 class TestStateThree : public TestState {
   public:
   TestStateThree();
-  // ~TestStateThree();
   void press(StateManager *sm);
 };
 
