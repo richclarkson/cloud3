@@ -184,7 +184,9 @@ void musicmode2()   // Middle Out - similar to musicmode1 but from the center an
 
 void musicmode3()    // Ripple
 { 
-   turnoffLEDs();
+
+  fadeToBlackBy( leds, NUM_LEDS, 1);
+  //turnoffLEDs();
 
   for (int y = 0; y < 8; y++) // create 8 different LED sections of saber each based on the 8 FFT channels
   {
@@ -197,10 +199,10 @@ void musicmode3()    // Ripple
     int topOfRipple = ((y * 15) + 6) + (fftArray[y] / 10);
     if (topOfRipple >= NUM_LEDS - 1)
     {
-      bottomOfRipple = NUM_LEDS - 1;
+      topOfRipple = NUM_LEDS - 1;
     }
 
-    int rippleBrightness = constrain(fftArray[y] * 3, 0, 255);
+    int rippleBrightness = constrain(fftArray[y] * 3, 0, 254);
 
     for (int led = bottomOfRipple; led < topOfRipple; led++)
     {
