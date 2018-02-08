@@ -7,9 +7,6 @@
 using namespace std;
 
 class TestState : public State {
-public:
-  int id;
-  int getID();
 };
 
 class TestStateOne : public TestState {
@@ -42,13 +39,13 @@ public:
 class ColorStateOne : public ColorState {
 public:
   ColorStateOne();
-  void advance(StateManager *sm);
+  void press(StateManager *sm);
 };
 
 class ColorStateTwo : public ColorState {
 public:
   ColorStateTwo();
-  void advance(StateManager *sm);
+  void press(StateManager *sm);
 };
 
 

@@ -3,10 +3,6 @@
 #include <iostream>
 using namespace std;
 
-int TestState::getID() {
-  return id;
-}
-
 TestStateOne::TestStateOne() { 
   cout << "\nTest State 1 created\n"; 
   this->id = 1;
@@ -62,7 +58,7 @@ ColorStateOne::ColorStateOne() {
   this->id = 11;
 }
 
-void ColorStateOne::advance(StateManager *sm) {
+void ColorStateOne::press(StateManager *sm) {
   cout << "\nState One advance called\n";
   delete this;
   sm->setColor(new ColorStateTwo());
@@ -73,7 +69,7 @@ ColorStateTwo::ColorStateTwo() {
   this->id = 12;
 }
 
-void ColorStateTwo::advance(StateManager *sm) {
+void ColorStateTwo::press(StateManager *sm) {
   cout << "\nState Two advance called\n";
   delete this;
   sm->setColor(new ColorStateOne());

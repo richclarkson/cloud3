@@ -17,9 +17,9 @@ public:
   StateManager();
   StateManager(State *starting, State *startingColor);
   void setCurrent(State *s);
-  void getCurrentState(State *externalPtr);
+  int getCurrentID();
   void setColor(State *s);
-  State *getcurrentColor();
+  State* getColor() { return colorSetting; }
   void advanceColor();
   void advanceChannel();
   int getChannel() { return channel; }
@@ -43,6 +43,10 @@ public:
   virtual void tap(StateManager *sm){};
   virtual void press(StateManager *sm){};
   virtual void update(StateManager *sm){};
+  int getID() { return id; }
+
+protected:
+  int id;
 };
 
 #endif

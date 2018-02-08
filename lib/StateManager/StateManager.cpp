@@ -1,6 +1,9 @@
 #include "StateManager.h"
 #include "States.h"
 
+#include <iostream>
+using namespace std;
+
 StateManager::StateManager() {}
 
 StateManager::StateManager(State *starting, State *startingColor) {
@@ -13,15 +16,9 @@ StateManager::StateManager(State *starting, State *startingColor) {
 
 void StateManager::setCurrent(State *s) { this->current = s; }
 
+int StateManager::getCurrentID() { return this->current->getID(); }
+
 void StateManager::setColor(State *s) { this->colorSetting = s; }
-
-void StateManager::getCurrentState(State *externalPtr) {
-  externalPtr = this->current;
-} 
-
-State* StateManager::getcurrentColor() {
-  return this->colorSetting;
-}
 
 void StateManager::tap() { current->tap(this); }
 
