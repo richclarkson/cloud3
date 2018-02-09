@@ -1,9 +1,6 @@
 #include "StateManager.h"
 #include "States.h"
 
-#include <iostream>
-using namespace std;
-
 StateManager::StateManager() {}
 
 StateManager::StateManager(State *starting, State *startingColor) {
