@@ -72,3 +72,7 @@ void StateManager::registerLevel(void (*cb)(), float *levelValPointer) {
 void StateManager::callLevelCallback() { this->levelCallback(); }
 
 void StateManager::update() { current->update(this); }
+
+void StateManager::registerDisplayController(DisplayController *dc) {
+  display = dc;
+}

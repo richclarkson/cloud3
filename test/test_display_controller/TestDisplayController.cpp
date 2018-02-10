@@ -9,6 +9,7 @@ DisplayController dc;
 
 void setUp() {
   sm = StateManager(new NormalOff, new Neon);
+  sm.registerDisplayController(&dc);
 }
 
 int main() {

@@ -5,6 +5,7 @@ class StateManager {
   friend class TestStateManager;
   class State *current;
   class State *colorSetting;
+  class DisplayController *display;
   int channel;
   int sensitivity;
   int brightness;
@@ -35,6 +36,8 @@ public:
   void registerLevel(void (*cb)(), float *levelValPointer);
   void callLevelCallback();
   void update();
+
+  void registerDisplayController(DisplayController *dc);
 };
 
 class State {
