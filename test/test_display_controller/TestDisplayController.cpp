@@ -5,11 +5,10 @@
 #include "States.h"
 
 StateManager sm;
-DisplayController dc;
 
 void setUp() {
   sm = StateManager(new NormalOff, new Neon);
-  sm.registerDisplayController(&dc);
+  sm.registerDisplayController(new DisplayController);
 }
 
 int main() {
