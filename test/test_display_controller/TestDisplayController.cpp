@@ -4,11 +4,19 @@
 #include "StateManager.h"
 #include "States.h"
 
+class TestDisplayController : public DisplayController {
+  int testVal;
+public:
+  TestDisplayController() { testVal = 0; }
+  void setTestVal(int val) { testVal = val; }
+  int getTestVal() { return testVal; }
+};
+
 StateManager sm;
 
 void setUp() {
   sm = StateManager(new NormalOff, new Neon);
-  sm.registerDisplayController(new DisplayController);
+  sm.registerDisplayController(new TestDisplayController);
 }
 
 void test_display_can_be_called_from_state_when_manager_updated() {

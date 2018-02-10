@@ -54,12 +54,9 @@ protected:
 };
 
 class DisplayController {
-  int testVal;
-
-public:
-  DisplayController() { testVal = 0; }
-  void setTestVal(int val) { testVal = val; }
-  int getTestVal() { return testVal; }
+  public:
+  virtual void setTestVal(int val)=0;
+  virtual int getTestVal()=0;
 };
 
 #endif
