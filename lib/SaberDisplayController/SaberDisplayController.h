@@ -13,6 +13,7 @@ public:
   void displayRipple();
   void displayBangAndFade();
   void displayRainbow();
+  
   void displayColorPreview();
 };
 
