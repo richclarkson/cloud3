@@ -57,6 +57,8 @@ class DisplayController {
   public:
   virtual void setTestVal(int val)=0;
   virtual int getTestVal()=0;
+  
+  virtual void turnOff(){}
 };
 
 #endif

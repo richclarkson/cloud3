@@ -13,7 +13,10 @@ void NormalOff::press(StateManager *sm) {
   delete this;
 }
 
-void NormalOff::update(DisplayController *dc) { dc->setTestVal(10); }
+void NormalOff::update(DisplayController *dc) {
+  dc->setTestVal(10);
+  dc->turnOff();
+}
 
 FallingDot::FallingDot() {}
 
