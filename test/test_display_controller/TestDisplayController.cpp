@@ -14,7 +14,7 @@ public:
   void displayFallingDot() { testVal = 11; }
   void displayMiddleOut() { testVal = 12; }
   void displayRipple() { testVal = 13; }
-  void displayBandAndFade() { testVal = 14; }
+  void displayBangAndFade() { testVal = 14; }
   void displayRainbow() { testVal = 15; }
 };
 
@@ -54,6 +54,7 @@ void test_states_call_displays_as_expected() {
   sm.tap();
   sm.update();
   TEST_ASSERT_EQUAL(15, tdc.getTestVal());
+  sm.tap();
   sm.tap();
   sm.update();
   TEST_ASSERT_EQUAL(10, tdc.getTestVal());
