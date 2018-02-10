@@ -76,7 +76,3 @@ void StateManager::update(unsigned long timerVal) { current->update(this->displa
 void StateManager::registerDisplayController(DisplayController *dc) {
   display = dc;
 }
-
-int StateManager::getDisplayTest() {
-  return display->getTestVal();
-}
