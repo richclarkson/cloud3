@@ -22,7 +22,7 @@ void FallingDot::tap(StateManager *sm) {
   delete this;
 }
 
-void FallingDot::update(DisplayController *dc) { dc->fallingDot(); }
+void FallingDot::update(DisplayController *dc) { dc->displayFallingDot(); }
 
 MiddleOut::MiddleOut() {}
 

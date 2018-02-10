@@ -12,7 +12,7 @@ public:
   void setTestVal(int val) { testVal = val; }
   int getTestVal() { return testVal; }
   void turnOff() { testVal = 10; }
-  void fallingDot() { testVal = 11; }
+  void displayFallingDot() { testVal = 11; }
 };
 
 StateManager sm;

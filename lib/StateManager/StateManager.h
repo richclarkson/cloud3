@@ -59,7 +59,7 @@ class DisplayController {
   virtual int getTestVal()=0;
   
   virtual void turnOff(){}
-  virtual void fallingDot(){}
+  virtual void displayFallingDot(){}
 };
 
 #endif

@@ -7,7 +7,7 @@ class SaberDisplayController : public DisplayController {
 
 public:
   void turnOff();
-  void fallingDot();
+  void displayFallingDot();
 };
 
 #endif
