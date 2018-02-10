@@ -11,13 +11,31 @@ class TestDisplayController : public SaberDisplayController {
 public:
   TestDisplayController() { testVal = 0; }
   int getTestVal() { return testVal; }
-  void turnOff() { testVal = 10; }
-  void displayFallingDot() { testVal = 11; }
-  void displayMiddleOut() { testVal = 12; }
-  void displayRipple() { testVal = 13; }
-  void displayBangAndFade() { testVal = 14; }
-  void displayRainbow() { testVal = 15; }
-  void displayColorPreview() { testVal = 16; }
+  void turnOff() { testVal = 0; }
+  void displayFallingDot() {
+    turnOff();
+    testVal += 1;
+  }
+  void displayMiddleOut() {
+    turnOff();
+    testVal = 2;
+  }
+  void displayRipple() {
+    turnOff();
+    testVal = 3;
+  }
+  void displayBangAndFade() {
+    turnOff();
+    testVal = 4;
+  }
+  void displayRainbow() {
+    turnOff();
+    testVal = 5;
+  }
+  void displayColorPreview() {
+    turnOff();
+    testVal = 6;
+  }
 };
 
 StateManager sm;
@@ -32,36 +50,36 @@ void setUp() {
 void test_display_can_be_called_from_state_when_manager_updated() {
   timerVal = 0;
   sm.update(timerVal);
-  TEST_ASSERT_EQUAL(10, tdc.getTestVal());
+  TEST_ASSERT_EQUAL(0, tdc.getTestVal());
   sm.tap();
   sm.update(timerVal);
-  TEST_ASSERT_EQUAL(11, tdc.getTestVal());
+  TEST_ASSERT_EQUAL(1, tdc.getTestVal());
 }
 
 void test_states_call_displays_as_expected() {
   sm.update();
-  TEST_ASSERT_EQUAL(10, tdc.getTestVal());
+  TEST_ASSERT_EQUAL(0, tdc.getTestVal());
   sm.tap();
   sm.update();
-  TEST_ASSERT_EQUAL(11, tdc.getTestVal());
+  TEST_ASSERT_EQUAL(1, tdc.getTestVal());
   sm.tap();
   sm.update();
-  TEST_ASSERT_EQUAL(12, tdc.getTestVal());
+  TEST_ASSERT_EQUAL(2, tdc.getTestVal());
   sm.tap();
   sm.update();
-  TEST_ASSERT_EQUAL(13, tdc.getTestVal());
+  TEST_ASSERT_EQUAL(3, tdc.getTestVal());
   sm.tap();
   sm.update();
-  TEST_ASSERT_EQUAL(14, tdc.getTestVal());
+  TEST_ASSERT_EQUAL(4, tdc.getTestVal());
   sm.tap();
   sm.update();
-  TEST_ASSERT_EQUAL(15, tdc.getTestVal());
+  TEST_ASSERT_EQUAL(5, tdc.getTestVal());
   sm.tap();
   sm.update();
   TEST_ASSERT_EQUAL(16, tdc.getTestVal());
   sm.tap();
   sm.update();
-  TEST_ASSERT_EQUAL(10, tdc.getTestVal());
+  TEST_ASSERT_EQUAL(0, tdc.getTestVal());
 }
 
 int main() {
