@@ -62,9 +62,9 @@ public:
   virtual void turnOff() {}
 
   virtual void displayFallingDot() {}
-  virtual void diplayMiddleOut() {}
+  virtual void displayMiddleOut() {}
   virtual void displayRipple() {}
-  virtual void displayBandAndFade() {}
+  virtual void displayBangAndFade() {}
   virtual void displayRainbow() {}
 };
 
