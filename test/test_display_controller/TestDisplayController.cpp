@@ -1,30 +1,34 @@
 #ifdef UNIT_TEST
 
-#include <unity.h>
 #include "StateManager.h"
 #include "States.h"
+#include <unity.h>
 
 class TestDisplayController : public DisplayController {
   int testVal;
+
 public:
   TestDisplayController() { testVal = 0; }
   void setTestVal(int val) { testVal = val; }
   int getTestVal() { return testVal; }
+  void turnOff() { testVal = 10; }
+  void fallingDot() { testVal = 11; }
 };
 
 StateManager sm;
+TestDisplayController tdc;
 
 void setUp() {
   sm = StateManager(new NormalOff, new Neon);
-  sm.registerDisplayController(new TestDisplayController);
+  sm.registerDisplayController(&tdc);
 }
 
 void test_display_can_be_called_from_state_when_manager_updated() {
   sm.update();
-  TEST_ASSERT_EQUAL(10, sm.getDisplayTest());
+  TEST_ASSERT_EQUAL(10, tdc.getTestVal());
   sm.tap();
   sm.update();
-  TEST_ASSERT_EQUAL(20, sm.getDisplayTest());
+  TEST_ASSERT_EQUAL(11, tdc.getTestVal());
 }
 
 int main() {
