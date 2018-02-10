@@ -66,6 +66,8 @@ public:
   virtual void displayRipple() {}
   virtual void displayBangAndFade() {}
   virtual void displayRainbow() {}
+
+  virtual void displayColorPreview() {}
 };
 
 #endif

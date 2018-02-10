@@ -16,6 +16,7 @@ public:
   void displayRipple() { testVal = 13; }
   void displayBangAndFade() { testVal = 14; }
   void displayRainbow() { testVal = 15; }
+  void displayColorPreview() { testVal = 16; }
 };
 
 StateManager sm;
@@ -55,6 +56,8 @@ void test_states_call_displays_as_expected() {
   sm.update();
   TEST_ASSERT_EQUAL(15, tdc.getTestVal());
   sm.tap();
+  sm.update();
+  TEST_ASSERT_EQUAL(16, tdc.getTestVal());
   sm.tap();
   sm.update();
   TEST_ASSERT_EQUAL(10, tdc.getTestVal());

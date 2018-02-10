@@ -62,6 +62,7 @@ public:
   ~LampMode(){};
   void tap(StateManager *sm);
   void press(StateManager *sm);
+  void update(DisplayController *dc);
 };
 
 #endif

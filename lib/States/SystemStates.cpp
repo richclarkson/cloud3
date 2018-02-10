@@ -68,3 +68,5 @@ void BangAndFade::update(DisplayController *dc) { dc-> displayBangAndFade(); }
 
 void Rainbow::update(DisplayController *dc) { dc-> displayRainbow(); }
 
+void LampMode::update(DisplayController *dc) { dc->displayColorPreview(); }
+
