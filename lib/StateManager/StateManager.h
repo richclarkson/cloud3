@@ -54,12 +54,13 @@ protected:
 };
 
 class DisplayController {
-  public:
-  virtual void setTestVal(int val)=0;
-  virtual int getTestVal()=0;
-  
-  virtual void turnOff(){}
-  virtual void displayFallingDot(){}
+protected:
+  virtual int getTestVal() = 0;
+
+public:
+  virtual void turnOff() {}
+
+  virtual void displayFallingDot() {}
 };
 
 #endif

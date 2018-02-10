@@ -9,7 +9,6 @@ class TestDisplayController : public DisplayController {
 
 public:
   TestDisplayController() { testVal = 0; }
-  void setTestVal(int val) { testVal = val; }
   int getTestVal() { return testVal; }
   void turnOff() { testVal = 10; }
   void displayFallingDot() { testVal = 11; }
