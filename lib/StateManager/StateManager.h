@@ -49,4 +49,8 @@ protected:
   int id;
 };
 
+class DisplayController {
+
+};
+
 #endif

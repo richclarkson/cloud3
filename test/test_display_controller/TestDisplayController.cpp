@@ -1,8 +1,15 @@
 #ifdef UNIT_TEST
 
 #include <unity.h>
+#include "StateManager.h"
+#include "States.h"
 
-void setUp() {}
+StateManager sm;
+DisplayController dc;
+
+void setUp() {
+  sm = StateManager(new NormalOff, new Neon);
+}
 
 int main() {
   UNITY_BEGIN();
