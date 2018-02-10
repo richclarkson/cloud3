@@ -29,7 +29,7 @@ public:
   MiddleOut();
   ~MiddleOut(){};
   void tap(StateManager *sm);
-  void update(StateManager *sm);
+  void update(DisplayController *dc);
 };
 
 class Ripple : public State {
@@ -37,7 +37,7 @@ public:
   Ripple();
   ~Ripple(){};
   void tap(StateManager *sm);
-  void update(StateManager *sm);
+  void update(DisplayController *dc);
 };
 
 class BangAndFade : public State {
@@ -45,7 +45,7 @@ public:
   BangAndFade();
   ~BangAndFade(){};
   void tap(StateManager *sm);
-  void update(StateManager *sm);
+  void update(DisplayController *dc);
 };
 
 class Rainbow : public State {
@@ -53,7 +53,7 @@ public:
   Rainbow();
   ~Rainbow(){};
   void tap(StateManager *sm);
-  void update(StateManager *sm);
+  void update(DisplayController *dc);
 };
 
 class LampMode : public State {
