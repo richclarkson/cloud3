@@ -20,7 +20,7 @@ public:
   void setCurrent(State *s);
   int getCurrentID();
   void setColor(State *s);
-  State* getColor() { return colorSetting; }
+  State *getColor() { return colorSetting; }
   void advanceColor();
   void advanceChannel();
   int getChannel() { return channel; }
@@ -38,6 +38,7 @@ public:
   void update();
 
   void registerDisplayController(DisplayController *dc);
+  int getDisplayTest();
 };
 
 class State {
@@ -45,7 +46,7 @@ public:
   virtual ~State(){};
   virtual void tap(StateManager *sm){};
   virtual void press(StateManager *sm){};
-  virtual void update(StateManager *sm){};
+  virtual void update(DisplayController *dc){};
   int getID() { return id; }
 
 protected:
@@ -53,7 +54,12 @@ protected:
 };
 
 class DisplayController {
+  int testVal;
 
+public:
+  DisplayController() { testVal = 0; }
+  void setTestVal(int val) { testVal = val; }
+  int getTestVal() { return testVal; }
 };
 
 #endif

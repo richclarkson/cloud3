@@ -13,6 +13,7 @@ public:
   ~NormalOff(){};
   void tap(StateManager *sm);
   void press(StateManager *sm);
+  void update(DisplayController *dc); 
 };
 
 class FallingDot : public State {
@@ -20,7 +21,7 @@ public:
   FallingDot();
   ~FallingDot(){};
   void tap(StateManager *sm);
-  void update(StateManager *sm);
+  void update(DisplayController *dc);
 };
 
 class MiddleOut : public State {
