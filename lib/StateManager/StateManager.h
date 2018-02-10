@@ -55,9 +55,6 @@ protected:
 };
 
 class DisplayController {
-protected:
-  virtual int getTestVal() = 0;
-
 public:
   virtual void turnOff() {}
 
