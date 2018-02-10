@@ -35,7 +35,7 @@ public:
   void callFFTCallback();
   void registerLevel(void (*cb)(), float *levelValPointer);
   void callLevelCallback();
-  void update();
+  void update(unsigned long timerVal);
 
   void registerDisplayController(DisplayController *dc);
   int getDisplayTest();

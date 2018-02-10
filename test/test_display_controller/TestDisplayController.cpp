@@ -17,6 +17,7 @@ public:
 
 StateManager sm;
 TestDisplayController tdc;
+unsigned long timerVal;
 
 void setUp() {
   sm = StateManager(new NormalOff, new Neon);
@@ -24,10 +25,11 @@ void setUp() {
 }
 
 void test_display_can_be_called_from_state_when_manager_updated() {
-  sm.update();
+  timerVal = 0;
+  sm.update(timerVal);
   TEST_ASSERT_EQUAL(10, tdc.getTestVal());
   sm.tap();
-  sm.update();
+  sm.update(timerVal);
   TEST_ASSERT_EQUAL(11, tdc.getTestVal());
 }
 
