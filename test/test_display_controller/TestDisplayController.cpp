@@ -1,11 +1,10 @@
 #ifdef UNIT_TEST
 
-#include "SaberDisplayController.h"
 #include "StateManager.h"
 #include "States.h"
 #include <unity.h>
 
-class TestDisplayController : public SaberDisplayController {
+class TestDisplayController : public DisplayController {
   int testVal;
 
 public:
