@@ -47,10 +47,12 @@ unsigned long timerVal;
 void setUp() {
   sm = StateManager(new NormalOff, new Neon);
   sm.registerDisplayController(&tdc);
+  cout << "\n" << &sm;
+  cout << " | " << sm.getCurrent()->getSM() << "\n";
 }
 
 void test_normal_off_system_state_calls_display_function() {
-  sm.update();
+  // sm.update();
   // TEST_ASSERT_EQUAL(0, tdc.getTestVal());
   // TEST_ASSERT_EQUAL(0, 0);
 }
