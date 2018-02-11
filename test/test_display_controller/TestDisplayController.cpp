@@ -31,10 +31,6 @@ public:
     turnOff();
     testVal = 5;
   }
-  void displayColorPreview() {
-    turnOff();
-    testVal = 6;
-  }
 };
 
 StateManager sm;
@@ -74,8 +70,6 @@ void test_states_call_displays_as_expected() {
   sm.update();
   TEST_ASSERT_EQUAL(5, tdc.getTestVal());
   sm.tap();
-  sm.update();
-  TEST_ASSERT_EQUAL(6, tdc.getTestVal());
   sm.tap();
   sm.update();
   TEST_ASSERT_EQUAL(0, tdc.getTestVal());
