@@ -57,7 +57,7 @@ void StateManager::tap() { current->tap(); }
 
 void StateManager::press() { current->press(); }
 
-void StateManager::update() { current->update(); }
+void StateManager::update() { current->update(this); }
 
 void StateManager::advanceColor() { colorSetting->press(); }
 

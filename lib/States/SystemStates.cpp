@@ -27,66 +27,77 @@ LampMode::LampMode(StateManager *sm) : State(sm) {}
 
 // tap methods
 void NormalOff::tap() {
-  this->gsm->setCurrent(new FallingDot(this->gsm));
+  FallingDot *fd = new FallingDot;
+  fd->registerStateManager(gsm);
+  gsm->setCurrent(fd);
   delete this;
+  // gsm->setCurrent(new FallingDot(gsm));
 }
 
 void FallingDot::tap() {
-  this->gsm->setCurrent(new MiddleOut(this->gsm));
   delete this;
+  gsm->setCurrent(new MiddleOut(gsm));
 }
 
 void MiddleOut::tap() {
-  this->gsm->setCurrent(new Ripple(this->gsm));
   delete this;
+  gsm->setCurrent(new Ripple(gsm));
 }
 
 void Ripple::tap() {
-  this->gsm->setCurrent(new BangAndFade(this->gsm));
   delete this;
+  gsm->setCurrent(new BangAndFade(gsm));
 }
 
 void BangAndFade::tap() {
-  this->gsm->setCurrent(new Rainbow(this->gsm));
   delete this;
+  gsm->setCurrent(new Rainbow(gsm));
 }
 
 void Rainbow::tap() {
-  this->gsm->setCurrent(new LampMode(this->gsm));
   delete this;
+  gsm->setCurrent(new LampMode(gsm));
 }
 
 void LampMode::tap() {
-  this->gsm->setCurrent(new NormalOff(this->gsm));
   delete this;
+  gsm->setCurrent(new NormalOff(gsm));
 }
 // ==============================
 
 // press methods
 void NormalOff::press() {
-  this->gsm->setCurrent(new SettingsOff(this->gsm));
   delete this;
+  gsm->setCurrent(new SettingsOff(gsm));
 }
 
-void LampMode::press() { this->gsm->advanceColor(); }
+void LampMode::press() { gsm->advanceColor(); }
 // ==============================
 
 // update methods
-void NormalOff::update() {
-  gsm->getDisplayController()->turnOff();
+void NormalOff::update(StateManager *sm) {
+  sm->getDisplayController()->turnOff();
 }
 
-void FallingDot::update() { gsm->getDisplayController()->displayFallingDot(); }
-
-void MiddleOut::update() { gsm->getDisplayController()->displayMiddleOut(); }
-
-void Ripple::update() { gsm->getDisplayController()->displayRipple(); }
-
-void BangAndFade::update() {
-  gsm->getDisplayController()->displayBangAndFade();
+void FallingDot::update(StateManager *sm) {
+  sm->getDisplayController()->displayFallingDot();
 }
 
-void Rainbow::update() { gsm->getDisplayController()->displayRainbow(); }
+void MiddleOut::update(StateManager *sm) {
+  sm->getDisplayController()->displayMiddleOut();
+}
 
-void LampMode::update() { gsm->getColor()->update(); }
+void Ripple::update(StateManager *sm) {
+  sm->getDisplayController()->displayRipple();
+}
+
+void BangAndFade::update(StateManager *sm) {
+  sm->getDisplayController()->displayBangAndFade();
+}
+
+void Rainbow::update(StateManager *sm) {
+  sm->getDisplayController()->displayRainbow();
+}
+
+void LampMode::update(StateManager *sm) { sm->getColor()->update(sm); }
 // ==============================

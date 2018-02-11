@@ -13,7 +13,7 @@ public:
   NormalOff(StateManager *sm);
   void tap();
   void press();
-  void update();
+  void update(StateManager *sm);
 };
 
 class FallingDot : public State {
@@ -21,7 +21,7 @@ public:
   FallingDot();
   FallingDot(StateManager *sm);
   void tap();
-  void update();
+  void update(StateManager *sm);
 };
 
 class MiddleOut : public State {
@@ -29,7 +29,7 @@ public:
   MiddleOut();
   MiddleOut(StateManager *sm);
   void tap();
-  void update();
+  void update(StateManager *sm);
 };
 
 class Ripple : public State {
@@ -37,7 +37,7 @@ public:
   Ripple();
   Ripple(StateManager *sm);
   void tap();
-  void update();
+  void update(StateManager *sm);
 };
 
 class BangAndFade : public State {
@@ -45,7 +45,7 @@ public:
   BangAndFade();
   BangAndFade(StateManager *sm);
   void tap();
-  void update();
+  void update(StateManager *sm);
 };
 
 class Rainbow : public State {
@@ -53,7 +53,7 @@ public:
   Rainbow();
   Rainbow(StateManager *sm);
   void tap();
-  void update();
+  void update(StateManager *sm);
 };
 
 class LampMode : public State {
@@ -62,7 +62,7 @@ public:
   LampMode(StateManager *sm);
   void tap();
   void press();
-  void update();
+  void update(StateManager *sm);
 };
 
 #endif

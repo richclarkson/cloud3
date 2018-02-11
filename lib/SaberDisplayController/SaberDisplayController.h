@@ -12,7 +12,7 @@ public:
   SaberDisplayController();
 
   void turnOff();
-  void update();
+  void update(StateManager *sm);
 
   bool isTimeFrame(unsigned long newTimer, unsigned long timeFrame);
   

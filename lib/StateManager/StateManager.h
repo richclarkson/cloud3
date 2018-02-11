@@ -51,16 +51,16 @@ public:
   State(StateManager *sm) { gsm = sm; }
   void registerStateManager(StateManager *sm) { gsm = sm; }
   StateManager *getSM() { return gsm; }
-  virtual void tap(){};
-  virtual void press(){};
-  virtual void update(){};
+  virtual void tap(){}
+  virtual void press(){}
+  virtual void update(StateManager *sm){}
   int testVal;
 };
 
 class DisplayController {
 public:
   virtual void turnOff() {}
-  virtual void update() {}
+  virtual void update(StateManager *sm) {}
 
   virtual void displayFallingDot() {}
   virtual void displayMiddleOut() {}

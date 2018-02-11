@@ -35,10 +35,18 @@ void Fire::press() {
 }
 
 // update
-void Neon::update() { this->gsm->getDisplayController()->displayNeon(); }
+void Neon::update(StateManager *sm) {
+  sm->getDisplayController()->displayNeon();
+}
 
-void White::update() { this->gsm->getDisplayController()->displayWhite(); }
+void White::update(StateManager *sm) {
+  sm->getDisplayController()->displayWhite();
+}
 
-void Ombre::update() { this->gsm->getDisplayController()->displayOmbre(); }
+void Ombre::update(StateManager *sm) {
+  sm->getDisplayController()->displayOmbre();
+}
 
-void Fire::update() { this->gsm->getDisplayController()->displayFire(); }
+void Fire::update(StateManager *sm) {
+  sm->getDisplayController()->displayFire();
+}
