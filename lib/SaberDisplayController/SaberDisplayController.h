@@ -13,6 +13,7 @@ public:
 
   void turnOff();
   void update();
+  void update(unsigned long timerVal);
 
   bool isTimeFrame(unsigned long newTimer, unsigned long timeFrame);
   
