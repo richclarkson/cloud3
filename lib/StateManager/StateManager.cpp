@@ -71,10 +71,10 @@ void StateManager::registerLevel(void (*cb)(), float *levelValPointer) {
 
 void StateManager::callLevelCallback() { this->levelCallback(); }
 
-void StateManager::update() { current->update(this->display); }
+void StateManager::update() { current->update(this); }
 
 void StateManager::update(unsigned long timerVal) {
-  current->update(this->display);
+  current->update(this);
 }
 
 void StateManager::registerDisplayController(DisplayController *dc) {
