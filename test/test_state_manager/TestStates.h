@@ -6,6 +6,11 @@
 #include <iostream>
 using namespace std;
 
+class TestStateManager : public StateManager {
+  public:
+  testVal;
+};
+
 class TestState : public State {
   public:
   TestState();
