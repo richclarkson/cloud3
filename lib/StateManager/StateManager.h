@@ -21,7 +21,7 @@ public:
   State* getCurrent() { return current; }
   int getCurrentID();
   void setColor(State *s);
-  State *getColor() { return colorSetting; }
+  State* getColor() { return colorSetting; }
   void advanceColor();
   void advanceChannel();
   int getChannel() { return channel; }
