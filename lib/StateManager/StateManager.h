@@ -18,10 +18,10 @@ public:
   StateManager();
   StateManager(State *starting, State *startingColor);
   void setCurrent(State *s);
-  State* getCurrent() { return current; }
+  State *getCurrent() { return current; }
   int getCurrentID();
   void setColor(State *s);
-  State* getColor() { return colorSetting; }
+  State *getColor() { return colorSetting; }
   void advanceColor();
   void advanceChannel();
   int getChannel() { return channel; }
@@ -40,13 +40,15 @@ public:
   void update(unsigned long timerVal);
 
   void registerDisplayController(DisplayController *dc);
-  DisplayController* getDisplayController() { return display; }
+  DisplayController *getDisplayController() { return display; }
   int getDisplayTest();
-
 };
 
 class State {
+  StateManager *gsm;
+
 public:
+  State(StateManager *sm) { gsm = sm; }
   virtual ~State(){};
   virtual void tap(StateManager *sm){};
   virtual void press(StateManager *sm){};
