@@ -65,7 +65,6 @@ class DisplayController {
 public:
   virtual void turnOff() {}
   virtual void update() {}
-  virtual void update(unsigned long timerVal) {}
 
   virtual void displayFallingDot() {}
   virtual void displayMiddleOut() {}
