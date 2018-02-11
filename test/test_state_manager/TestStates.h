@@ -10,7 +10,7 @@ class TestOne : public State {
 public:
   TestOne();
   TestOne(StateManager *sm);
-  void tap();
+  void tap(StateManager *sm);
   int testVal;
 };
 
@@ -18,7 +18,7 @@ class TestTwo : public State {
 public:
   TestTwo();
   TestTwo(StateManager *sm);
-  void tap();
+  void tap(StateManager *sm);
   void press(StateManager *sm);
   int testVal;
 };
