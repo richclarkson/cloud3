@@ -8,43 +8,36 @@ using namespace std;
 
 class TestStateManager : public StateManager {
   public:
-  testVal;
-};
-
-class TestState : public State {
-  public:
-  TestState();
-  TestState(StateManager *sm);
   int testVal;
 };
 
-class TestStateOne : public TestState {
+class TestStateOne : public State {
 public:
   TestStateOne();
-  TestStateOne(StateManager *sm);
+  TestStateOne(TestStateManager *sm);
   void tap();
   void press();
 };
 
-class TestStateTwo : public TestState {
+class TestStateTwo : public State {
 public:
   TestStateTwo();
-  TestStateTwo(StateManager *sm);
+  TestStateTwo(TestStateManager *sm);
   void tap();
   void press();
 };
 
-class ColorStateOne : public TestState {
+class ColorStateOne : public State {
 public:
   ColorStateOne();
-  ColorStateOne(StateManager *sm);
+  ColorStateOne(TestStateManager *sm);
   void press();
 };
 
-class ColorStateTwo : public TestState {
+class ColorStateTwo : public State {
 public:
   ColorStateTwo();
-  ColorStateTwo(StateManager *sm);
+  ColorStateTwo(TestStateManager *sm);
   void press();
 };
 
