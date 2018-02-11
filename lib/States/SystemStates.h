@@ -12,7 +12,7 @@ public:
   NormalOff();
   NormalOff(StateManager *sm);
   void tap(StateManager *sm);
-  void press();
+  void press(StateManager *sm);
   void update(StateManager *sm);
 };
 
@@ -61,7 +61,7 @@ public:
   LampMode();
   LampMode(StateManager *sm);
   void tap(StateManager *sm);
-  void press();
+  void press(StateManager *sm);
   void update(StateManager *sm);
 };
 

@@ -14,24 +14,24 @@ Fire::Fire() {}
 Fire::Fire(StateManager *sm) : State(sm) {}
 
 // press
-void Neon::press() {
-  this->gsm->setColor(new White(this->gsm));
+void Neon::press(StateManager *sm) {
   delete this;
+  sm->setColor(new White);
 }
 
-void White::press() {
-  this->gsm->setColor(new Ombre(this->gsm));
+void White::press(StateManager *sm) {
   delete this;
+  sm->setColor(new Ombre);
 }
 
-void Ombre::press() {
-  this->gsm->setColor(new Fire(this->gsm));
+void Ombre::press(StateManager *sm) {
   delete this;
+  sm->setColor(new Fire);
 }
 
-void Fire::press() {
-  this->gsm->setColor(new White(this->gsm));
+void Fire::press(StateManager *sm) {
   delete this;
+  sm->setColor(new White);
 }
 
 // update

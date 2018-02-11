@@ -51,16 +51,16 @@ void TestTwo::tap(StateManager *sm) {
   sm->setCurrent(new TestOne);
 }
 
-void TestTwo::press() {
+void TestTwo::press(StateManager *sm) {
   gsm->advanceColor();
 }
 
-void ColorOne::press() {
+void ColorOne::press(StateManager *sm) {
   delete this;
   gsm->setColor(new ColorTwo(gsm));
 }
 
-void ColorTwo::press() {
+void ColorTwo::press(StateManager *sm) {
   delete this;
   gsm->setColor(new ColorOne(gsm));
 }

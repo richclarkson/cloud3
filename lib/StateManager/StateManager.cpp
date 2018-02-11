@@ -59,7 +59,7 @@ void StateManager::press() { current->press(this); }
 
 void StateManager::update() { current->update(this); }
 
-void StateManager::advanceColor() { colorSetting->press(); }
+void StateManager::advanceColor() { colorSetting->press(this); }
 
 void StateManager::advanceChannel() {
   this->channel++;

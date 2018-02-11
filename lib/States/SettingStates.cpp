@@ -44,15 +44,15 @@ void Reset::tap(StateManager *sm) {
 }
 
 // press methods
-void SettingsOff::press() {
-  this->gsm->setCurrent(new NormalOff(this->gsm));
+void SettingsOff::press(StateManager *sm) {
   delete this;
+  sm->setCurrent(new NormalOff);
 }
 
-void Channel::press() { this->gsm->advanceChannel(); }
+void Channel::press(StateManager *sm) { sm->advanceChannel(); }
 
-void Sensitivity::press() { this->gsm->advanceSensitivity(); }
+void Sensitivity::press(StateManager *sm) { sm->advanceSensitivity(); }
 
-void Brightness::press() { this->gsm->advanceBrightness(); }
+void Brightness::press(StateManager *sm) { sm->advanceBrightness(); }
 
-void Reset::press() { this->gsm->resetSettings(); }
+void Reset::press(StateManager *sm) { sm->resetSettings(); }

@@ -63,12 +63,12 @@ void LampMode::tap(StateManager *sm) {
 // ==============================
 
 // press methods
-void NormalOff::press() {
+void NormalOff::press(StateManager *sm) {
   delete this;
-  gsm->setCurrent(new SettingsOff(gsm));
+  sm->setCurrent(new SettingsOff);
 }
 
-void LampMode::press() { gsm->advanceColor(); }
+void LampMode::press(StateManager *sm) { sm->advanceColor(); }
 // ==============================
 
 // update methods

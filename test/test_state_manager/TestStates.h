@@ -19,7 +19,7 @@ public:
   TestTwo();
   TestTwo(StateManager *sm);
   void tap();
-  void press();
+  void press(StateManager *sm);
   int testVal;
 };
 
@@ -27,7 +27,7 @@ class ColorOne : public State {
 public:
   ColorOne();
   ColorOne(StateManager *sm);
-  void press();
+  void press(StateManager *sm);
   int testVal;
 };
 
@@ -35,7 +35,7 @@ class ColorTwo : public State {
 public:
   ColorTwo();
   ColorTwo(StateManager *sm);
-  void press();
+  void press(StateManager *sm);
   int testVal;
 };
 
