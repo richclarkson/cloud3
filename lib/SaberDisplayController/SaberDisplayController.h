@@ -5,12 +5,16 @@
 
 class SaberDisplayController : public DisplayController {
   bool whiteFlag;
+  unsigned long timerVal;
+  unsigned long prevTimerVal;
 
 public:
   SaberDisplayController();
 
   void turnOff();
   void update();
+
+  bool isTimeFrame(unsigned long newTimer, unsigned long timeFrame);
   
   void displayFallingDot();
   void displayMiddleOut();

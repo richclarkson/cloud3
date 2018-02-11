@@ -3,6 +3,17 @@
 
 SaberDisplayController::SaberDisplayController() {
   whiteFlag = false;
+  timerVal = 0;
+  prevTimerVal = 0;
+}
+
+bool SaberDisplayController::isTimeFrame(unsigned long newTimerVal, unsigned long timeFrame) {
+  timerVal += newTimerVal;
+  if (timerVal - prevTimerVal >= timeFrame) {
+    prevTimerVal = timerVal;
+    return true;
+  }
+  return false;
 }
 
 void SaberDisplayController::turnOff() {
