@@ -2,45 +2,40 @@
 #include "SystemStates.h"
 
 // constructors
-SettingsOff::SettingsOff() {}
-SettingsOff::SettingsOff(StateManager *sm) : State(sm) {}
+SettingsOff::SettingsOff() : State() {}
 
-Channel::Channel() {}
-Channel::Channel(StateManager *sm) : State(sm) {}
+Channel::Channel() : State() {}
 
-Sensitivity::Sensitivity() {}
-Sensitivity::Sensitivity(StateManager *sm) : State(sm) {}
+Sensitivity::Sensitivity() : State() {}
 
-Brightness::Brightness() {}
-Brightness::Brightness(StateManager *sm) : State(sm) {}
+Brightness::Brightness() : State() {}
 
-Reset::Reset() {}
-Reset::Reset(StateManager *sm) : State(sm) {}
+Reset::Reset() : State() {}
 
 // tap methods
 void SettingsOff::tap(StateManager *sm) {
-  this->gsm->setCurrent(new Channel(this->gsm));
   delete this;
+  sm->setCurrent(new Channel);
 }
 
 void Channel::tap(StateManager *sm) {
-  this->gsm->setCurrent(new Sensitivity(this->gsm));
   delete this;
+  sm->setCurrent(new Sensitivity);
 }
 
 void Sensitivity::tap(StateManager *sm) {
-  this->gsm->setCurrent(new Brightness(this->gsm));
   delete this;
+  sm->setCurrent(new Brightness);
 }
 
 void Brightness::tap(StateManager *sm) {
-  this->gsm->setCurrent(new Reset(this->gsm));
   delete this;
+  sm->setCurrent(new Reset);
 }
 
 void Reset::tap(StateManager *sm) {
-  this->gsm->setCurrent(new SettingsOff(this->gsm));
   delete this;
+  sm->setCurrent(new SettingsOff);
 }
 
 // press methods

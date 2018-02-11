@@ -3,26 +3,19 @@
 
 // constructors
 // previews should get called here
-NormalOff::NormalOff() {}
-NormalOff::NormalOff(StateManager *sm) : State(sm) {}
+NormalOff::NormalOff() : State() {}
 
-FallingDot::FallingDot() {}
-FallingDot::FallingDot(StateManager *sm) : State(sm) {}
+FallingDot::FallingDot() : State() {}
 
-MiddleOut::MiddleOut() {}
-MiddleOut::MiddleOut(StateManager *sm) : State(sm) {}
+MiddleOut::MiddleOut() : State() {}
 
-Ripple::Ripple() {}
-Ripple::Ripple(StateManager *sm) : State(sm) {}
+Ripple::Ripple() : State() {}
 
-BangAndFade::BangAndFade() {}
-BangAndFade::BangAndFade(StateManager *sm) : State(sm) {}
+BangAndFade::BangAndFade() : State() {}
 
-Rainbow::Rainbow() {}
-Rainbow::Rainbow(StateManager *sm) : State(sm) {}
+Rainbow::Rainbow() : State() {}
 
-LampMode::LampMode() {}
-LampMode::LampMode(StateManager *sm) : State(sm) {}
+LampMode::LampMode() : State() {}
 // ===============================
 
 // tap methods

@@ -9,7 +9,6 @@ using namespace std;
 class TestOne : public State {
 public:
   TestOne();
-  TestOne(StateManager *sm);
   void tap(StateManager *sm);
   int testVal;
 };
@@ -17,7 +16,6 @@ public:
 class TestTwo : public State {
 public:
   TestTwo();
-  TestTwo(StateManager *sm);
   void tap(StateManager *sm);
   void press(StateManager *sm);
   int testVal;
@@ -26,7 +24,6 @@ public:
 class ColorOne : public State {
 public:
   ColorOne();
-  ColorOne(StateManager *sm);
   void press(StateManager *sm);
   int testVal;
 };
@@ -34,7 +31,6 @@ public:
 class ColorTwo : public State {
 public:
   ColorTwo();
-  ColorTwo(StateManager *sm);
   void press(StateManager *sm);
   int testVal;
 };

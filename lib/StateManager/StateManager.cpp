@@ -7,8 +7,6 @@ StateManager::StateManager() {}
 StateManager::StateManager(State *starting, State *startingColor) {
   setCurrent(starting);
   setColor(startingColor);
-  current->registerStateManager(this);
-  colorSetting->registerStateManager(this);
   channel = 8;
   sensitivity = 4;
   brightness = 4;

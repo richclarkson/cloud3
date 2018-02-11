@@ -43,17 +43,11 @@ public:
 };
 
 class State {
-protected:
-  StateManager *gsm;
-
 public:
   State() {}
-  State(StateManager *sm) { gsm = sm; }
-  void registerStateManager(StateManager *sm) { gsm = sm; }
-  StateManager *getSM() { return gsm; }
-  virtual void tap(StateManager *sm){}
-  virtual void press(StateManager *sm){}
-  virtual void update(StateManager *sm){}
+  virtual void tap(StateManager *sm) {}
+  virtual void press(StateManager *sm) {}
+  virtual void update(StateManager *sm) {}
   int testVal;
 };
 
