@@ -1,6 +1,7 @@
 #include "StateManager.h"
 #include "States.h"
 
+//=== constructors ==========
 StateManager::StateManager() {}
 
 StateManager::StateManager(State *starting, State *startingColor) {
@@ -12,18 +13,53 @@ StateManager::StateManager(State *starting, State *startingColor) {
   sensitivity = 4;
   brightness = 4;
 }
+//============================
 
+//=== setters ================
 void StateManager::setCurrent(State *s) { this->current = s; }
 
-int StateManager::getCurrentID() { return this->current->getID(); }
-
 void StateManager::setColor(State *s) { this->colorSetting = s; }
+//============================
 
-void StateManager::tap() { current->tap(this); }
+//=== getters ================
+State *StateManager::getCurrent() { return current; }
 
-void StateManager::press() { current->press(this); }
+State *StateManager::getColor() { return colorSetting; }
 
-void StateManager::advanceColor() { colorSetting->press(this); }
+DisplayController *StateManager::getDisplayController() { return display; }
+
+int StateManager::getChannel() { return channel; }
+
+int StateManager::getSensitivity() { return sensitivity; }
+
+int StateManager::getBrightness() { return brightness; }
+//============================
+
+//=== dependency injection ===
+void StateManager::registerDisplayController(DisplayController *dc) {
+  display = dc;
+}
+
+void StateManager::registerFFT(void (*cb)(), float *fftArrayPointer) {
+  this->fftCallBack = cb;
+  this->fftArrayPtr = fftArrayPointer;
+}
+
+void StateManager::registerLevel(void (*cb)(), float *levelValPointer) {
+  this->levelCallback = cb;
+  this->levelValPtr = levelValPointer;
+}
+//============================
+
+//=== operations =============
+
+void StateManager::tap() { current->tap(); }
+
+void StateManager::press() { current->press(); }
+
+void StateManager::update() { current->update(); }
+
+void StateManager::advanceColor() { colorSetting->press(); }
 
 void StateManager::advanceChannel() {
   this->channel++;
@@ -56,26 +92,7 @@ void StateManager::resetSettings() {
   // TODO: Saves values to EEPROM
 }
 
-void StateManager::registerFFT(void (*cb)(), float *fftArrayPointer) {
-  this->fftCallBack = cb;
-  this->fftArrayPtr = fftArrayPointer;
-}
+void StateManager::updateFFT() { this->fftCallBack(); }
 
-void StateManager::callFFTCallback() { this->fftCallBack(); }
-
-void StateManager::registerLevel(void (*cb)(), float *levelValPointer) {
-  this->levelCallback = cb;
-  this->levelValPtr = levelValPointer;
-}
-
-void StateManager::callLevelCallback() { this->levelCallback(); }
-
-void StateManager::update() { current->update(this); }
-
-void StateManager::update(unsigned long timerVal) {
-  current->update(this);
-}
-
-void StateManager::registerDisplayController(DisplayController *dc) {
-  display = dc;
-}
+void StateManager::updateLevel() { this->levelCallback(); }
+//============================

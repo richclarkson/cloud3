@@ -10,41 +10,41 @@
 class SettingsOff : public State {
 public:
   SettingsOff();
-  ~SettingsOff(){};
-  void tap(StateManager *sm);
-  void press(StateManager *sm);
+  SettingsOff(StateManager *sm);
+  void tap();
+  void press();
 };
 
 class Channel : public State {
 public:
   Channel();
-  ~Channel(){};
-  void tap(StateManager *sm);
-  void press(StateManager *sm);
+  Channel(StateManager *sm);
+  void tap();
+  void press();
 };
 
 class Sensitivity : public State {
 public:
   Sensitivity();
-  ~Sensitivity(){};
-  void tap(StateManager *sm);
-  void press(StateManager *sm);
+  Sensitivity(StateManager *sm);
+  void tap();
+  void press();
 };
 
 class Brightness : public State {
 public:
   Brightness();
-  ~Brightness(){};
-  void tap(StateManager *sm);
-  void press(StateManager *sm);
+  Brightness(StateManager *sm);
+  void tap();
+  void press();
 };
 
 class Reset : public State {
 public:
   Reset();
-  ~Reset(){};
-  void tap(StateManager *sm);
-  void press(StateManager *sm);
+  Reset(StateManager *sm);
+  void tap();
+  void press();
 };
 
 #endif

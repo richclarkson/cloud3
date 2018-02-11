@@ -1,44 +1,44 @@
 #include "ColorStates.h"
 
-Neon::Neon() {}
-White::White() {}
-Ombre::Ombre() {}
+// constructors
+Neon::Neon() : State() {}
+Neon::Neon(StateManager *sm) : State(sm) {}
+
+White::White() : State() {}
+White::White(StateManager *sm) : State(sm) {}
+
+Ombre::Ombre() : State() {}
+Ombre::Ombre(StateManager *sm) : State(sm) {}
+
 Fire::Fire() {}
+Fire::Fire(StateManager *sm) : State(sm) {}
 
-void Neon::press(StateManager *sm) {
+// press
+void Neon::press() {
+  this->gsm->setColor(new White(this->gsm));
   delete this;
-  sm->setColor(new White());
 }
 
-void White::press(StateManager *sm) {
+void White::press() {
+  this->gsm->setColor(new Ombre(this->gsm));
   delete this;
-  sm->setColor(new Ombre());
 }
 
-void Ombre::press(StateManager *sm) {
+void Ombre::press() {
+  this->gsm->setColor(new Fire(this->gsm));
   delete this;
-  sm->setColor(new Fire());
 }
 
-void Fire::press(StateManager *sm) {
+void Fire::press() {
+  this->gsm->setColor(new White(this->gsm));
   delete this;
-  sm->setColor(new White());
 }
 
-void Neon::update(StateManager *sm) {
-  sm->getDisplayController()->displayNeon();
-}
+// update
+void Neon::update() { this->gsm->getDisplayController()->displayNeon(); }
 
-void White::update(StateManager *sm) {
-  sm->getDisplayController()->displayWhite();
-}
+void White::update() { this->gsm->getDisplayController()->displayWhite(); }
 
-void Ombre::update(StateManager *sm) {
-  sm->getDisplayController()->displayOmbre();
-}
+void Ombre::update() { this->gsm->getDisplayController()->displayOmbre(); }
 
-void Fire::update(StateManager *sm) {
-  sm->getDisplayController()->displayFire();
-}
-
-
+void Fire::update() { this->gsm->getDisplayController()->displayFire(); }

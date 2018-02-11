@@ -10,33 +10,33 @@
 class Neon : public State {
 public:
   Neon();
-  ~Neon(){};
-  void press(StateManager *sm);
-  void update(StateManager *sm);
+  Neon(StateManager *sm);
+  void press();
+  void update();
 };
 
 class White : public State {
 public:
   White();
-  ~White(){};
-  void press(StateManager *sm);
-  void update(StateManager *sm);
+  White(StateManager *sm);
+  void press();
+  void update();
 };
 
 class Ombre : public State {
 public:
   Ombre();
-  ~Ombre(){};
-  void press(StateManager *sm);
-  void update(StateManager *sm);
+  Ombre(StateManager *sm);
+  void press();
+  void update();
 };
 
 class Fire : public State {
 public:
   Fire();
-  ~Fire(){};
-  void press(StateManager *sm);
-  void update(StateManager *sm);
+  Fire(StateManager *sm);
+  void press();
+  void update();
 };
 
 #endif

@@ -1,50 +1,58 @@
 #include "SettingStates.h"
 #include "SystemStates.h"
 
+// constructors
 SettingsOff::SettingsOff() {}
-
-void SettingsOff::tap(StateManager *sm) {
-  sm->setCurrent(new Channel());
-  delete this;
-}
-
-void SettingsOff::press(StateManager *sm) {
-  sm->setCurrent(new NormalOff());
-  delete this;
-}
+SettingsOff::SettingsOff(StateManager *sm) : State(sm) {}
 
 Channel::Channel() {}
-
-void Channel::tap(StateManager *sm) {
-  sm->setCurrent(new Sensitivity());
-  delete this;
-}
-
-void Channel::press(StateManager *sm) { sm->advanceChannel(); }
+Channel::Channel(StateManager *sm) : State(sm) {}
 
 Sensitivity::Sensitivity() {}
-
-void Sensitivity::tap(StateManager *sm) {
-  sm->setCurrent(new Brightness());
-  delete this;
-}
-
-void Sensitivity::press(StateManager *sm) { sm->advanceSensitivity(); }
+Sensitivity::Sensitivity(StateManager *sm) : State(sm) {}
 
 Brightness::Brightness() {}
-
-void Brightness::tap(StateManager *sm) {
-  sm->setCurrent(new Reset());
-  delete this;
-}
-
-void Brightness::press(StateManager *sm) { sm->advanceBrightness(); }
+Brightness::Brightness(StateManager *sm) : State(sm) {}
 
 Reset::Reset() {}
+Reset::Reset(StateManager *sm) : State(sm) {}
 
-void Reset::tap(StateManager *sm) {
-  sm->setCurrent(new SettingsOff());
+// tap methods
+void SettingsOff::tap() {
+  this->gsm->setCurrent(new Channel(this->gsm));
   delete this;
 }
 
-void Reset::press(StateManager *sm) { sm->resetSettings(); }
+void Channel::tap() {
+  this->gsm->setCurrent(new Sensitivity(this->gsm));
+  delete this;
+}
+
+void Sensitivity::tap() {
+  this->gsm->setCurrent(new Brightness(this->gsm));
+  delete this;
+}
+
+void Brightness::tap() {
+  this->gsm->setCurrent(new Reset(this->gsm));
+  delete this;
+}
+
+void Reset::tap() {
+  this->gsm->setCurrent(new SettingsOff(this->gsm));
+  delete this;
+}
+
+// press methods
+void SettingsOff::press() {
+  this->gsm->setCurrent(new NormalOff(this->gsm));
+  delete this;
+}
+
+void Channel::press() { this->gsm->advanceChannel(); }
+
+void Sensitivity::press() { this->gsm->advanceSensitivity(); }
+
+void Brightness::press() { this->gsm->advanceBrightness(); }
+
+void Reset::press() { this->gsm->resetSettings(); }
