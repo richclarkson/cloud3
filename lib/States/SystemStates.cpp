@@ -73,30 +73,20 @@ void LampMode::press() { this->gsm->advanceColor(); }
 
 // update methods
 void NormalOff::update() {
-  this->gsm->getDisplayController()->turnOff();
+  gsm->getDisplayController()->turnOff();
 }
 
-void FallingDot::update() {
-  this->gsm->getDisplayController()->displayFallingDot();
-}
+void FallingDot::update() { gsm->getDisplayController()->displayFallingDot(); }
 
-void MiddleOut::update() {
-  this->gsm->getDisplayController()->displayMiddleOut();
-}
+void MiddleOut::update() { gsm->getDisplayController()->displayMiddleOut(); }
 
-void Ripple::update() {
-  this->gsm->getDisplayController()->displayRipple();
-}
+void Ripple::update() { gsm->getDisplayController()->displayRipple(); }
 
 void BangAndFade::update() {
-  this->gsm->getDisplayController()->displayBangAndFade();
+  gsm->getDisplayController()->displayBangAndFade();
 }
 
-void Rainbow::update() {
-  this->gsm->getDisplayController()->displayRainbow();
-}
+void Rainbow::update() { gsm->getDisplayController()->displayRainbow(); }
 
-void LampMode::update() {
-  this->gsm->getColor()->update();
-}
+void LampMode::update() { gsm->getColor()->update(); }
 // ==============================
