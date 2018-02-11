@@ -4,44 +4,40 @@
 #include "States.h"
 #include <unity.h>
 
+#include <iostream>
+using namespace std;
+
 class TestDisplayController : public DisplayController {
-  int testVal;
+  int testValue;
 
 public:
-  TestDisplayController() { testVal = 0; }
-  int getTestVal() { return testVal; }
-  void turnOff() { testVal = 0; }
-  void displayFallingDot() {
-    testVal = 1;
+  TestDisplayController() { testValue = 0; }
+  int getTestVal() { return testValue; }
+  void turnOff() {
+    cout << "\nTurn off called\n";
+    // testValue = 0;
   }
+  void displayFallingDot() { testValue = 1; }
   void displayMiddleOut() {
     turnOff();
-    testVal = 2;
+    testValue = 2;
   }
   void displayRipple() {
     turnOff();
-    testVal = 3;
+    testValue = 3;
   }
   void displayBangAndFade() {
     turnOff();
-    testVal = 4;
+    testValue = 4;
   }
   void displayRainbow() {
     turnOff();
-    testVal = 5;
+    testValue = 5;
   }
-  void displayNeon() {
-    testVal = 10;
-  }
-  void displayWhite() {
-    testVal = 20;
-  }
-  void displayOmbre() {
-    testVal = 30;
-  }
-  void displayFire() {
-    testVal = 40;
-  }
+  void displayNeon() { testValue = 10; }
+  void displayWhite() { testValue = 20; }
+  void displayOmbre() { testValue = 30; }
+  void displayFire() { testValue = 40; }
 };
 
 StateManager sm;
@@ -54,17 +50,15 @@ void setUp() {
 }
 
 void test_normal_off_system_state_calls_display_function() {
-  // sm.update();
-  // TEST_ASSERT_EQUAL(0, tdc.getTestVal());
-  sm.tap();
   sm.update();
-  TEST_ASSERT_EQUAL(0, 0);
+  // TEST_ASSERT_EQUAL(0, tdc.getTestVal());
+  // TEST_ASSERT_EQUAL(0, 0);
 }
 
 int main() {
   UNITY_BEGIN();
 
-    RUN_TEST(test_normal_off_system_state_calls_display_function);
+  RUN_TEST(test_normal_off_system_state_calls_display_function);
 
   UNITY_END();
 }
