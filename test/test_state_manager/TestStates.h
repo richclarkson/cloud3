@@ -7,46 +7,40 @@
 using namespace std;
 
 class TestState : public State {
+  public:
+  TestState();
+  TestState(StateManager *sm);
+  int testVal;
 };
 
 class TestStateOne : public TestState {
 public:
   TestStateOne();
-  ~TestStateOne();
-  void tap(StateManager *sm);
+  TestStateOne(StateManager *sm);
+  void tap();
+  void press();
 };
 
 class TestStateTwo : public TestState {
 public:
   TestStateTwo();
-  ~TestStateTwo();
-  void tap(StateManager *sm);
-  void press(StateManager *sm);
+  TestStateTwo(StateManager *sm);
+  void tap();
+  void press();
 };
 
-class TestStateThree : public TestState {
-public:
-  TestStateThree();
-  void press(StateManager *sm);
-  void tap(StateManager *sm);
-};
-
-class ColorState : public TestState {
-public:
-  void advance(StateManager *sm) {}
-};
-
-class ColorStateOne : public ColorState {
+class ColorStateOne : public TestState {
 public:
   ColorStateOne();
-  void press(StateManager *sm);
+  ColorStateOne(StateManager *sm);
+  void press();
 };
 
-class ColorStateTwo : public ColorState {
+class ColorStateTwo : public TestState {
 public:
   ColorStateTwo();
-  void press(StateManager *sm);
+  ColorStateTwo(StateManager *sm);
+  void press();
 };
-
 
 #endif

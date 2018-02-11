@@ -3,74 +3,61 @@
 #include <iostream>
 using namespace std;
 
-TestStateOne::TestStateOne() { 
-  cout << "\nTest State 1 created\n"; 
-  this->id = 1;
+TestState::TestState() : State() {}
+TestState::TestState(StateManager *sm) : State(sm) {}
+
+TestStateOne::TestStateOne() : TestState() {
+  this->testVal = 1;
+  // cout << "\nTest State One created; SM: NO\n";
 }
 
-TestStateOne::~TestStateOne() { 
-  cout << "\nTest State 1 destroyed\n"; 
+TestStateOne::TestStateOne(StateManager *sm) : TestState(sm) {
+  this->testVal = 1;
+  // cout << "\nTest State One created; SM: YES\n";
 }
 
-void TestStateOne::tap(StateManager *sm) {
-  cout << "1 tapped: " << sm << "\n";
-  // TestStateTwo* ts = new TestStateTwo;
+TestStateTwo::TestStateTwo() : TestState() {
+  this->testVal = 2;
+  // cout << "\nTest State Two created; SM: NO\t" << this << "\n";
+}
+
+TestStateTwo::TestStateTwo(StateManager *sm) : TestState(sm) {
+  this->testVal = 2;
+  // cout << "\nTest State Two created; SM: YES\t" << this << "\n";
+}
+
+ColorStateOne::ColorStateOne() : TestState() { this->testVal = 10; }
+
+ColorStateOne::ColorStateOne(StateManager *sm) : TestState(sm) {
+  this->testVal = 10;
+}
+
+ColorStateTwo::ColorStateTwo() : TestState() { this->testVal = 20; }
+
+ColorStateTwo::ColorStateTwo(StateManager *sm) : TestState(sm) {
+  this->testVal = 20;
+}
+
+void TestStateOne::tap() {
+  StateManager *sm = gsm;
   delete this;
-  sm->setCurrent(new TestStateTwo());
+  sm->setCurrent(new TestStateTwo(sm));
 }
 
-TestStateTwo::TestStateTwo() { 
-  cout << "\nTest State 2 created\n"; 
-  this->id = 2;
-}
-
-TestStateTwo::~TestStateTwo() { 
-  cout << "\nTest State 2 destroyed\n"; 
-}
-
-void TestStateTwo::tap(StateManager *sm) {
-  cout << "2 tapped: " << sm << "\n";
+void TestStateTwo::tap() {
+  this->gsm->setCurrent(new TestStateOne(this->gsm));
   delete this;
-  sm->setCurrent(new TestStateOne());
 }
 
-void TestStateTwo::press(StateManager *sm) {
-  delete this;
-  sm->setCurrent(new TestStateThree());
+void TestStateOne::press() { this->gsm->advanceColor(); }
+
+
+void TestStateTwo::press() { this->gsm->advanceColor(); }
+
+void ColorStateOne::press() {
+  this->gsm->setColor(new ColorStateTwo(this->gsm));
 }
 
-TestStateThree::TestStateThree() {
-  this->id = 3;
-}
-
-void TestStateThree::press(StateManager *sm) {
-  delete this;
-  sm->setCurrent(new TestStateOne());
-}
-
-void TestStateThree::tap(StateManager *sm) {
-  cout << "\nThree tapped, sm: " << sm << "\n";
-  sm->advanceColor();
-}
-
-ColorStateOne::ColorStateOne() {
-  cout << "\nColor One created\n";
-  this->id = 11;
-}
-
-void ColorStateOne::press(StateManager *sm) {
-  cout << "\nState One advance called\n";
-  delete this;
-  sm->setColor(new ColorStateTwo());
-}
-
-ColorStateTwo::ColorStateTwo() {
-  cout << "\nColor Two created\n";
-  this->id = 12;
-}
-
-void ColorStateTwo::press(StateManager *sm) {
-  cout << "\nState Two advance called\n";
-  delete this;
-  sm->setColor(new ColorStateOne());
+void ColorStateTwo::press() {
+  this->gsm->setColor(new ColorStateOne(this->gsm));
 }
