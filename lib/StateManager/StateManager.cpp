@@ -71,7 +71,7 @@ void StateManager::callLevelCallback() { this->levelCallback(); }
 void StateManager::update() { current->update(this); }
 
 void StateManager::update(unsigned long timerVal) {
-  current->update(this);
+  current->update(this, timerVal);
 }
 
 void StateManager::registerDisplayController(DisplayController *dc) {

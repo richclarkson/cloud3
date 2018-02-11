@@ -56,30 +56,30 @@ void NormalOff::press(StateManager *sm) {
 void LampMode::press(StateManager *sm) { sm->advanceColor(); }
 
 // update methods
-void NormalOff::update(StateManager *sm) {
+void NormalOff::update(StateManager *sm, timerVal) {
   sm->getDisplayController()->turnOff();
 }
 
-void FallingDot::update(StateManager *sm) {
+void FallingDot::update(StateManager *sm, timerVal) {
   sm->getDisplayController()->displayFallingDot();
 }
 
-void MiddleOut::update(StateManager *sm) {
+void MiddleOut::update(StateManager *sm, timerVal) {
   sm->getDisplayController()->displayMiddleOut();
 }
 
-void Ripple::update(StateManager *sm) {
+void Ripple::update(StateManager *sm, timerVal) {
   sm->getDisplayController()->displayRipple();
 }
 
-void BangAndFade::update(StateManager *sm) {
+void BangAndFade::update(StateManager *sm, timerVal) {
   sm->getDisplayController()->displayBangAndFade();
 }
 
-void Rainbow::update(StateManager *sm) {
+void Rainbow::update(StateManager *sm, timerVal) {
   sm->getDisplayController()->displayRainbow();
 }
 
-void LampMode::update(StateManager *sm) {
-  sm->getColor()->update(sm);
+void LampMode::update(StateManager *sm, timerVal) {
+  sm->getColor()->update(sm, timerVal);
 }
