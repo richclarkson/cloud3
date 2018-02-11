@@ -47,10 +47,13 @@ protected:
   StateManager *gsm;
 
 public:
-  State() {}
-  State(StateManager *sm) { gsm = sm; }
+  State() { testVal = -1; }
+  State(StateManager *sm) {
+    gsm = sm;
+    testVal = -1;
+  }
   void registerStateManager(StateManager *sm) { gsm = sm; }
-  StateManager* getSM() { return gsm; }
+  StateManager *getSM() { return gsm; }
   virtual void tap(){};
   virtual void press(){};
   virtual void update(){};
