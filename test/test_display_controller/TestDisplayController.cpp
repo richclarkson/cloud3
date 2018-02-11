@@ -14,8 +14,7 @@ public:
   TestDisplayController() { testValue = 0; }
   int getTestVal() { return testValue; }
   void turnOff() {
-    cout << "\nTurn off called\n";
-    // testValue = 0;
+    testValue = 0;
   }
   void displayFallingDot() { testValue = 1; }
   void displayMiddleOut() {
@@ -52,15 +51,39 @@ void setUp() {
 }
 
 void test_normal_off_system_state_calls_display_function() {
-  // sm.update();
-  // TEST_ASSERT_EQUAL(0, tdc.getTestVal());
-  // TEST_ASSERT_EQUAL(0, 0);
+  sm.update();
+  TEST_ASSERT_EQUAL(0, tdc.getTestVal());
+}
+
+void test_each_state_calls_its_display_function() {
+  sm.update();
+  TEST_ASSERT_EQUAL(0, tdc.getTestVal());
+  sm.tap();
+  sm.update();
+  TEST_ASSERT_EQUAL(1, tdc.getTestVal());
+  sm.tap();
+  sm.update();
+  TEST_ASSERT_EQUAL(2, tdc.getTestVal());
+  sm.tap();
+  sm.update();
+  TEST_ASSERT_EQUAL(3, tdc.getTestVal());
+  sm.tap();
+  sm.update();
+  TEST_ASSERT_EQUAL(4, tdc.getTestVal());
+  sm.tap();
+  sm.update();
+  TEST_ASSERT_EQUAL(5, tdc.getTestVal());
+  sm.tap();
+  sm.tap();
+  sm.update();
+  TEST_ASSERT_EQUAL(0, tdc.getTestVal());
 }
 
 int main() {
   UNITY_BEGIN();
 
   RUN_TEST(test_normal_off_system_state_calls_display_function);
+  RUN_TEST(test_each_state_calls_its_display_function);
 
   UNITY_END();
 }
