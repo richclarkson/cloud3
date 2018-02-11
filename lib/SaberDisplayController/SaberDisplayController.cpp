@@ -25,6 +25,4 @@ void SaberDisplayController::displayRainbow() {
   // add state display code here
 }
 
-void SaberDisplayController::displayColorPreview() {
-  // add state display code here
 }
