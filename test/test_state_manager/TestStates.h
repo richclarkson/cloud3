@@ -6,39 +6,20 @@
 #include <iostream>
 using namespace std;
 
-class TestStateManager : public StateManager {
-  public:
+class TestOne : public State {
+public:
+  TestOne();
+  TestOne(StateManager *sm);
+  void tap();
   int testVal;
 };
 
-class TestStateOne : public State {
+class TestTwo : public State {
 public:
-  TestStateOne();
-  TestStateOne(TestStateManager *sm);
+  TestTwo();
+  TestTwo(StateManager *sm);
   void tap();
-  void press();
-};
-
-class TestStateTwo : public State {
-public:
-  TestStateTwo();
-  TestStateTwo(TestStateManager *sm);
-  void tap();
-  void press();
-};
-
-class ColorStateOne : public State {
-public:
-  ColorStateOne();
-  ColorStateOne(TestStateManager *sm);
-  void press();
-};
-
-class ColorStateTwo : public State {
-public:
-  ColorStateTwo();
-  ColorStateTwo(TestStateManager *sm);
-  void press();
+  int testVal;
 };
 
 #endif

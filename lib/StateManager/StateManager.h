@@ -54,6 +54,7 @@ public:
   virtual void tap(){};
   virtual void press(){};
   virtual void update(){};
+  int testVal;
 };
 
 class DisplayController {
