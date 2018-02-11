@@ -60,6 +60,7 @@ protected:
 class DisplayController {
 public:
   virtual void turnOff() {}
+  virtual void update() {}
 
   virtual void displayFallingDot() {}
   virtual void displayMiddleOut() {}
@@ -67,6 +68,10 @@ public:
   virtual void displayBangAndFade() {}
   virtual void displayRainbow() {}
 
+  virtual void displayNeon() {}
+  virtual void displayWhite() {}
+  virtual void displayOmbre() {}
+  virtual void displayFire() {}
 };
 
 #endif

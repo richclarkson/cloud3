@@ -68,4 +68,5 @@ void BangAndFade::update(StateManager *sm) { sm->getDisplayController()-> displa
 
 void Rainbow::update(StateManager *sm) { sm->getDisplayController()-> displayRainbow(); }
 
+void LampMode::update(StateManager *sm) { sm->getDisplayController()->update(); }
 

@@ -24,3 +24,21 @@ void Fire::press(StateManager *sm) {
   delete this;
   sm->setColor(new White());
 }
+
+void Neon::update(StateManager *sm) {
+  sm->getDisplayController()->displayNeon();
+}
+
+void White::update(StateManager *sm) {
+  sm->getDisplayController()->displayWhite();
+}
+
+void Ombre::update(StateManager *sm) {
+  sm->getDisplayController()->displayOmbre();
+}
+
+void Fire::update(StateManager *sm) {
+  sm->getDisplayController()->displayFire();
+}
+
+
