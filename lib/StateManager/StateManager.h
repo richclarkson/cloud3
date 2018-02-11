@@ -48,7 +48,9 @@ class State {
   StateManager *gsm;
 
 public:
+  State() {}
   State(StateManager *sm) { gsm = sm; }
+  void registerStateManager(StateManager *sm) { gsm = sm; }
   virtual ~State(){};
   virtual void tap(StateManager *sm){};
   virtual void press(StateManager *sm){};
