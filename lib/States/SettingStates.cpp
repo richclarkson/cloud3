@@ -18,27 +18,27 @@ Reset::Reset() {}
 Reset::Reset(StateManager *sm) : State(sm) {}
 
 // tap methods
-void SettingsOff::tap() {
+void SettingsOff::tap(StateManager *sm) {
   this->gsm->setCurrent(new Channel(this->gsm));
   delete this;
 }
 
-void Channel::tap() {
+void Channel::tap(StateManager *sm) {
   this->gsm->setCurrent(new Sensitivity(this->gsm));
   delete this;
 }
 
-void Sensitivity::tap() {
+void Sensitivity::tap(StateManager *sm) {
   this->gsm->setCurrent(new Brightness(this->gsm));
   delete this;
 }
 
-void Brightness::tap() {
+void Brightness::tap(StateManager *sm) {
   this->gsm->setCurrent(new Reset(this->gsm));
   delete this;
 }
 
-void Reset::tap() {
+void Reset::tap(StateManager *sm) {
   this->gsm->setCurrent(new SettingsOff(this->gsm));
   delete this;
 }

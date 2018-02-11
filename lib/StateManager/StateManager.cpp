@@ -53,9 +53,9 @@ void StateManager::registerLevel(void (*cb)(), float *levelValPointer) {
 
 //=== operations =============
 
-void StateManager::tap() { current->tap(); }
+void StateManager::tap() { current->tap(this); }
 
-void StateManager::press() { current->press(); }
+void StateManager::press() { current->press(this); }
 
 void StateManager::update() { current->update(this); }
 

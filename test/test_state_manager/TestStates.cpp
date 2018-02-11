@@ -41,14 +41,14 @@ ColorTwo::ColorTwo(StateManager *sm) : State(sm) {
   cout << "\ncolor TWO created\n";
 }
 
-void TestOne::tap() {
+void TestOne::tap(StateManager *sm) {
   delete this;
-  gsm->setCurrent(new TestTwo(gsm));
+  sm->setCurrent(new TestTwo);
 }
 
-void TestTwo::tap() {
+void TestTwo::tap(StateManager *sm) {
   delete this;
-  gsm->setCurrent(new TestOne(gsm));
+  sm->setCurrent(new TestOne);
 }
 
 void TestTwo::press() {

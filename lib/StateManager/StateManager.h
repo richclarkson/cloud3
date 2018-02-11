@@ -51,8 +51,8 @@ public:
   State(StateManager *sm) { gsm = sm; }
   void registerStateManager(StateManager *sm) { gsm = sm; }
   StateManager *getSM() { return gsm; }
-  virtual void tap(){}
   virtual void press(){}
+  virtual void tap(StateManager *sm){}
   virtual void update(StateManager *sm){}
   int testVal;
 };

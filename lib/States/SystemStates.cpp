@@ -26,42 +26,39 @@ LampMode::LampMode(StateManager *sm) : State(sm) {}
 // ===============================
 
 // tap methods
-void NormalOff::tap() {
-  FallingDot *fd = new FallingDot;
-  fd->registerStateManager(gsm);
-  gsm->setCurrent(fd);
+void NormalOff::tap(StateManager *sm) {
   delete this;
-  // gsm->setCurrent(new FallingDot(gsm));
+  sm->setCurrent(new FallingDot);
 }
 
-void FallingDot::tap() {
+void FallingDot::tap(StateManager *sm) {
   delete this;
-  gsm->setCurrent(new MiddleOut(gsm));
+  sm->setCurrent(new MiddleOut);
 }
 
-void MiddleOut::tap() {
+void MiddleOut::tap(StateManager *sm) {
   delete this;
-  gsm->setCurrent(new Ripple(gsm));
+  sm->setCurrent(new Ripple);
 }
 
-void Ripple::tap() {
+void Ripple::tap(StateManager *sm) {
   delete this;
-  gsm->setCurrent(new BangAndFade(gsm));
+  sm->setCurrent(new BangAndFade);
 }
 
-void BangAndFade::tap() {
+void BangAndFade::tap(StateManager *sm) {
   delete this;
-  gsm->setCurrent(new Rainbow(gsm));
+  sm->setCurrent(new Rainbow);
 }
 
-void Rainbow::tap() {
+void Rainbow::tap(StateManager *sm) {
   delete this;
-  gsm->setCurrent(new LampMode(gsm));
+  sm->setCurrent(new LampMode);
 }
 
-void LampMode::tap() {
+void LampMode::tap(StateManager *sm) {
   delete this;
-  gsm->setCurrent(new NormalOff(gsm));
+  sm->setCurrent(new NormalOff);
 }
 // ==============================
 
