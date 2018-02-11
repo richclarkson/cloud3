@@ -19,6 +19,23 @@ public:
   TestTwo();
   TestTwo(StateManager *sm);
   void tap();
+  void press();
+  int testVal;
+};
+
+class ColorOne : public State {
+public:
+  ColorOne();
+  ColorOne(StateManager *sm);
+  void press();
+  int testVal;
+};
+
+class ColorTwo : public State {
+public:
+  ColorTwo();
+  ColorTwo(StateManager *sm);
+  void press();
   int testVal;
 };
 
