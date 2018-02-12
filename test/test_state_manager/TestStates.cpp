@@ -5,21 +5,21 @@ using namespace std;
 
 TestOne::TestOne() : State() {
   setTestVal(1);
-  cout << "\ntest One created\n";
+  // cout << "\ntest One created\n";
 }
 TestTwo::TestTwo() : State() {
   setTestVal(2);
-  cout << "\ntest Two created\n";
+  // cout << "\ntest Two created\n";
 }
 
 ColorOne::ColorOne() : State() {
   setTestVal(10);
-  cout << "\ncolor One created\n";
+  // cout << "\ncolor One created\n";
 }
 
 ColorTwo::ColorTwo() : State() {
   setTestVal(20);
-  cout << "\ncolor Two created\n";
+  // cout << "\ncolor Two created\n";
 }
 
 void TestOne::tap(StateManager *sm) {
