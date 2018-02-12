@@ -5,8 +5,6 @@
 
 class SaberDisplayController : public DisplayController {
   bool whiteFlag;
-  unsigned long timerVal;
-  unsigned long prevTimerVal;
 
 public:
   SaberDisplayController();

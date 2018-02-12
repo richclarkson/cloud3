@@ -77,11 +77,17 @@ void test_each_state_calls_its_display_function() {
   TEST_ASSERT_EQUAL(0, tdc.getTestVal());
 }
 
+void test_timer_val() {
+  TEST_ASSERT_FALSE(tdc.isTimeFrame(100, 300));
+  TEST_ASSERT_TRUE(tdc.isTimeFrame(250, 300));
+}
+
 int main() {
   UNITY_BEGIN();
 
   RUN_TEST(test_normal_off_system_state_calls_display_function);
   RUN_TEST(test_each_state_calls_its_display_function);
+  RUN_TEST(test_timer_val);
 
   UNITY_END();
 }
