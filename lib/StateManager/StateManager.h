@@ -57,10 +57,6 @@ public:
 };
 
 class DisplayController {
-protected:
-  unsigned long timerVal;
-  unsigned long prevTimerVal;
-
 public:
   virtual void turnOff() {}
   virtual void update(StateManager *sm) {}
@@ -75,14 +71,6 @@ public:
   virtual void displayWhite() {}
   virtual void displayOmbre() {}
   virtual void displayFire() {}
-  bool isTimeFrame(unsigned long newTimerVal, unsigned long timeFrame) {
-    timerVal += newTimerVal;
-    if (timerVal - prevTimerVal >= timeFrame) {
-      prevTimerVal = timerVal;
-      return true;
-    }
-    return false;
-  }
 };
 
 #endif
