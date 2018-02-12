@@ -2,12 +2,16 @@
 
 // constructors
 Neon::Neon() : State() {}
+Neon::~Neon() {}
 
 White::White() : State() {}
+White::~White() {}
 
 Ombre::Ombre() : State() {}
+Ombre::~Ombre() {}
 
 Fire::Fire() : State() {}
+Fire::~Fire() {}
 
 // press
 void Neon::press(StateManager *sm) {

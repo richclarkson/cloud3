@@ -48,6 +48,7 @@ protected:
 
 public:
   State() {}
+  virtual ~State() {}
   virtual void tap(StateManager *sm) {}
   virtual void press(StateManager *sm) {}
   virtual void update(StateManager *sm) {}

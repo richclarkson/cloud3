@@ -10,6 +10,7 @@
 class Neon : public State {
 public:
   Neon();
+  ~Neon();
   void press(StateManager *sm);
   void update(StateManager *sm);
 };
@@ -17,6 +18,7 @@ public:
 class White : public State {
 public:
   White();
+  ~White();
   void press(StateManager *sm);
   void update(StateManager *sm);
 };
@@ -24,6 +26,7 @@ public:
 class Ombre : public State {
 public:
   Ombre();
+  ~Ombre();
   void press(StateManager *sm);
   void update(StateManager *sm);
 };
@@ -31,6 +34,7 @@ public:
 class Fire : public State {
 public:
   Fire();
+  ~Fire();
   void press(StateManager *sm);
   void update(StateManager *sm);
 };

@@ -3,14 +3,19 @@
 
 // constructors
 SettingsOff::SettingsOff() : State() {}
+SettingsOff::~SettingsOff() {}
 
 Channel::Channel() : State() {}
+Channel::~Channel() {}
 
 Sensitivity::Sensitivity() : State() {}
+Sensitivity::~Sensitivity() {}
 
 Brightness::Brightness() : State() {}
+Brightness::~Brightness() {}
 
 Reset::Reset() : State() {}
+Reset::~Reset() {}
 
 // tap methods
 void SettingsOff::tap(StateManager *sm) {

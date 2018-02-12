@@ -10,6 +10,7 @@
 class SettingsOff : public State {
 public:
   SettingsOff();
+  ~SettingsOff();
   void tap(StateManager *sm);
   void press(StateManager *sm);
 };
@@ -17,6 +18,7 @@ public:
 class Channel : public State {
 public:
   Channel();
+  ~Channel();
   void tap(StateManager *sm);
   void press(StateManager *sm);
 };
@@ -24,6 +26,7 @@ public:
 class Sensitivity : public State {
 public:
   Sensitivity();
+  ~Sensitivity();
   void tap(StateManager *sm);
   void press(StateManager *sm);
 };
@@ -31,6 +34,7 @@ public:
 class Brightness : public State {
 public:
   Brightness();
+  ~Brightness();
   void tap(StateManager *sm);
   void press(StateManager *sm);
 };
@@ -38,6 +42,7 @@ public:
 class Reset : public State {
 public:
   Reset();
+  ~Reset();
   void tap(StateManager *sm);
   void press(StateManager *sm);
 };

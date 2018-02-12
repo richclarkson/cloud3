@@ -4,18 +4,25 @@
 // constructors
 // previews should get called here
 NormalOff::NormalOff() : State() {}
+NormalOff::~NormalOff() {}
 
 FallingDot::FallingDot() : State() {}
+FallingDot::~FallingDot() {}
 
 MiddleOut::MiddleOut() : State() {}
+MiddleOut::~MiddleOut() {}
 
 Ripple::Ripple() : State() {}
+Ripple::~Ripple() {}
 
 BangAndFade::BangAndFade() : State() {}
+BangAndFade::~BangAndFade() {}
 
 Rainbow::Rainbow() : State() {}
+Rainbow::~Rainbow() {}
 
 LampMode::LampMode() : State() {}
+LampMode::~LampMode() {}
 // ===============================
 
 // tap methods
