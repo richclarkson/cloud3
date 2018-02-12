@@ -3,9 +3,6 @@
 
 #include "StateManager.h"
 
-#include <iostream>
-using namespace std;
-
 class TestOne : public State {
 public:
   TestOne();
