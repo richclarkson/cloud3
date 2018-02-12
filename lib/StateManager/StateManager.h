@@ -51,7 +51,7 @@ public:
   virtual void tap(StateManager *sm) {}
   virtual void press(StateManager *sm) {}
   virtual void update(StateManager *sm) {}
-  virtual void setTestVal(int val) {}
+  void setTestVal(int val) { testVal = val; }
   int getTestVal() { return testVal; }
 };
 

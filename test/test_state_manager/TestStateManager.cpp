@@ -18,28 +18,26 @@ void setUp(void) {
 }
 
 void test_state_value_exists() {
-  TEST_ASSERT_EQUAL(1, sm.getCurrent()->testVal);
+  TEST_ASSERT_EQUAL(1, sm.getCurrent()->getTestVal());
 }
 
 void test_state_advances_on_tap() {
   sm.tap();
-  TEST_ASSERT_EQUAL(2, sm.getCurrent()->testVal);
+  TEST_ASSERT_EQUAL(2, sm.getCurrent()->getTestVal());
   sm.tap();
-  TEST_ASSERT_EQUAL(1, sm.getCurrent()->testVal);
+  TEST_ASSERT_EQUAL(1, sm.getCurrent()->getTestVal());
   sm.tap();
-  TEST_ASSERT_EQUAL(2, sm.getCurrent()->testVal);
+  TEST_ASSERT_EQUAL(2, sm.getCurrent()->getTestVal());
 }
 
-void test_color_exists() {
-  TEST_ASSERT_EQUAL(10, sm.getColor()->testVal);
-}
+void test_color_exists() { TEST_ASSERT_EQUAL(10, sm.getColor()->getTestVal()); }
 
 void test_color_advances_when_two_is_pressed() {
   sm.tap(); //get to TestTwo
   sm.press();
-  TEST_ASSERT_EQUAL(20, sm.getColor()->testVal);
+  TEST_ASSERT_EQUAL(20, sm.getColor()->getTestVal());
   sm.press();
-  TEST_ASSERT_EQUAL(10, sm.getColor()->testVal);
+  TEST_ASSERT_EQUAL(10, sm.getColor()->getTestVal());
 }
 
 int main() {

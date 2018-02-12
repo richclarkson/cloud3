@@ -4,21 +4,21 @@
 using namespace std;
 
 TestOne::TestOne() : State() {
-  State::testVal = 1;
+  setTestVal(1);
   cout << "\ntest One created\n";
 }
 TestTwo::TestTwo() : State() {
-  State::testVal = 2;
+  setTestVal(2);
   cout << "\ntest Two created\n";
 }
 
 ColorOne::ColorOne() : State() {
-  State::testVal = 10;
+  setTestVal(10);
   cout << "\ncolor One created\n";
 }
 
 ColorTwo::ColorTwo() : State() {
-  State::testVal = 20;
+  setTestVal(20);
   cout << "\ncolor Two created\n";
 }
 
