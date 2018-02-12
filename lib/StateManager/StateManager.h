@@ -43,12 +43,16 @@ public:
 };
 
 class State {
+protected:
+  int testVal;
+
 public:
   State() {}
   virtual void tap(StateManager *sm) {}
   virtual void press(StateManager *sm) {}
   virtual void update(StateManager *sm) {}
-  int testVal;
+  virtual void setTestVal(int val) {}
+  int getTestVal() { return testVal; }
 };
 
 class DisplayController {
