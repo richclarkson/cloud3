@@ -1,21 +1,17 @@
 #ifdef UNIT_TEST
 
 #include "StateManager.h"
-#include "TestStates.h"
 #include "States.h"
+#include "TestStates.h"
 #include <unity.h>
 
-#include <typeinfo>
 #include <iostream>
+#include <typeinfo>
 using namespace std;
-
 
 StateManager sm;
 
-void setUp(void) { 
-  sm = StateManager(new TestOne, new ColorOne);
-
-}
+void setUp(void) { sm = StateManager(new TestOne, new ColorOne); }
 
 void test_state_value_exists() {
   TEST_ASSERT_EQUAL(1, sm.getCurrent()->getTestVal());
@@ -33,7 +29,7 @@ void test_state_advances_on_tap() {
 void test_color_exists() { TEST_ASSERT_EQUAL(10, sm.getColor()->getTestVal()); }
 
 void test_color_advances_when_two_is_pressed() {
-  sm.tap(); //get to TestTwo
+  sm.tap(); // get to TestTwo
   sm.press();
   TEST_ASSERT_EQUAL(20, sm.getColor()->getTestVal());
   sm.press();
