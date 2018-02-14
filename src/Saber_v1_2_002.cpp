@@ -68,7 +68,7 @@ float eq[8] = {
 //Lamp Mode Variables
 int rainbowCounter = 0;
 int timeSpeed = 100;
-uint8_t gHue = 0;           // rotating "base color" used by many of the patterns
+uint8_t gHue = 180;           // rotating "base color" used by many of the patterns
 int COOLINGarray[] = {100, 90, 85, 80, 75, 90, 85, 100, 90}; // Fire Mode varriable
 int COOLING = 90;         // Fire Mode varriable
 #define SPARKING 100      // Fire Mode varriable
@@ -112,7 +112,7 @@ int prevVariableSet = 0;
 
 int variableCounter = 9;  //global
 
-uint8_t normal = 1;  // may change this to eprom
+uint8_t normal;  // may change this to eprom
 uint8_t demoAuto;
 uint8_t singlePress;
 
@@ -130,6 +130,7 @@ int musicVariable3;
 byte newEpprom;
 uint8_t automatedIndicator;
 uint8_t reset = 0;
+int numberLoops = 30;
 
 void musicmode1();
 void musicmode2();
@@ -170,9 +171,10 @@ void setup()
   FastLED.setBrightness(90);
   turnoffLEDs();
   FastLED.show();
-  delay(1000);  // Sanity Delay
   Serial.begin(9600);
+  delay(3000);  // Sanity Delay
   Serial.println("Saber v1.2");
+  eepromSet();
   loopTime = 0;
   capSensor = TapPressButton(50, 300, 1000, 1000);
   isTouch = false;
@@ -203,7 +205,7 @@ void loop()
       buttonPushCounterDemo = 100;
       pushAndHold = 0;
       Serial.println("Falling Dot");
-      indicatorDemo(20);
+      indicatorDemo(numberLoops);
     }
 
     else if (buttonPushCounter == 1) {    // middle out
@@ -212,7 +214,7 @@ void loop()
       buttonPushCounterDemo = 101;
       pushAndHold = 0;
       Serial.println("Middle Out");
-      indicatorDemo(20);
+      indicatorDemo(numberLoops);
     }
 
     else if (buttonPushCounter == 2) {    // ripple
@@ -221,7 +223,7 @@ void loop()
       buttonPushCounterDemo = 102;
       pushAndHold = 0;
       Serial.println("Ripple");
-      indicatorDemo(20);
+      indicatorDemo(numberLoops);
     }
 
     else if (buttonPushCounter == 3) {    // fade
@@ -230,7 +232,7 @@ void loop()
       buttonPushCounterDemo = 103;
       pushAndHold = 0;
       Serial.println("Fade");
-      indicatorDemo(20);
+      indicatorDemo(numberLoops);
     }
 
     else if (buttonPushCounter == 4) {    // music rainbow
@@ -239,7 +241,7 @@ void loop()
       buttonPushCounterDemo = 104;
       pushAndHold = 0;
       Serial.println("Rainbow");
-      indicatorDemo(20);
+      indicatorDemo(numberLoops);
     }
 
     else if (buttonPushCounter == 5) {   // lamp mode
@@ -384,7 +386,7 @@ void loop()
     }
 
     else if (buttonPushCounter == 112) {              // off
-      indicatorDemo(20);
+      //indicatorDemo(2);
     }
 
   }    //end settings modes here
@@ -771,23 +773,23 @@ void fetchValue()                                                  //fetch only 
 void indicators(int variableSet) 
 {
   if      (buttonPushCounter == 106) {
-    modeColor = 210;
+    modeColor = 120;
   }
   else if (buttonPushCounter == 107) {
-    modeColor =  10;  //green
+    modeColor =  100;  //green
   }
   else if (buttonPushCounter == 108) {
-    modeColor =  100; //pink
+    modeColor =  230; //pink
   }
   else if (buttonPushCounter == 109) {
     modeColor = 160;  // blue
   }
   //else if (buttonPushCounter == 110) { modeColor =  60; }  // yellow
   else if (buttonPushCounter == 110) {
-    modeColor = 95;   // red
+    modeColor = 10;   // red
   }
   else if (buttonPushCounter == 111) {
-    modeColor = 210;
+    modeColor = 120;
   }
 
 
@@ -847,21 +849,18 @@ void indicators(int variableSet)
 }
 
 void eepromSet() 
-{  newEpprom = 255;          // first run eprom data save
-  //newEpprom = EEPROM.read(0);          // first run eprom data save
-  if (newEpprom == 255) {
-
+{ // newEpprom = 255;          // first run eprom data save   TODO remove this for final code
+  newEpprom = EEPROM.read(0);          // first run eprom data save
+  if (newEpprom != 73) {
+    
+    Serial.println("New EPROM!");
     // eeprom values:
-    newEpprom = 1;
-
+    newEpprom = 73;
     buttonPushCounter = 0;                  //
     channel = 8;                            //
-    //locked = 0;                             //
     musicVariable3 = 0;                     //
     hueSelect = 8;                          //
-    //demo = 0;                               //
-    //demoAuto = 9;                           //
-    sensitivity = 4;                        //  3 for normal saber, 1 for half saber
+    sensitivity = 4;                        //
     Bvariable = 4;                          //
 
     //other values:
@@ -872,27 +871,41 @@ void eepromSet()
     EEPROM.update(0, newEpprom);
     EEPROM.update(1, buttonPushCounter);
     EEPROM.update(2, channel);
-    //EEPROM.update(3, locked );
     EEPROM.update(3, musicVariable3);
     EEPROM.update(4, hueSelect);
-    //EEPROM.update(6, demo);
-    //EEPROM.update(7, demoAuto);
     EEPROM.update(5, sensitivity);
     EEPROM.update(6, Bvariable);
   }
 
-  else {                                                    //not new eeprom
+  else { 
+    Serial.println("Old EPROM!");                           //not new eeprom
     buttonPushCounter =  (int)EEPROM.read(1);
     channel =            (int)EEPROM.read(2);
-    //locked =             (int)EEPROM.read(3);
     musicVariable3 =     (int)EEPROM.read(3);
     hueSelect =          (int)EEPROM.read(4);
-    //demo  =              (int)EEPROM.read(6);
-    //demoAuto =           (int)EEPROM.read(7);
     sensitivity =        (int)EEPROM.read(5);
     Bvariable =          (int)EEPROM.read(6);
 
-    //COOLING   =  COOLINGarray[channel];
+    Serial.print("buttonPushCounter :   ");
+    Serial.println(buttonPushCounter);
+    Serial.print("channel :   ");
+    Serial.println(channel);
+    Serial.print("musicVariable3 :   ");
+    Serial.println(musicVariable3);
+    Serial.print("hueSelect :   ");
+    Serial.println(hueSelect);
+    Serial.print("sensitivity :   ");
+    Serial.println(sensitivity);
+    Serial.print("Bvariable :   ");
+    Serial.println(Bvariable);
+
+    buttonPushCounter =  (int)EEPROM.read(1);
+    channel =            (int)EEPROM.read(2);
+    musicVariable3 =     (int)EEPROM.read(3);
+    hueSelect =          (int)EEPROM.read(4);
+    sensitivity =        (int)EEPROM.read(5);
+    Bvariable =          (int)EEPROM.read(6);
+
     FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20); // set master brightness control
     if (buttonPushCounter == 10 || buttonPushCounter == 110) {
       normal = 0;
@@ -906,10 +919,10 @@ void eepromSet()
 void indicatorModes() 
 {
 
-  soundLevel = random(0, NUM_LEDS * 0.7); //was 80
+  soundLevel = random(0, NUM_LEDS * 0.4); //was 80
   for (int i = 0; i < 8; i++)        
   {
-    fftArray[i] = random(0, NUM_LEDS * 0.4); //was 80
+    fftArray[i] = random(0, NUM_LEDS * 0.2); //was 80
   }
   if (buttonPushCounterDemo == 100) {
     musicmode1(); 
@@ -932,12 +945,11 @@ void indicatorDemo(int loops)
 {
   for (int i = 0; i < loops; i++) {
     indicatorModes();
-    delay(20);
+    delay(30);
     
     //TODO allow interupt here
     holding = touchRead(capPin);
     if  (holding > touchTime) {
-      //tap();
       break;
     }
   }
@@ -963,7 +975,7 @@ void tap()
     else {
       buttonPushCounter ++;
     }
-    if (buttonPushCounter == 13) {  buttonPushCounter = 7; }
+    if (buttonPushCounter == 12) {  buttonPushCounter = 7; }
   }
 }
 
