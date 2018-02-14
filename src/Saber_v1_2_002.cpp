@@ -84,7 +84,7 @@ int capture[100];
 CRGB leds[NUM_LEDS];
 //#define FRAMES_PER_SECOND 120
 
-//TAP HOLD Varriables
+//TAP HOLD Varriables                  // TODO clean up unused varriables   
 const int capPin = 19;
 const int touchTime = 1000;
 unsigned long loopTime;
@@ -96,7 +96,7 @@ int milisCounter = 0;
 int lastButtonState;
 uint8_t buttonPushCounter;
 uint8_t prevButtonPushCounter;
-const int numberOfModes = 7;                  //number of modes
+const int numberOfModes = 7; 
 uint8_t mode = 0;
 int indicatorTime = 200;
 uint8_t buttonHeld = 0;
@@ -174,7 +174,6 @@ void setup()
   loopTime = 0;
   capSensor = TapPressButton(50, 300, 1000, 1000);
   isTouch = false;
-  
 }
 
 
@@ -182,18 +181,18 @@ void loop()
 { 
   isTouch = touchRead(capPin) > touchTime;
   loopTime = millis();
-  // Serial.println(touchRead(capPin));
+  // Serial.println(touchRead(capPin));     // callibration
   capSensor.update(isTouch, loopTime);
   if (capSensor.isTap()) {
-    //tap();
     Serial.println("tap");
+    tap();
   }
   if (capSensor.isPress()) {
-    //press();
     Serial.println("press");
+    press();
   }
-  //Manager();
-  /*
+  //Manager();    TODO Tidy up loop using a mode setup funtion
+  
   if (normal == 1) {
 
     if      (buttonPushCounter == 0) {    // falling dot
@@ -236,7 +235,7 @@ void loop()
       EEPROM.update(1, buttonPushCounter);
       buttonPushCounter = 104;
       buttonPushCounterDemo = 104;
-      pushAndHold = 2;
+      pushAndHold = 0;
       Serial.println("Rainbow");
       indicatorDemo(20);
     }
@@ -387,7 +386,7 @@ void loop()
     }
 
   }    //end settings modes here
-  */
+  
 }     //end loop here
 
 
@@ -929,11 +928,12 @@ void indicatorDemo(int loops)
     indicatorModes();
     delay(20);
     
-    buttonState = touchRead(capPin) > touchTime;
-    if  (buttonState == HIGH) {
-      buttonChecker();
-      break;
-    }
+    //TODO allow interupt here
+    // buttonState = touchRead(capPin) > touchTime;
+    // if  (buttonState == HIGH) {
+    //   buttonChecker();
+    //   break;
+    // }
   }
 }
 
@@ -964,7 +964,7 @@ void tap()
 void press()
 {   
   fetchValue();
-  ledCimber = 8;
+  //ledCimber = 8;
 
   if  (pushAndHold == 0) {        // no push and holds modes = M1 M2 M3 M4  
     indicatorModes();
@@ -987,14 +987,18 @@ void press()
 
   else if (pushAndHold == 3) {       // lamp modes = L1      
     variableCounter++;
+    Serial.print("hueSelect = ");
+    Serial.println(hueSelect);
     if (variableCounter > 11) {   variableCounter = 8; }
     if (variableCounter < 8)  {   variableCounter = 8; }
     assignValue();
     lampMode();
   }
 
-  if  (pushAndHold == 4) {
+  if  (pushAndHold == 4) {    //TODO add while() here
     ledCimber++;
+    Serial.print("ledCimber = ");
+    Serial.println(ledCimber);
     if (ledCimber >= (NUM_LEDS - 5)) {
       ledCimber = ((NUM_LEDS / 8) * 7) + 8;
     }
