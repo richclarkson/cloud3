@@ -84,9 +84,13 @@ CRGB leds[NUM_LEDS];
 //#define FRAMES_PER_SECOND 120
 
 //TAP HOLD Varriables
+const int capPin = 19;
+const int touchTime = 1000;
+unsigned long loopTime;
+bool isTouch;
+
 int buttonCounter = 0;
 int milisCounter = 0;
-const int buttonPin = 7;
 uint8_t buttonState;
 int lastButtonState;
 uint8_t buttonPushCounter;
@@ -155,19 +159,21 @@ void indicatorDemo(int loops);
 
 
 void setup()
-{
+{ 
   AudioMemory(12);     // Audio requires memory to work.
   FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER, DATA_RATE_MHZ(2)>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   FastLED.setBrightness(90);
   turnoffLEDs();
   FastLED.show();
   delay(1000);  // Sanity Delay
+  Serial.begin(9600);
 }
 
 
 void loop()
 { 
   buttonChecker();
+  /*
   if (normal == 1) {
 
     if      (buttonPushCounter == 0) {    // falling dot
@@ -267,11 +273,6 @@ void loop()
     }
   } // end normal modes start settings modes
 
-
-
-
-
-
   else {     // if noraml = 0  //  Settings Modes start here
 
     if (buttonPushCounter == 7) { //        frequency
@@ -355,6 +356,7 @@ void loop()
     }
 
   }    //end settings modes here
+  */
 }     //end loop here
 
 
@@ -608,12 +610,15 @@ void Fire2012()
 
 void buttonChecker() 
 {                                                
-  buttonState = digitalRead(buttonPin);
+  //buttonState = digitalRead(buttonPin);
+  buttonState = touchRead(capPin) > touchTime;
+  //buttonState = isTouch;
+
   if (buttonState == HIGH) {  // button is on:
     while ((buttonState == HIGH) && (++timeCounter < 100)) {             // while for Tap, freeze LEDs as they were
       buttonCounter = 0;
       for (int i = 0; i < threashold; i++) {
-        buttonState = digitalRead(buttonPin);
+        buttonState = touchRead(capPin) > touchTime;
         if  (buttonState == HIGH) {
           buttonCounter++;
         }
@@ -627,7 +632,7 @@ void buttonChecker()
     }
     timeCounter = 0;
     if (buttonState == LOW) {
-      //Serial.println("mode switch");
+      Serial.println("tap");
       //next button mode
       firstPressHold = 1;
       if (normal == 1) {
@@ -657,6 +662,7 @@ void buttonChecker()
   
     else {  // button is still high after 1 second
       firstPressHold = 0;
+      Serial.println("hold");
       //initilize push and hold mode
       //every n seconds add one to value
       fetchValue();
@@ -669,7 +675,7 @@ void buttonChecker()
       while (buttonState == HIGH) {                         // while holding
         buttonCounter = 0;
         for (int i = 0; i < threashold; i++) {
-          buttonState = digitalRead(buttonPin);
+          buttonState = touchRead(capPin) > touchTime;
           if  (buttonState == HIGH) {
             buttonCounter++;
           }
@@ -694,6 +700,7 @@ void buttonChecker()
         else {
           EVERY_N_MILLISECONDS( 1000 ) {    // TODO check if this needs to go up to 1000
             //fetchValue();
+            Serial.println("holding...");
             if      (pushAndHold == 0) {        // no push and holds modes = M1 M2 M3 M4      = lock change only
               indicatorModes();   // TODO may need for loop
             }
@@ -745,6 +752,7 @@ void buttonChecker()
         //ledCimber++;
   
       }  //end while holding
+      Serial.println("end hold");
   
       if (pushAndHold == 1 || pushAndHold == 4) { //settings
         //variableCounter--;
@@ -1044,7 +1052,7 @@ void indicatorDemo(int loops)
   for (int i = 0; i < loops; i++) {
     indicatorModes();
     
-    buttonState = digitalRead(buttonPin);
+    buttonState = touchRead(capPin) > touchTime;
     if  (buttonState == HIGH) {
       buttonChecker();
       break;
