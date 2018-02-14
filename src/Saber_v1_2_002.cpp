@@ -90,6 +90,8 @@ const int touchTime = 1000;
 unsigned long loopTime;
 bool isTouch;
 
+int holding = 0;
+
 bool buttonState;
 int buttonCounter = 0;
 int milisCounter = 0;
@@ -667,16 +669,11 @@ void assignValue()                                                   //assign
   }
 
   else if (buttonPushCounter == 106) {   // off
-    if (ledCimber >= ((NUM_LEDS / 8) * 7) + 7) {
+    if (ledCimber >= 107) {
       normal = 0;
       FastLED.setBrightness(255);
       buttonPushCounter = 7;
-    }
-    else {
-      ledCimber = 8;
-      fill_solid( leds, NUM_LEDS, CRGB(0, 0, 0));
-      FastLED.show();
-      FastLED.show();
+      Serial.println("ledClimber activate");
     }
   }
 
@@ -697,7 +694,7 @@ void assignValue()                                                   //assign
   }
 
   else if (buttonPushCounter == 110) {     // reset
-    if (ledCimber >= ((NUM_LEDS / 8) * 7) + 7) {
+    if (ledCimber >= 107) {
 
       fill_solid( leds, NUM_LEDS, CHSV(255, 255, 200));
       FastLED.show();
@@ -714,12 +711,14 @@ void assignValue()                                                   //assign
       eepromSet();
     }
     else {
-      ledCimber = 8;
+      //ledCimber = 8;
       fill_solid( leds, NUM_LEDS, CRGB(0, 0, 0));
+      leds[8] = CHSV(modeColor, 255, 150);
+      FastLED.show();
     }
   }
   else if (buttonPushCounter == 111) {    // off
-    if (ledCimber >= ((NUM_LEDS / 8) * 7) + 7) {
+    if (ledCimber >= 107) {
       normal = 1;
       FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20);
       buttonPushCounter = 0;
@@ -728,7 +727,6 @@ void assignValue()                                                   //assign
     else {
       ledCimber = 8;
       fill_solid( leds, NUM_LEDS, CRGB(0, 0, 0));
-      FastLED.show();
       FastLED.show();
     }
   }
@@ -832,11 +830,15 @@ void indicators(int variableSet)
 
     if (ledCimber <= 8) {
       fill_solid( leds, NUM_LEDS, CRGB(0, 0, 0));
-      leds[8] = CHSV(modeColor, 255, 150);
+      if (buttonPushCounter == 110) { leds[8] = CHSV(modeColor, 255, 150); }
+      FastLED.show();
     }
 
-    leds[ledCimber] = CHSV(modeColor, 255, 150);
-    FastLED.show();
+    for (int i = 9; i < ledCimber; i++) {
+      leds[i] = CHSV(modeColor, 255, 150);
+      FastLED.show();
+    }
+    
   }
 }
 
@@ -996,13 +998,20 @@ void press()
   }
 
   if  (pushAndHold == 4) {    //TODO add while() here
-    ledCimber++;
-    Serial.print("ledCimber = ");
-    Serial.println(ledCimber);
-    if (ledCimber >= (NUM_LEDS - 5)) {
-      ledCimber = ((NUM_LEDS / 8) * 7) + 8;
+    holding = touchRead(capPin);
+    while( holding > touchTime ){
+      ledCimber = ledCimber + 5;
+      if (ledCimber > 107){ 
+        ledCimber = 108;
+        assignValue();
+        break; 
+      }
+      Serial.print("ledCimber = ");
+      Serial.println(ledCimber);
+      indicators(ledCimber);
+      holding = touchRead(capPin);
     }
-    //assignValue();
+    ledCimber = 8;
     indicators(ledCimber);
   }
 }
