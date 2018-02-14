@@ -81,7 +81,7 @@ int capture[100];
 #define COLOR_ORDER BGR
 #define NUM_LEDS 115 //115 for normal Saber, 48 for half saber
 CRGB leds[NUM_LEDS];
-#define FRAMES_PER_SECOND 120
+//#define FRAMES_PER_SECOND 120
 
 //TAP HOLD Varriables
 int buttonCounter = 0;
@@ -158,7 +158,7 @@ void lampMode();
 void setup()
 {
   AudioMemory(12);     // Audio requires memory to work.
-  FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+  FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER, DATA_RATE_MHZ(2)>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   FastLED.setBrightness(90);
   turnoffLEDs();
   FastLED.show();
@@ -168,20 +168,210 @@ void setup()
 
 void loop()
 { 
-  void musicmode1();
-  void musicmode2();
-  void musicmode3();
-  void musicmode4();
-  void musicmode5();
+  buttonChecker();
 
-  void lampmode1();
-  void lampmode2();
-  void lampmode3();
-  void lampmode4();
+  if (normal == 1) {
 
-  void rainbow(int startPos, int number, float deltaHue);
-  void Fire2012();
-}
+    if      (buttonPushCounter == 0) {    // falling dot
+      EEPROM.update(1, buttonPushCounter);
+      buttonPushCounter = 100;
+      buttonPushCounterDemo = 100;
+      pushAndHold = 0;
+      indicatorDemo(20);
+      allBins = 0;
+    }
+
+    else if (buttonPushCounter == 1) {    // middle out
+      EEPROM.update(1, buttonPushCounter);
+      buttonPushCounter = 101;
+      buttonPushCounterDemo = 101;
+      pushAndHold = 0;
+      indicatorDemo(20);
+      allBins = 0;
+    }
+
+    else if (buttonPushCounter == 2) {    // ripple
+      EEPROM.update(1, buttonPushCounter);
+      buttonPushCounter = 102;
+      buttonPushCounterDemo = 102;
+      pushAndHold = 0;
+      indicatorDemo(20);
+      allBins = 0;
+    }
+
+    else if (buttonPushCounter == 3) {    // fade
+      EEPROM.update(1, buttonPushCounter);
+      buttonPushCounter = 103;
+      buttonPushCounterDemo = 103;
+      pushAndHold = 0;
+      indicatorDemo(20);
+      allBins = 0;
+      peakAll = 35;
+    }
+
+    else if (buttonPushCounter == 4) {    // music rainbow
+      EEPROM.update(1, buttonPushCounter);
+      buttonPushCounter = 104;
+      buttonPushCounterDemo = 104;
+      pushAndHold = 2;
+      indicatorDemo(20);
+      allBins = 0;
+    }
+
+    else if (buttonPushCounter == 5) {   // lamp mode
+      EEPROM.update(1, buttonPushCounter);
+      buttonPushCounter = 105;
+      buttonPushCounterDemo = 105;
+      pushAndHold = 3;
+    }
+
+
+
+
+    else if (buttonPushCounter == 6) { //      OFF
+      EEPROM.update(1, buttonPushCounter);
+      buttonPushCounter = 106;
+      pushAndHold = 4;
+      ledCimber = 8;
+      indcatorDots = 3;
+      for (int led = 0; led < NUM_LEDS; led++) {
+        leds[led].setRGB( 0, 0, 0);
+      }
+      for (int i = 0; i < 8; i++) {
+        BinsBinsBins[i] = 0; // sum of all the bins
+      }
+      FastLED.show();
+      FastLED.show();
+    }
+
+
+    // set normal loop modes here:
+
+
+    if (buttonPushCounter == 100) {                 // falling dot
+      musicMode();
+    }
+
+    else if (buttonPushCounter == 101) {                // middle out
+      musicMode();
+      //minMaxThershold = 10;
+    }
+
+    else if (buttonPushCounter == 102) {                // ripple
+      musicMode();
+      //minMaxThershold = NUM_LEDS;
+    }
+
+    else if (buttonPushCounter == 103) {                // fade
+      musicMode();
+    }
+
+    else if (buttonPushCounter == 104) {                // rainbow music
+      musicMode();
+      //musicVariable3 changes color
+    }
+
+    else if (buttonPushCounter == 105) {                // lamp modes
+      lampMode();
+      //hueSelect changes color & type of lamp
+    }
+
+    else if (buttonPushCounter == 106) {              // Off
+    }
+  } // end normal modes start settings modes
+
+
+
+
+
+
+  else {     // if noraml = 0  //  Settings Modes start here
+
+    if (buttonPushCounter == 7) { //        frequency
+      buttonPushCounter = 107;
+      pushAndHold = 1;
+      indcatorDots = 8;
+      //EEPROM.update(1, buttonPushCounter);
+    }
+
+    else if (buttonPushCounter == 8) { //        sensitivity
+      buttonPushCounter = 108;
+      pushAndHold = 1;
+      indcatorDots = 8;
+      //EEPROM.update(1, buttonPushCounter);
+    }
+
+    else if (buttonPushCounter == 9) { //           brightness
+      buttonPushCounter = 109;
+      pushAndHold = 1;
+      indcatorDots = 8;
+      //EEPROM.update(1, buttonPushCounter);
+    }
+
+    //    else if (buttonPushCounter == 10){  //        demo on switch
+    //    EEPROM.update(1, buttonPushCounter);
+    //    buttonPushCounter = 110;
+    //    pushAndHold = 4;
+    //    ledCimber = 8;
+    //    indcatorDots = 3;
+    //    for(int led = 0; led < NUM_LEDS; led++) {
+    //      leds[led].setRGB( 0, 0, 0);
+    //    }
+    //    FastLED.show();
+    //  }
+    else if (buttonPushCounter == 10) { //        reset
+      buttonPushCounter = 110;
+      pushAndHold = 4;
+      ledCimber = 8;
+      indcatorDots = 3;
+      for (int led = 0; led < NUM_LEDS; led++) {
+        leds[led].setRGB( 0, 0, 0);
+      }
+      FastLED.show();
+    }
+    else if (buttonPushCounter == 11) { //        off
+      buttonPushCounter = 111;
+      pushAndHold = 4;
+      ledCimber = 8;
+      indcatorDots = 3;
+      for (int led = 0; led < NUM_LEDS; led++) {
+        leds[led].setRGB( 0, 0, 0);
+      }
+      FastLED.show();
+      FastLED.show();
+      //EEPROM.update(1, buttonPushCounter);
+    }
+
+
+    if (buttonPushCounter == 107) {              // Frequency
+      indicators(channel);
+    }
+
+    else if (buttonPushCounter == 108) {              // Sensitvity
+      indicators(sensitivity);
+    }
+
+    else if (buttonPushCounter == 109) {              // Brightness
+      indicators(Bvariable);
+    }
+
+    else if (buttonPushCounter == 110) {              // reset
+      indicators(reset);
+    }
+
+    else if (buttonPushCounter == 111) {              // off
+      //indicators(off);
+    }
+
+    else if (buttonPushCounter == 112) {              // off
+      indicatorDemo(20);
+    }
+
+  }    //end settings modes here
+}     //end loop here
+
+
+
 
 
 
@@ -205,7 +395,7 @@ void musicmode1()   // Falling Dot
   }
   FastLED.show(); // send data to LEDs to display
 
-  if (++dotCount >= 60) {                   // make the dot fall slowly
+  if (++dotCount >= 20) {                   // make the dot fall slowly
     dotCount = 0;
     if (dot > 1) {
       dot--;
