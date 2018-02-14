@@ -18,9 +18,10 @@
 #include <FastLED.h>
 #include <Audio.h>   
 #include <EEPROM.h>
-
+#include "TapPressButton.h"
 
 FASTLED_USING_NAMESPACE
+TapPressButton capSensor;
 
 //Global Varriables
 int channel = 8;
