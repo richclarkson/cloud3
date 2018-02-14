@@ -122,10 +122,7 @@ int Bvariable = 4;
 int musicVariable3;
 byte newEpprom;
 uint8_t automatedIndicator;
-int randomFade;
-int prevRandomFade;
-int autoPeak;
-int rippleV[8];
+uint8_t reset = 0;
 
 void musicmode1();
 void musicmode2();
@@ -152,6 +149,8 @@ void indicators(int variableSet);
 void eepromSet();
 void indicatorModes();
 void lampMode(); 
+void musicMode();
+void indicatorDemo(int loops);
 
 
 
@@ -169,7 +168,6 @@ void setup()
 void loop()
 { 
   buttonChecker();
-
   if (normal == 1) {
 
     if      (buttonPushCounter == 0) {    // falling dot
@@ -178,7 +176,6 @@ void loop()
       buttonPushCounterDemo = 100;
       pushAndHold = 0;
       indicatorDemo(20);
-      allBins = 0;
     }
 
     else if (buttonPushCounter == 1) {    // middle out
@@ -187,7 +184,6 @@ void loop()
       buttonPushCounterDemo = 101;
       pushAndHold = 0;
       indicatorDemo(20);
-      allBins = 0;
     }
 
     else if (buttonPushCounter == 2) {    // ripple
@@ -196,7 +192,6 @@ void loop()
       buttonPushCounterDemo = 102;
       pushAndHold = 0;
       indicatorDemo(20);
-      allBins = 0;
     }
 
     else if (buttonPushCounter == 3) {    // fade
@@ -205,8 +200,6 @@ void loop()
       buttonPushCounterDemo = 103;
       pushAndHold = 0;
       indicatorDemo(20);
-      allBins = 0;
-      peakAll = 35;
     }
 
     else if (buttonPushCounter == 4) {    // music rainbow
@@ -215,7 +208,6 @@ void loop()
       buttonPushCounterDemo = 104;
       pushAndHold = 2;
       indicatorDemo(20);
-      allBins = 0;
     }
 
     else if (buttonPushCounter == 5) {   // lamp mode
@@ -224,9 +216,6 @@ void loop()
       buttonPushCounterDemo = 105;
       pushAndHold = 3;
     }
-
-
-
 
     else if (buttonPushCounter == 6) { //      OFF
       EEPROM.update(1, buttonPushCounter);
@@ -237,10 +226,6 @@ void loop()
       for (int led = 0; led < NUM_LEDS; led++) {
         leds[led].setRGB( 0, 0, 0);
       }
-      for (int i = 0; i < 8; i++) {
-        BinsBinsBins[i] = 0; // sum of all the bins
-      }
-      FastLED.show();
       FastLED.show();
     }
 
@@ -250,25 +235,27 @@ void loop()
 
     if (buttonPushCounter == 100) {                 // falling dot
       musicMode();
+      musicmode1(); 
     }
 
     else if (buttonPushCounter == 101) {                // middle out
       musicMode();
-      //minMaxThershold = 10;
+      musicmode2(); 
     }
 
     else if (buttonPushCounter == 102) {                // ripple
-      musicMode();
-      //minMaxThershold = NUM_LEDS;
+      analyzeFFTall(); 
+      musicmode3(); 
     }
 
     else if (buttonPushCounter == 103) {                // fade
       musicMode();
+      musicmode4(); 
     }
 
     else if (buttonPushCounter == 104) {                // rainbow music
       musicMode();
-      //musicVariable3 changes color
+      musicmode5(); 
     }
 
     else if (buttonPushCounter == 105) {                // lamp modes
@@ -375,6 +362,50 @@ void loop()
 
 
 
+//*******************************       Music Modes    ******************************************//
+
+void musicMode()    // fetch readings
+{
+  if (channel < 8){
+    analyzeFFT();
+  }
+  else if (channel == 8){
+    analyzeLevel();
+  }
+}
+
+void analyzeLevel() 
+{
+  if (rms1.available()) {
+    soundLevel = (rms1.read() - 0.0006) * scale[sensitivity];     // remove noise and scale
+    soundLevel = constrain(soundLevel, 0, NUM_LEDS);              // limit
+  }
+}
+
+void analyzeFFT() 
+{
+  if (fft1024.available()) {
+    FFTreading(channel);
+    soundLevel = fftArray[channel];
+  }
+}
+
+void analyzeFFTall() 
+{
+  if (fft1024.available()) {
+    for (int i = 0; i < 8; i++) {
+      FFTreading(i);
+    }
+  }
+}
+
+void FFTreading(int FFTchannel) 
+{
+  reading[FFTchannel] =  fft1024.read(binStart[FFTchannel], binEnd[FFTchannel]);
+  reading[FFTchannel] = reading[FFTchannel] - (noise[FFTchannel] * 0.0001);           // remove noise
+  fftArray[FFTchannel] = (reading[FFTchannel] * scale[sensitivity]) * eq[FFTchannel]; // scale
+  fftArray[FFTchannel] = constrain(fftArray[FFTchannel], 0, NUM_LEDS);                // limit
+}
 
 void musicmode1()   // Falling Dot
 { 
@@ -476,7 +507,7 @@ void musicmode5()     // Rainbow
   FastLED.show(); // send data to LEDs to display
 }
 
-
+//*******************************      Lamp Modes    ******************************************//
 
 void turnoffLEDs()
 {
@@ -571,40 +602,9 @@ void Fire2012()
     }
 }
 
+//*******************************      State Modes    ******************************************//
 
 
-void analyzeLevel() 
-{
-  if (rms1.available()) {
-    soundLevel = (rms1.read() - 0.0006) * scale[sensitivity];     // remove noise and scale
-    soundLevel = constrain(soundLevel, 0, NUM_LEDS);              // limit
-  }
-}
-
-void analyzeFFT() 
-{
-  if (fft1024.available()) {
-    FFTreading(channel);
-    soundLevel = fftArray[channel];
-  }
-}
-
-void analyzeFFTall() 
-{
-  if (fft1024.available()) {
-    for (int i = 0; i < 8; i++) {
-      FFTreading(i);
-    }
-  }
-}
-
-void FFTreading(int FFTchannel) 
-{
-  reading[FFTchannel] =  fft1024.read(binStart[FFTchannel], binEnd[FFTchannel]);
-  reading[FFTchannel] = reading[FFTchannel] - (noise[FFTchannel] * 0.0001);           // remove noise
-  fftArray[FFTchannel] = (reading[FFTchannel] * scale[sensitivity]) * eq[FFTchannel]; // scale
-  fftArray[FFTchannel] = constrain(fftArray[FFTchannel], 0, NUM_LEDS);                // limit
-}
 
 void buttonChecker() 
 {                                                
@@ -696,7 +696,6 @@ void buttonChecker()
             //fetchValue();
             if      (pushAndHold == 0) {        // no push and holds modes = M1 M2 M3 M4      = lock change only
               indicatorModes();   // TODO may need for loop
-              //lockUnlock();
             }
   
             else if (pushAndHold == 1) {        // settings & off modes                       = variable change only
@@ -1017,132 +1016,37 @@ void eepromSet()
 
 void indicatorModes() {
 
-  //fadeToBlackBy( leds, NUM_LEDS, 255);
-  automatedIndicator = random(0, NUM_LEDS * 0.7); //was 80
-  randomFade = random(100);
-  prevRandomFade = randomFade;
-
-  if (automatedIndicator <= 0) {       // Empty column
-
-    if (buttonPushCounterDemo == 100) {
-      fadeToBlackBy( leds, NUM_LEDS, 30);
-    }
-    if (buttonPushCounterDemo == 101) {
-      fadeToBlackBy( leds, NUM_LEDS, 30);
-      leds[NUM_LEDS / 2].setRGB( 50, 50, 50);
-    }
-    if (buttonPushCounterDemo == 104) {
-      fadeToBlackBy( leds, NUM_LEDS, 50);
-    }
+  soundLevel = random(0, NUM_LEDS * 0.7); //was 80
+  for (int i = 0; i < 8; i++)        
+  {
+    fftArray[i] = random(0, NUM_LEDS * 0.4); //was 80
   }
-
-  else if (automatedIndicator < NUM_LEDS) { // Partial column?
-
-    if (buttonPushCounterDemo == 100) {               // dot
-      fadeToBlackBy( leds, NUM_LEDS, 50);
-
-    }
-
-    if (buttonPushCounterDemo == 104) {               // rainbow music
-      fadeToBlackBy( leds, NUM_LEDS, 30);
-      //        for(int led = soundLevel; led < NUM_LEDS; led++) {
-      //          leds[led].setRGB( 0, 0, 0);
-      //        }
-    }
-
-
-    else if (buttonPushCounterDemo == 101) {                                      //middle out
-      for (int led = 0; led < (NUM_LEDS - automatedIndicator) / 2; led++) {
-        leds[led].setRGB( 0, 0, 0);
-      }
-      for (int led = (automatedIndicator / 2) + NUM_LEDS / 2; led < NUM_LEDS; led++) {
-        leds[led].setRGB( 0, 0, 0);
-      }
-      leds[NUM_LEDS / 2].setRGB( 50, 50, 50);
-    }
+  if (buttonPushCounterDemo == 100) {
+    musicmode1(); 
   }
-
-
-
-  if (autoPeak < automatedIndicator) {
-    autoPeak = automatedIndicator + 1;
+  if (buttonPushCounterDemo == 101) {
+    musicmode2(); 
   }
-  else {
-    autoPeak = autoPeak - 2;
+  if (buttonPushCounterDemo == 102) {
+    musicmode3(); 
   }
-
-
-
-
-  if (buttonPushCounterDemo == 100) {                 //dot
-    for (int led = 0; led < automatedIndicator; led++) {
-      leds[led].setRGB( 50, 50, 50);
-    }
-    leds[autoPeak].setRGB( 0, 0, 255);
-    for (int led = autoPeak + 1; led < NUM_LEDS; led++) {
-      leds[led].setRGB( 0, 0, 0);
-    }
-    delay(50);
+  if (buttonPushCounterDemo == 103) {
+    musicmode4(); 
   }
-
-  else if (buttonPushCounterDemo == 101) {                 // middle out
-    automatedIndicator = automatedIndicator / 2 ;
-
-    for (int led = NUM_LEDS / 2; led < NUM_LEDS / 2 + automatedIndicator; led++) {
-      leds[led].setRGB( 50, 50, 50);
-    }
-
-    for (int led = NUM_LEDS / 2; led > NUM_LEDS / 2 - automatedIndicator; led--) {
-      leds[led].setRGB( 50, 50, 50);
-    }
-    delay(50);
+  if (buttonPushCounterDemo == 104) {
+    musicmode5(); 
   }
-
-  if (buttonPushCounterDemo == 102) {                 //ripple                                       //
-
-
-    fadeToBlackBy(leds, NUM_LEDS, 10);
-
-    for (int y = random(8); y < 8; y = y + random(1, 8)) {
-      rippleV[y] = random(NUM_LEDS / 2); // TODO need to check the random number range here was 50
-
-      for (int led = ((y * 18) + 6) - (rippleV[y] / 15) ; led < ((y * 18) + 6) + (rippleV[y] / 15); led++) {
-        leds[led].setRGB( rippleV[y], rippleV[y], rippleV[y]);
-      }
-      blur1d (leds, NUM_LEDS, rippleV[y]);
-      delay (30);
-    }
-    //delay(10);
-  }
-
-
-
-  if (buttonPushCounterDemo == 103) {                //fade
-    if (prevRandomFade >= randomFade && prevRandomFade >= 35) {
-      prevRandomFade--;
-    }
-    else {
-      prevRandomFade = randomFade;
-    }
-    for (int led = 0; led < NUM_LEDS; led++) {
-      leds[led].setRGB( prevRandomFade, prevRandomFade, prevRandomFade);
-    }
-    delay(80);
-
-  }
-
-  if (buttonPushCounterDemo == 104) {                //rainbow
-    fadeToBlackBy( leds, NUM_LEDS, 30);
-    fill_rainbow( leds, automatedIndicator, (musicVariable3 * 30), 1);
-    //      for(int led = automatedIndicator; led < NUM_LEDS; led++) {
-    //          leds[led].setRGB( 0, 0, 0);
-    //        }
-
-
-    delay(50);
-  }
-
-  FastLED.show();
 }
 
-
+void indicatorDemo(int loops)
+{
+  for (int i = 0; i < loops; i++) {
+    indicatorModes();
+    
+    buttonState = digitalRead(buttonPin);
+    if  (buttonState == HIGH) {
+      buttonChecker();
+      break;
+    }
+  }
+}
