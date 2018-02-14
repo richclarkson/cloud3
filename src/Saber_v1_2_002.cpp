@@ -89,9 +89,9 @@ const int touchTime = 1000;
 unsigned long loopTime;
 bool isTouch;
 
+bool buttonState;
 int buttonCounter = 0;
 int milisCounter = 0;
-uint8_t buttonState;
 int lastButtonState;
 uint8_t buttonPushCounter;
 uint8_t prevButtonPushCounter;
@@ -109,7 +109,7 @@ int prevVariableSet = 0;
 
 int variableCounter = 9;  //global
 
-uint8_t normal;
+uint8_t normal = 1;  // may change this to eprom
 uint8_t demoAuto;
 uint8_t singlePress;
 
@@ -167,13 +167,18 @@ void setup()
   FastLED.show();
   delay(1000);  // Sanity Delay
   Serial.begin(9600);
+  Serial.println("Saber v1.2");
+  loopTime = 0;
+  capSensor = TapPressButton(50, 300, 1000, 1000);
+  isTouch = false;
+  
 }
 
 
 void loop()
 { 
   buttonChecker();
-  /*
+  
   if (normal == 1) {
 
     if      (buttonPushCounter == 0) {    // falling dot
@@ -181,6 +186,7 @@ void loop()
       buttonPushCounter = 100;
       buttonPushCounterDemo = 100;
       pushAndHold = 0;
+      Serial.println("Falling Dot");
       indicatorDemo(20);
     }
 
@@ -189,6 +195,7 @@ void loop()
       buttonPushCounter = 101;
       buttonPushCounterDemo = 101;
       pushAndHold = 0;
+      Serial.println("Middle Out");
       indicatorDemo(20);
     }
 
@@ -197,6 +204,7 @@ void loop()
       buttonPushCounter = 102;
       buttonPushCounterDemo = 102;
       pushAndHold = 0;
+      Serial.println("Ripple");
       indicatorDemo(20);
     }
 
@@ -205,6 +213,7 @@ void loop()
       buttonPushCounter = 103;
       buttonPushCounterDemo = 103;
       pushAndHold = 0;
+      Serial.println("Fade");
       indicatorDemo(20);
     }
 
@@ -213,6 +222,7 @@ void loop()
       buttonPushCounter = 104;
       buttonPushCounterDemo = 104;
       pushAndHold = 2;
+      Serial.println("Rainbow");
       indicatorDemo(20);
     }
 
@@ -220,6 +230,7 @@ void loop()
       EEPROM.update(1, buttonPushCounter);
       buttonPushCounter = 105;
       buttonPushCounterDemo = 105;
+      Serial.println("Lamp Mode");
       pushAndHold = 3;
     }
 
@@ -229,6 +240,7 @@ void loop()
       pushAndHold = 4;
       ledCimber = 8;
       indcatorDots = 3;
+      Serial.println("Off");
       for (int led = 0; led < NUM_LEDS; led++) {
         leds[led].setRGB( 0, 0, 0);
       }
@@ -279,6 +291,7 @@ void loop()
       buttonPushCounter = 107;
       pushAndHold = 1;
       indcatorDots = 8;
+      Serial.println("Freqency Setting");
       //EEPROM.update(1, buttonPushCounter);
     }
 
@@ -286,6 +299,7 @@ void loop()
       buttonPushCounter = 108;
       pushAndHold = 1;
       indcatorDots = 8;
+      Serial.println("Sensitivity Setting");
       //EEPROM.update(1, buttonPushCounter);
     }
 
@@ -293,6 +307,7 @@ void loop()
       buttonPushCounter = 109;
       pushAndHold = 1;
       indcatorDots = 8;
+      Serial.println("Brightness Setting");
       //EEPROM.update(1, buttonPushCounter);
     }
 
@@ -312,6 +327,7 @@ void loop()
       pushAndHold = 4;
       ledCimber = 8;
       indcatorDots = 3;
+      Serial.println("Reset Setting");
       for (int led = 0; led < NUM_LEDS; led++) {
         leds[led].setRGB( 0, 0, 0);
       }
@@ -322,10 +338,10 @@ void loop()
       pushAndHold = 4;
       ledCimber = 8;
       indcatorDots = 3;
+      Serial.println("Off Setting");
       for (int led = 0; led < NUM_LEDS; led++) {
         leds[led].setRGB( 0, 0, 0);
       }
-      FastLED.show();
       FastLED.show();
       //EEPROM.update(1, buttonPushCounter);
     }
@@ -356,7 +372,7 @@ void loop()
     }
 
   }    //end settings modes here
-  */
+  
 }     //end loop here
 
 
@@ -533,7 +549,7 @@ void lampMode()      // collection of all the lamp modes
   else if (hueSelect == 11) {                                         //fire
     lampmode4();
   }
-  else if (hueSelect > 11) {
+  else {
     hueSelect = 8;
   }
 }
@@ -966,8 +982,8 @@ void indicators(int variableSet)
 }
 
 void eepromSet() 
-{  //newEpprom = 255;          // first run eprom data save
-  newEpprom = EEPROM.read(0);          // first run eprom data save
+{  newEpprom = 255;          // first run eprom data save
+  //newEpprom = EEPROM.read(0);          // first run eprom data save
   if (newEpprom == 255) {
 
     // eeprom values:
@@ -1051,6 +1067,7 @@ void indicatorDemo(int loops)
 {
   for (int i = 0; i < loops; i++) {
     indicatorModes();
+    delay(20);
     
     buttonState = touchRead(capPin) > touchTime;
     if  (buttonState == HIGH) {
