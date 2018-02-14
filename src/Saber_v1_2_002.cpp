@@ -807,21 +807,25 @@ void indicators(int variableSet)
       leds[led] = CHSV(modeColor, 255, 100);
     }
 
-    if (variableSet > 7 && buttonState == HIGH) {
+    if (variableSet > 7 && isTouch == HIGH) {
       for (int led = 8; led < NUM_LEDS; led = led + ((NUM_LEDS) / 8)) {                                // all dots on
         leds[led] = CHSV(modeColor, 255, 255);
       }
+      //Serial.println("a");
     }
-    else if (variableSet > 7 && buttonState == LOW) {
+    else if (variableSet > 7 && isTouch == LOW) {
       for (int led = 8; led < NUM_LEDS; led = led + ((NUM_LEDS) / 8)) {                                // all dots on
         leds[led] = CHSV(modeColor, 255, dotBrightness);
       }
+      //Serial.println("b");
     }
-    else if (variableSet <= 7 && buttonState == HIGH) {                                                 //dot                                                        // indicator dot
+    else if (variableSet <= 7 && isTouch == HIGH) {                                                 //dot                                                        // indicator dot
       leds[((NUM_LEDS / 8)*variableSet) + 8] = CHSV(modeColor, 255, 255);
+      //Serial.println("c");
     }
-    else if (variableSet <= 7 && buttonState == LOW) {                                                    //dot                                                     // indicator dot
+    else if (variableSet <= 7 && isTouch == LOW) {                                                    //dot                                                     // indicator dot
       leds[((NUM_LEDS / 8)*variableSet) + 8] = CHSV(modeColor, 255, dotBrightness);
+      //Serial.println("d");
     }
     FastLED.show();
   }
@@ -931,11 +935,11 @@ void indicatorDemo(int loops)
     delay(20);
     
     //TODO allow interupt here
-    // buttonState = touchRead(capPin) > touchTime;
-    // if  (buttonState == HIGH) {
-    //   buttonChecker();
-    //   break;
-    // }
+    holding = touchRead(capPin);
+    if  (holding > touchTime) {
+      //tap();
+      break;
+    }
   }
 }
 
