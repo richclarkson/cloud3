@@ -156,6 +156,8 @@ void indicatorModes();
 void lampMode(); 
 void fetchSoundData();
 void indicatorDemo(int loops);
+void tap();
+void press();
 
 
 
@@ -178,8 +180,20 @@ void setup()
 
 void loop()
 { 
-  buttonChecker();
-  
+  isTouch = touchRead(capPin) > touchTime;
+  loopTime = millis();
+  // Serial.println(touchRead(capPin));
+  capSensor.update(isTouch, loopTime);
+  if (capSensor.isTap()) {
+    //tap();
+    Serial.println("tap");
+  }
+  if (capSensor.isPress()) {
+    //press();
+    Serial.println("press");
+  }
+  //Manager();
+  /*
   if (normal == 1) {
 
     if      (buttonPushCounter == 0) {    // falling dot
@@ -373,7 +387,7 @@ void loop()
     }
 
   }    //end settings modes here
-  
+  */
 }     //end loop here
 
 
@@ -623,161 +637,6 @@ void Fire2012()
 
 //*******************************      State Modes    ******************************************//
 
-
-
-void buttonChecker() 
-{                                                
-  //buttonState = digitalRead(buttonPin);
-  buttonState = touchRead(capPin) > touchTime;
-  //buttonState = isTouch;
-
-  if (buttonState == HIGH) {  // button is on:
-    while ((buttonState == HIGH) && (++timeCounter < 100)) {             // while for Tap, freeze LEDs as they were
-      buttonCounter = 0;
-      for (int i = 0; i < threashold; i++) {
-        buttonState = touchRead(capPin) > touchTime;
-        if  (buttonState == HIGH) {
-          buttonCounter++;
-        }
-      }
-      if (buttonCounter > threashold * 0.8) {
-        buttonState = HIGH;
-      }
-      else {
-        buttonState = LOW;
-      }
-    }
-    timeCounter = 0;
-    if (buttonState == LOW) {
-      Serial.println("tap");
-      //next button mode
-      firstPressHold = 1;
-      if (normal == 1) {
-        if ((buttonPushCounter > 99) && (singlePress = 1)) {
-          buttonPushCounter = buttonPushCounter - 99;             //got to next mode
-          }
-        else {
-          buttonPushCounter ++;
-        }
-        if (buttonPushCounter == numberOfModes) {    //limit counter to number of normal modes
-          buttonPushCounter = 0;
-        }
-      }
-  
-      else if (normal == 0) {      //  if (normal == 0)  settings modes
-        if ((buttonPushCounter > 99) && (singlePress = 1)) {
-          buttonPushCounter = buttonPushCounter - 99;             //got to next mode
-        }
-        else {
-          buttonPushCounter ++;
-        }
-        if (buttonPushCounter == 13) {
-          buttonPushCounter = 7;    // loop in settings modes
-        }
-      }
-    }
-  
-    else {  // button is still high after 1 second
-      firstPressHold = 0;
-      Serial.println("hold");
-      //initilize push and hold mode
-      //every n seconds add one to value
-      fetchValue();
-      ledCimber = 8;
-  
-      if (pushAndHold == 1) { //settings
-        indicators(variableCounter);     // TODO check if this needs adding back in
-      }
-
-      while (buttonState == HIGH) {                         // while holding
-        buttonCounter = 0;
-        for (int i = 0; i < threashold; i++) {
-          buttonState = touchRead(capPin) > touchTime;
-          if  (buttonState == HIGH) {
-            buttonCounter++;
-          }
-        }
-        if (buttonCounter > threashold * 0.8) {
-          buttonState = HIGH;
-        }
-        else {
-          buttonState = LOW;
-        }
-  
-        if  (pushAndHold == 4) {
-          // timmer4();
-          ledCimber++;
-          if (ledCimber >= (NUM_LEDS - 5)) {
-            ledCimber = ((NUM_LEDS / 8) * 7) + 8;
-          }
-          //delay(4);
-          indicators(ledCimber);
-        }
-  
-        else {
-          EVERY_N_MILLISECONDS( 1000 ) {    // TODO check if this needs to go up to 1000
-            //fetchValue();
-            Serial.println("holding...");
-            if      (pushAndHold == 0) {        // no push and holds modes = M1 M2 M3 M4      = lock change only
-              indicatorModes();   // TODO may need for loop
-            }
-  
-            else if (pushAndHold == 1) {        // settings & off modes                       = variable change only
-              variableCounter++;
-              if (variableCounter >= 9) {
-                variableCounter = 0;
-              }
-            }
-  
-            else if (pushAndHold == 2) {       // rainbow = M5              = variable + lock
-              variableCounter++;
-              if (variableCounter > 8) {
-                variableCounter = 0;
-              }
-              if (variableCounter < 0) {
-                variableCounter = 0;
-              }
-              assignValue();
-            }
-  
-            else if (pushAndHold == 3) {       // lamp modes = L1               = variable + lock
-              variableCounter++;
-              if (variableCounter > 11) {   //
-                variableCounter = 8;
-              }
-              if (variableCounter < 8) {
-                variableCounter = 8;
-              }
-              assignValue();
-            } // end pushAndHold = 3
-  
-              //indicators(variableCounter);     //  change indicator
-          }  //end EVERY_N_MILLISECONDS
-        }
-        
-        if (pushAndHold == 1) {
-          indicators(variableCounter);     //  change indicator
-        }
-  
-        else if (pushAndHold ==  2 || pushAndHold == 0) {       //
-          indicatorModes();
-        }
-  
-        else if (pushAndHold == 3) {
-          lampMode();
-        }
-        //ledCimber++;
-  
-      }  //end while holding
-      Serial.println("end hold");
-  
-      if (pushAndHold == 1 || pushAndHold == 4) { //settings
-        //variableCounter--;
-        assignValue();
-      } //end settings pushAndHold
-    }  //end button being held
-  }  //end button inital press
-} //button checking
 
 void assignValue()                                                   //assign
 {
@@ -1075,5 +934,71 @@ void indicatorDemo(int loops)
       buttonChecker();
       break;
     }
+  }
+}
+
+
+void tap()
+{ 
+  if (normal == 1) {
+    if ((buttonPushCounter > 99) && (singlePress = 1)) {
+      buttonPushCounter = buttonPushCounter - 99;             //got to next mode
+    }
+    else {
+      buttonPushCounter ++;
+    }
+    if (buttonPushCounter == numberOfModes) { buttonPushCounter = 0;  }
+  }
+  
+  else if (normal == 0) {      //  settings modes
+    if ((buttonPushCounter > 99) && (singlePress = 1)) {
+      buttonPushCounter = buttonPushCounter - 99;             //got to next mode
+    }
+    else {
+      buttonPushCounter ++;
+    }
+    if (buttonPushCounter == 13) {  buttonPushCounter = 7; }
+  }
+}
+
+void press()
+{   
+  fetchValue();
+  ledCimber = 8;
+
+  if  (pushAndHold == 0) {        // no push and holds modes = M1 M2 M3 M4  
+    indicatorModes();
+  }
+
+  else if (pushAndHold == 1) {        // settings & off modes     
+    variableCounter++;
+    if (variableCounter >= 9) { variableCounter = 0; }
+    assignValue();
+    indicators(variableCounter);     //  change indicator
+  }
+
+  else if (pushAndHold == 2) {       // rainbow = M5           
+    variableCounter++;
+    if (variableCounter > 8) {  variableCounter = 0;  }
+    if (variableCounter < 0) {  variableCounter = 0;  }
+    assignValue();
+    indicatorModes();
+  }
+
+  else if (pushAndHold == 3) {       // lamp modes = L1      
+    variableCounter++;
+    if (variableCounter > 11) {   variableCounter = 8; }
+    if (variableCounter < 8)  {   variableCounter = 8; }
+    assignValue();
+    lampMode();
+  }
+
+  if  (pushAndHold == 4) {
+    ledCimber++;
+    if (ledCimber >= (NUM_LEDS - 5)) {
+      ledCimber = ((NUM_LEDS / 8) * 7) + 8;
+    }
+    //assignValue();
+    indicators(ledCimber);
   }
 }
