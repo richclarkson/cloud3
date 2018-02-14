@@ -24,9 +24,9 @@ FASTLED_USING_NAMESPACE
 TapPressButton capSensor;
 
 //Global Varriables
-int channel = 8;
-int sensitivity = 4;  // 0-8 where 8 = maximum sensitivity
-int brightness = 4;
+int channel;
+int sensitivity;  // 0-8 where 8 = maximum sensitivity
+int brightness;
 
 //Sound Variables
 int soundLevel;          // this is the output of the FFT after being EQ
@@ -89,39 +89,15 @@ const int capPin = 19;
 const int touchTime = 1000;
 unsigned long loopTime;
 bool isTouch;
-
 int holding = 0;
-
-bool buttonState;
-int buttonCounter = 0;
-int milisCounter = 0;
-int lastButtonState;
 uint8_t buttonPushCounter;
-uint8_t prevButtonPushCounter;
-const int numberOfModes = 7; 
-uint8_t mode = 0;
-int indicatorTime = 200;
-uint8_t buttonHeld = 0;
-int timeCounter = 0;
-int threashold = 1500;
-
 int modeColor;
 int indcatorDots;
 uint8_t ledCimber = 8;
-int prevVariableSet = 0;
-
 int variableCounter = 9;  //global
-
 uint8_t normal;  // may change this to eprom
-uint8_t demoAuto;
-uint8_t singlePress;
-
-int firstPressHold = 1;
 uint8_t pushAndHold = 0;
-uint8_t numberOfSettingsModes = 4;
-int pushAndHoldTimer = 1000;
 uint8_t buttonPushCounterDemo;
-
 uint8_t dotBrightness = 250;
 uint8_t dotBrightnessDirection = 1;
 int hueSelect;
@@ -761,9 +737,6 @@ void fetchValue()                                                  //fetch only 
   else if (buttonPushCounter == 109) {  // brightness
     variableCounter = Bvariable;
   }
-  //  else if (buttonPushCounter == 110){   //demo
-  //    demoAuto = 9;
-  //  }
   else if (buttonPushCounter == 110) {  //reset
   }
   else if (buttonPushCounter == 111) {  // off
@@ -864,7 +837,7 @@ void eepromSet()
     Bvariable = 4;                          //
 
     //other values:
-    COOLING   =  COOLINGarray[channel];
+    //COOLING   =  COOLINGarray[channel];
     normal = 1;
     FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20); // set master brightness control
 
@@ -959,17 +932,17 @@ void indicatorDemo(int loops)
 void tap()
 { 
   if (normal == 1) {
-    if ((buttonPushCounter > 99) && (singlePress = 1)) {
+    if (buttonPushCounter > 99) {
       buttonPushCounter = buttonPushCounter - 99;             //got to next mode
     }
     else {
       buttonPushCounter ++;
     }
-    if (buttonPushCounter == numberOfModes) { buttonPushCounter = 0;  }
+    if (buttonPushCounter == 7) { buttonPushCounter = 0;  }   //number of modes
   }
   
   else if (normal == 0) {      //  settings modes
-    if ((buttonPushCounter > 99) && (singlePress = 1)) {
+    if (buttonPushCounter > 99) {
       buttonPushCounter = buttonPushCounter - 99;             //got to next mode
     }
     else {
