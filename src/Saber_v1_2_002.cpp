@@ -149,7 +149,7 @@ void indicators(int variableSet);
 void eepromSet();
 void indicatorModes();
 void lampMode(); 
-void musicMode();
+void fetchSoundData();
 void indicatorDemo(int loops);
 
 
@@ -234,12 +234,12 @@ void loop()
 
 
     if (buttonPushCounter == 100) {                 // falling dot
-      musicMode();
+      fetchSoundData();
       musicmode1(); 
     }
 
     else if (buttonPushCounter == 101) {                // middle out
-      musicMode();
+      fetchSoundData();
       musicmode2(); 
     }
 
@@ -249,12 +249,12 @@ void loop()
     }
 
     else if (buttonPushCounter == 103) {                // fade
-      musicMode();
+      fetchSoundData();
       musicmode4(); 
     }
 
     else if (buttonPushCounter == 104) {                // rainbow music
-      musicMode();
+      fetchSoundData();
       musicmode5(); 
     }
 
@@ -364,7 +364,7 @@ void loop()
 
 //*******************************       Music Modes    ******************************************//
 
-void musicMode()    // fetch readings
+void fetchSoundData()    // fetch readings
 {
   if (channel < 8){
     analyzeFFT();
@@ -1014,7 +1014,8 @@ void eepromSet()
   }
 }
 
-void indicatorModes() {
+void indicatorModes() 
+{
 
   soundLevel = random(0, NUM_LEDS * 0.7); //was 80
   for (int i = 0; i < 8; i++)        
