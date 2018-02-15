@@ -12,6 +12,8 @@
     2 - White: Solid white light across whole Saber
     3 - Ombre: Rainbow color gradient with linear cycle
     4 - Fire: Visualization of linear fire
+
+    TODO get rid of press after falling dot bug
 */
 
 #include <Arduino.h>
@@ -162,7 +164,7 @@ void loop()
 { 
   isTouch = touchRead(capPin) > touchTime;
   loopTime = millis();
-  Serial.println(touchRead(capPin));     // use for callibration
+    //Serial.println(touchRead(capPin));     // use for callibration
   capSensor.update(isTouch, loopTime);
   if (capSensor.isTap()) {
     Serial.println("tap");
@@ -825,7 +827,7 @@ void indicators(int variableSet)
 }
 
 void eepromSet() 
-{ // newEpprom = 255;          // first run eprom data save   TODO remove this for final code
+{ newEpprom = 1;          // first run eprom data save   TODO remove this for final code
   newEpprom = EEPROM.read(0);          // first run eprom data save
   if (newEpprom != 73) {
     
@@ -937,6 +939,8 @@ void tap()
   if (normal == 1) {
     if (buttonPushCounter > 99) {
       buttonPushCounter = buttonPushCounter - 99;             //got to next mode
+      Serial.print("buttonPushCounter Normal Modes = ");
+      Serial.println(buttonPushCounter);
     }
     else {
       buttonPushCounter ++;
@@ -947,6 +951,8 @@ void tap()
   else if (normal == 0) {      //  settings modes
     if (buttonPushCounter > 99) {
       buttonPushCounter = buttonPushCounter - 99;             //got to next mode
+      Serial.print("buttonPushCounter Settings Modes = ");
+      Serial.println(buttonPushCounter);
     }
     else {
       buttonPushCounter ++;
