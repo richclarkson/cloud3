@@ -13,7 +13,8 @@
     3 - Ombre: Rainbow color gradient with linear cycle
     4 - Fire: Visualization of linear fire
 
-    TODO fix muisc mode rainbow on hold
+    TODO:
+
 */
 
 #include <Arduino.h>
@@ -88,7 +89,7 @@ int capture[100];
 CRGB leds[NUM_LEDS];
 //#define FRAMES_PER_SECOND 120
 
-//TAP HOLD Varriables                  // TODO clean up unused varriables   
+//TAP HOLD Varriables 
 const int capPin = 19;
 const int touchTime = 1000;
 unsigned long loopTime;
@@ -609,7 +610,7 @@ void indicators(int variableSet)
 }
 
 void eepromSet() 
-{ //newEpprom = 1;          // first run eprom data save   TODO remove this for final code
+{ //newEpprom = 1;          // first run eprom data save
   newEpprom = EEPROM.read(0);          // first run eprom data save
   if (newEpprom != 73) {
     
@@ -710,7 +711,6 @@ void indicatorDemo(int loops)
     indicatorModes();
     delay(30);
     
-    //TODO allow interupt here
     holding = touchRead(capPin);
     if  (holding > touchTime) {
       break;
