@@ -13,9 +13,7 @@
     3 - Ombre: Rainbow color gradient with linear cycle
     4 - Fire: Visualization of linear fire
 
-    TODO speed up reaction of ledClimber
-    TODO fix Music Mode Fade lower limit
-
+    TODO fix muisc mode rainbow on hold
 */
 
 #include <Arduino.h>
@@ -28,9 +26,11 @@ FASTLED_USING_NAMESPACE
 TapPressButton capSensor;
 
 //Global Varriables
+uint8_t buttonPushCounter;
 int channel;
 int sensitivity;  // 0-8 where 8 = maximum sensitivity
-int brightness;
+int Bvariable;  // brightness
+int hueSelect;
 
 //Sound Variables
 int soundLevel;          // this is the output of the FFT after being EQ
@@ -94,7 +94,6 @@ const int touchTime = 1000;
 unsigned long loopTime;
 bool isTouch;
 int holding = 0;
-uint8_t buttonPushCounter;
 int modeColor;
 int indcatorDots;
 uint8_t ledCimber = 8;
@@ -104,9 +103,6 @@ uint8_t pushAndHold = 0;
 uint8_t buttonPushCounterDemo;
 uint8_t dotBrightness = 250;
 uint8_t dotBrightnessDirection = 1;
-int hueSelect;
-int Bvariable = 4;
-int musicVariable3;
 int newEpprom;
 uint8_t automatedIndicator;
 uint8_t reset = 0;
@@ -312,7 +308,7 @@ void musicmode4()   // Fade
   FastLED.show();
   if (++dotCount >= 10) {                   // make the dot fall slowly
     dotCount = 0;
-    if (dot > 5) {
+    if (dot > 20) {
       dot--;
     }
   }
@@ -445,8 +441,6 @@ void assignValue()                                                   //assign
   }
 
   else if (buttonPushCounter == 104) {  // rainbow music
-    musicVariable3 = variableCounter;
-    EEPROM.update(3, musicVariable3);
   }
 
   else if (buttonPushCounter == 105) {   //lamp
@@ -483,7 +477,7 @@ void assignValue()                                                   //assign
     Serial.print("Bvariable = ");
     Serial.println(Bvariable);
     FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20);
-    EEPROM.update(6, Bvariable);
+    EEPROM.update(3, Bvariable);
   }
 
   else if (buttonPushCounter == 110) {     // reset
@@ -535,7 +529,6 @@ void fetchValue()                                                  //fetch only 
   else if (buttonPushCounter == 103) {  // fade
   }
   else if (buttonPushCounter == 104) {  // rainbow
-    variableCounter = musicVariable3;
   }
   else if (buttonPushCounter == 105) {  // lamp
     variableCounter = hueSelect;
@@ -610,9 +603,7 @@ void indicators(int variableSet)
       FastLED.show();
     }
 
-    //for (int i = 9; i < ledCimber; i++) {
-      leds[ledCimber] = CHSV(modeColor, 255, 150);
-   // }
+    leds[ledCimber] = CHSV(modeColor, 255, 150);
     FastLED.show();
   }
 }
@@ -627,10 +618,10 @@ void eepromSet()
     newEpprom = 73;
     buttonPushCounter = 0;                  //
     channel = 8;                            //
-    musicVariable3 = 0;                     //
+    Bvariable = 3;                          //
     hueSelect = 8;                          //
     sensitivity = 3;                        //
-    Bvariable = 3;                          //
+
 
     normal = 1;
     FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20); // set master brightness control
@@ -638,27 +629,25 @@ void eepromSet()
     EEPROM.update(0, newEpprom);
     EEPROM.update(1, buttonPushCounter);
     EEPROM.update(2, channel);
-    EEPROM.update(3, musicVariable3);
+    EEPROM.update(3, Bvariable);
     EEPROM.update(4, hueSelect);
     EEPROM.update(5, sensitivity);
-    EEPROM.update(6, Bvariable);
+
   }
 
   else { 
     Serial.println("Old EPROM!");                           //not new eeprom
     buttonPushCounter =  (int)EEPROM.read(1);
     channel =            (int)EEPROM.read(2);
-    musicVariable3 =     (int)EEPROM.read(3);
+    Bvariable =          (int)EEPROM.read(3);
     hueSelect =          (int)EEPROM.read(4);
     sensitivity =        (int)EEPROM.read(5);
-    Bvariable =          (int)EEPROM.read(6);
+
 
     Serial.print("buttonPushCounter :   ");
     Serial.println(buttonPushCounter);
     Serial.print("channel :   ");
     Serial.println(channel);
-    Serial.print("musicVariable3 :   ");
-    Serial.println(musicVariable3);
     Serial.print("hueSelect :   ");
     Serial.println(hueSelect);
     Serial.print("sensitivity :   ");
@@ -668,10 +657,10 @@ void eepromSet()
 
     buttonPushCounter =  (int)EEPROM.read(1);
     channel =            (int)EEPROM.read(2);
-    musicVariable3 =     (int)EEPROM.read(3);
+    Bvariable =          (int)EEPROM.read(3);
     hueSelect =          (int)EEPROM.read(4);
     sensitivity =        (int)EEPROM.read(5);
-    Bvariable =          (int)EEPROM.read(6);
+
 
     if (buttonPushCounter < 0 || buttonPushCounter > 6){    // safety in case bad eprom reading
       buttonPushCounter = 0;
