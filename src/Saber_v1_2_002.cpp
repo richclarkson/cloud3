@@ -13,7 +13,7 @@
     3 - Ombre: Rainbow color gradient with linear cycle
     4 - Fire: Visualization of linear fire
 
-    TODO get rid of press after falling dot bug
+    TODO get rid of press after ledClimber bug
     TODO ADD in a saftey incase buttonPushCounter picks up a bad value from epprom
 */
 
@@ -645,11 +645,9 @@ void eepromSet()
     channel = 8;                            //
     musicVariable3 = 0;                     //
     hueSelect = 8;                          //
-    sensitivity = 4;                        //
-    Bvariable = 4;                          //
+    sensitivity = 3;                        //
+    Bvariable = 3;                          //
 
-    //other values:
-    //COOLING   =  COOLINGarray[channel];
     normal = 1;
     FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20); // set master brightness control
 
@@ -691,13 +689,20 @@ void eepromSet()
     sensitivity =        (int)EEPROM.read(5);
     Bvariable =          (int)EEPROM.read(6);
 
+    if (buttonPushCounter < 0 || buttonPushCounter > 6){    // safety in case bad eprom reading
+      buttonPushCounter = 0;
+    }
+    if (sensitivity < 0 || sensitivity > 9){    // safety in case bad eprom reading
+      sensitivity = 3;
+    }
+    if (Bvariable < 0 || Bvariable > 9){    // safety in case bad eprom reading
+      Bvariable = 3;
+    }
+    if (channel < 0 || channel > 9){    // safety in case bad eprom reading
+      channel = 8;
+    }
+    normal = 1;
     FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20); // set master brightness control
-    if (buttonPushCounter == 10 || buttonPushCounter == 110) {
-      normal = 0;
-    }
-    else {
-      normal = 1;
-    }
   }
 }
 
@@ -739,7 +744,6 @@ void indicatorDemo(int loops)
     }
   }
 }
-
 
 void tap()
 { 
@@ -821,7 +825,6 @@ void press()
   }
 }
 
-
 void prepareModes()
 {
   if (normal == 1) {
@@ -900,7 +903,6 @@ void prepareModes()
       pushAndHold = 1;
       indcatorDots = 8;
       Serial.println("Freqency Setting");
-      //EEPROM.update(1, buttonPushCounter);
     }
 
     else if (buttonPushCounter == 8) { //        sensitivity
@@ -908,7 +910,6 @@ void prepareModes()
       pushAndHold = 1;
       indcatorDots = 8;
       Serial.println("Sensitivity Setting");
-      //EEPROM.update(1, buttonPushCounter);
     }
 
     else if (buttonPushCounter == 9) { //           brightness
@@ -916,7 +917,6 @@ void prepareModes()
       pushAndHold = 1;
       indcatorDots = 8;
       Serial.println("Brightness Setting");
-      //EEPROM.update(1, buttonPushCounter);
     }
     else if (buttonPushCounter == 10) { //        reset
       buttonPushCounter = 110;
@@ -939,11 +939,9 @@ void prepareModes()
         leds[led].setRGB( 0, 0, 0);
       }
       FastLED.show();
-      //EEPROM.update(1, buttonPushCounter);
     }
-  }    //end settings modes here
+  }
 }
-
 
 void runMode()
 {
