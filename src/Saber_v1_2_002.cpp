@@ -14,6 +14,7 @@
     4 - Fire: Visualization of linear fire
 
     TODO:
+    Fix sometimes freezeing in lamp mode to off mode?
 
 */
 
@@ -69,6 +70,11 @@ float eq[8] = {
   1.0, 1.0, 0.7, 0.5, 1.0, 1.0, 1.5, 2.0   // individual channel scaling factor
 };
 
+static const int preview[] = {
+  10, 4, 10, 12, 50, 60, 25, 3, 2, 5, 5, 100, 60, 10, 5, 6, 7, 12, 5, 6, 9, 8
+};
+int previewCounter = 0;
+
 
 //Lamp Mode Variables
 int rainbowCounter = 0;
@@ -107,7 +113,7 @@ uint8_t dotBrightnessDirection = 1;
 int newEpprom;
 uint8_t automatedIndicator;
 uint8_t reset = 0;
-int numberLoops = 30;
+int numberLoops = 200;
 
 // Prototype Functions:
 void musicmode1();
@@ -687,11 +693,20 @@ void eepromSet()
 void indicatorModes() 
 {
 
-  soundLevel = random(0, NUM_LEDS * 0.4); //was 80
+  //soundLevel = random(0, NUM_LEDS * 0.4); //was 80
+  if (++dotCount >= 10) {    
+    dotCount = 0;
+    if (++previewCounter >= 20) {                   
+    previewCounter = 0;
+    }
+  }
+  soundLevel = preview[previewCounter];
+
   for (int i = 0; i < 8; i++)        
   {
-    fftArray[i] = random(0, NUM_LEDS * 0.2); //was 80
+    fftArray[i] = preview[random(20)]; 
   }
+
   if (buttonPushCounterDemo == 100) {
     musicmode1(); 
   }
@@ -712,12 +727,14 @@ void indicatorModes()
 void indicatorDemo(int loops)
 {
   for (int i = 0; i < loops; i++) {
-    indicatorModes();
-    delay(30);
-    
+    //if (++dotCount >= 3) {                   // make the dot fall slowly
+     // dotCount = 0;
+      indicatorModes();
+    //}  
+    //delay(1);
     holding = touchRead(capPin);
     if  (holding > touchTime) {
-      break;
+     break;
     }
   }
 }
@@ -815,7 +832,8 @@ void prepareModes()
       buttonPushCounterDemo = 100;
       pushAndHold = 0;
       Serial.println("Falling Dot");
-      indicatorDemo(numberLoops);
+      indicatorDemo(numberLoops/2);
+      previewCounter = 14;
     }
 
     else if (buttonPushCounter == 1) {    // middle out
@@ -824,7 +842,8 @@ void prepareModes()
       buttonPushCounterDemo = 101;
       pushAndHold = 0;
       Serial.println("Middle Out");
-      indicatorDemo(numberLoops);
+      indicatorDemo(numberLoops*2);
+      previewCounter = 0;
     }
 
     else if (buttonPushCounter == 2) {    // ripple
@@ -833,7 +852,7 @@ void prepareModes()
       buttonPushCounterDemo = 102;
       pushAndHold = 0;
       Serial.println("Ripple");
-      indicatorDemo(numberLoops);
+      indicatorDemo(50);
     }
 
     else if (buttonPushCounter == 3) {    // fade
@@ -843,6 +862,7 @@ void prepareModes()
       pushAndHold = 0;
       Serial.println("Fade");
       indicatorDemo(numberLoops);
+      previewCounter = 0;
     }
 
     else if (buttonPushCounter == 4) {    // music rainbow
@@ -851,7 +871,7 @@ void prepareModes()
       buttonPushCounterDemo = 104;
       pushAndHold = 0;
       Serial.println("Rainbow");
-      indicatorDemo(numberLoops);
+      indicatorDemo(numberLoops*2);
     }
 
     else if (buttonPushCounter == 5) {   // lamp mode
