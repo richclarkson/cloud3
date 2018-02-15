@@ -14,6 +14,7 @@
     4 - Fire: Visualization of linear fire
 
     TODO get rid of press after falling dot bug
+    TODO ADD in a saftey incase buttonPushCounter picks up a bad value from epprom
 */
 
 #include <Arduino.h>
@@ -97,7 +98,7 @@ int modeColor;
 int indcatorDots;
 uint8_t ledCimber = 8;
 int variableCounter = 9;  //global
-uint8_t normal;  // may change this to eprom
+uint8_t normal = 1;  // 1 = normal modes, 0 = settings modes
 uint8_t pushAndHold = 0;
 uint8_t buttonPushCounterDemo;
 uint8_t dotBrightness = 250;
@@ -105,22 +106,21 @@ uint8_t dotBrightnessDirection = 1;
 int hueSelect;
 int Bvariable = 4;
 int musicVariable3;
-byte newEpprom;
+int newEpprom;
 uint8_t automatedIndicator;
 uint8_t reset = 0;
 int numberLoops = 30;
 
+// Prototype Functions:
 void musicmode1();
 void musicmode2();
 void musicmode3();
 void musicmode4();
 void musicmode5();
-
 void lampmode1();
 void lampmode2();
 void lampmode3();
 void lampmode4();
-
 void rainbow(int startPos, int number, float deltaHue);
 void Fire2012();
 void turnoffLEDs();
@@ -139,7 +139,8 @@ void fetchSoundData();
 void indicatorDemo(int loops);
 void tap();
 void press();
-//void prepareModes();
+void prepareModes();
+void runMode();
 
 
 
@@ -174,205 +175,11 @@ void loop()
     Serial.println("press");
     press();
   }
-  //Manager();    TODO Tidy up loop using a mode setup funtion
-
-  //prepareModes();
-  
-  if (normal == 1) {
-
-    if      (buttonPushCounter == 0) {    // falling dot
-      EEPROM.update(1, buttonPushCounter);
-      buttonPushCounter = 100;
-      buttonPushCounterDemo = 100;
-      pushAndHold = 0;
-      Serial.println("Falling Dot");
-      indicatorDemo(numberLoops);
-    }
-
-    else if (buttonPushCounter == 1) {    // middle out
-      EEPROM.update(1, buttonPushCounter);
-      buttonPushCounter = 101;
-      buttonPushCounterDemo = 101;
-      pushAndHold = 0;
-      Serial.println("Middle Out");
-      indicatorDemo(numberLoops);
-    }
-
-    else if (buttonPushCounter == 2) {    // ripple
-      EEPROM.update(1, buttonPushCounter);
-      buttonPushCounter = 102;
-      buttonPushCounterDemo = 102;
-      pushAndHold = 0;
-      Serial.println("Ripple");
-      indicatorDemo(numberLoops);
-    }
-
-    else if (buttonPushCounter == 3) {    // fade
-      EEPROM.update(1, buttonPushCounter);
-      buttonPushCounter = 103;
-      buttonPushCounterDemo = 103;
-      pushAndHold = 0;
-      Serial.println("Fade");
-      indicatorDemo(numberLoops);
-    }
-
-    else if (buttonPushCounter == 4) {    // music rainbow
-      EEPROM.update(1, buttonPushCounter);
-      buttonPushCounter = 104;
-      buttonPushCounterDemo = 104;
-      pushAndHold = 0;
-      Serial.println("Rainbow");
-      indicatorDemo(numberLoops);
-    }
-
-    else if (buttonPushCounter == 5) {   // lamp mode
-      EEPROM.update(1, buttonPushCounter);
-      buttonPushCounter = 105;
-      buttonPushCounterDemo = 105;
-      Serial.println("Lamp Mode");
-      pushAndHold = 3;
-    }
-
-    else if (buttonPushCounter == 6) { //      OFF
-      EEPROM.update(1, buttonPushCounter);
-      buttonPushCounter = 106;
-      pushAndHold = 4;
-      ledCimber = 8;
-      indcatorDots = 3;
-      Serial.println("Off");
-      for (int led = 0; led < NUM_LEDS; led++) {
-        leds[led].setRGB( 0, 0, 0);
-      }
-      FastLED.show();
-    }
-
-
-    // set normal loop modes here:
-
-
-    if (buttonPushCounter == 100) {                 // falling dot
-      fetchSoundData();
-      musicmode1(); 
-    }
-
-    else if (buttonPushCounter == 101) {                // middle out
-      fetchSoundData();
-      musicmode2(); 
-    }
-
-    else if (buttonPushCounter == 102) {                // ripple
-      analyzeFFTall(); 
-      musicmode3(); 
-    }
-
-    else if (buttonPushCounter == 103) {                // fade
-      fetchSoundData();
-      musicmode4(); 
-    }
-
-    else if (buttonPushCounter == 104) {                // rainbow music
-      fetchSoundData();
-      musicmode5(); 
-    }
-
-    else if (buttonPushCounter == 105) {                // lamp modes
-      lampMode();
-      //hueSelect changes color & type of lamp
-    }
-
-    else if (buttonPushCounter == 106) {              // Off
-    }
-  } // end normal modes start settings modes
-
-  else {     // if noraml = 0  //  Settings Modes start here
-
-    if (buttonPushCounter == 7) { //        frequency
-      buttonPushCounter = 107;
-      pushAndHold = 1;
-      indcatorDots = 8;
-      Serial.println("Freqency Setting");
-      //EEPROM.update(1, buttonPushCounter);
-    }
-
-    else if (buttonPushCounter == 8) { //        sensitivity
-      buttonPushCounter = 108;
-      pushAndHold = 1;
-      indcatorDots = 8;
-      Serial.println("Sensitivity Setting");
-      //EEPROM.update(1, buttonPushCounter);
-    }
-
-    else if (buttonPushCounter == 9) { //           brightness
-      buttonPushCounter = 109;
-      pushAndHold = 1;
-      indcatorDots = 8;
-      Serial.println("Brightness Setting");
-      //EEPROM.update(1, buttonPushCounter);
-    }
-
-    //    else if (buttonPushCounter == 10){  //        demo on switch
-    //    EEPROM.update(1, buttonPushCounter);
-    //    buttonPushCounter = 110;
-    //    pushAndHold = 4;
-    //    ledCimber = 8;
-    //    indcatorDots = 3;
-    //    for(int led = 0; led < NUM_LEDS; led++) {
-    //      leds[led].setRGB( 0, 0, 0);
-    //    }
-    //    FastLED.show();
-    //  }
-    else if (buttonPushCounter == 10) { //        reset
-      buttonPushCounter = 110;
-      pushAndHold = 4;
-      ledCimber = 8;
-      indcatorDots = 3;
-      Serial.println("Reset Setting");
-      for (int led = 0; led < NUM_LEDS; led++) {
-        leds[led].setRGB( 0, 0, 0);
-      }
-      FastLED.show();
-    }
-    else if (buttonPushCounter == 11) { //        off
-      buttonPushCounter = 111;
-      pushAndHold = 4;
-      ledCimber = 8;
-      indcatorDots = 3;
-      Serial.println("Off Setting");
-      for (int led = 0; led < NUM_LEDS; led++) {
-        leds[led].setRGB( 0, 0, 0);
-      }
-      FastLED.show();
-      //EEPROM.update(1, buttonPushCounter);
-    }
-
-
-    if (buttonPushCounter == 107) {              // Frequency
-      indicators(channel);
-    }
-
-    else if (buttonPushCounter == 108) {              // Sensitvity
-      indicators(sensitivity);
-    }
-
-    else if (buttonPushCounter == 109) {              // Brightness
-      indicators(Bvariable);
-    }
-
-    else if (buttonPushCounter == 110) {              // reset
-      indicators(reset);
-    }
-
-    else if (buttonPushCounter == 111) {              // off
-      //indicators(off);
-    }
-
-    else if (buttonPushCounter == 112) {              // off
-      //indicatorDemo(2);
-    }
-
-  }    //end settings modes here
-  
-}     //end loop here
+  if (buttonPushCounter < 90){
+    prepareModes();               // load in startup values for each mode
+  }
+  runMode();                      // run the loop using selected mode
+}   
 
 
 
@@ -689,7 +496,7 @@ void assignValue()                                                   //assign
       delay(200);
       fadeToBlackBy( leds, NUM_LEDS, 255);
       FastLED.show();
-      newEpprom = 255;
+      newEpprom = 73;
       EEPROM.update(0, newEpprom);
       eepromSet();
     }
@@ -827,7 +634,7 @@ void indicators(int variableSet)
 }
 
 void eepromSet() 
-{ newEpprom = 1;          // first run eprom data save   TODO remove this for final code
+{ //newEpprom = 1;          // first run eprom data save   TODO remove this for final code
   newEpprom = EEPROM.read(0);          // first run eprom data save
   if (newEpprom != 73) {
     
@@ -954,7 +761,7 @@ void tap()
       Serial.print("buttonPushCounter Settings Modes = ");
       Serial.println(buttonPushCounter);
     }
-    else {
+    else { 
       buttonPushCounter ++;
     }
     if (buttonPushCounter == 12) {  buttonPushCounter = 7; }
@@ -1015,199 +822,182 @@ void press()
 }
 
 
-// void prepareModes()
-// {
-//   if (normal == 1) {
+void prepareModes()
+{
+  if (normal == 1) {
 
-//     if      (buttonPushCounter == 0) {    // falling dot
-//       EEPROM.update(1, buttonPushCounter);
-//       buttonPushCounter = 100;
-//       buttonPushCounterDemo = 100;
-//       pushAndHold = 0;
-//       Serial.println("Falling Dot");
-//       indicatorDemo(numberLoops);
-//     }
+    if      (buttonPushCounter == 0) {    // falling dot
+      EEPROM.update(1, buttonPushCounter);
+      buttonPushCounter = 100;
+      buttonPushCounterDemo = 100;
+      pushAndHold = 0;
+      Serial.println("Falling Dot");
+      indicatorDemo(numberLoops);
+    }
 
-//     else if (buttonPushCounter == 1) {    // middle out
-//       EEPROM.update(1, buttonPushCounter);
-//       buttonPushCounter = 101;
-//       buttonPushCounterDemo = 101;
-//       pushAndHold = 0;
-//       Serial.println("Middle Out");
-//       indicatorDemo(numberLoops);
-//     }
+    else if (buttonPushCounter == 1) {    // middle out
+      EEPROM.update(1, buttonPushCounter);
+      buttonPushCounter = 101;
+      buttonPushCounterDemo = 101;
+      pushAndHold = 0;
+      Serial.println("Middle Out");
+      indicatorDemo(numberLoops);
+    }
 
-//     else if (buttonPushCounter == 2) {    // ripple
-//       EEPROM.update(1, buttonPushCounter);
-//       buttonPushCounter = 102;
-//       buttonPushCounterDemo = 102;
-//       pushAndHold = 0;
-//       Serial.println("Ripple");
-//       indicatorDemo(numberLoops);
-//     }
+    else if (buttonPushCounter == 2) {    // ripple
+      EEPROM.update(1, buttonPushCounter);
+      buttonPushCounter = 102;
+      buttonPushCounterDemo = 102;
+      pushAndHold = 0;
+      Serial.println("Ripple");
+      indicatorDemo(numberLoops);
+    }
 
-//     else if (buttonPushCounter == 3) {    // fade
-//       EEPROM.update(1, buttonPushCounter);
-//       buttonPushCounter = 103;
-//       buttonPushCounterDemo = 103;
-//       pushAndHold = 0;
-//       Serial.println("Fade");
-//       indicatorDemo(numberLoops);
-//     }
+    else if (buttonPushCounter == 3) {    // fade
+      EEPROM.update(1, buttonPushCounter);
+      buttonPushCounter = 103;
+      buttonPushCounterDemo = 103;
+      pushAndHold = 0;
+      Serial.println("Fade");
+      indicatorDemo(numberLoops);
+    }
 
-//     else if (buttonPushCounter == 4) {    // music rainbow
-//       EEPROM.update(1, buttonPushCounter);
-//       buttonPushCounter = 104;
-//       buttonPushCounterDemo = 104;
-//       pushAndHold = 0;
-//       Serial.println("Rainbow");
-//       indicatorDemo(numberLoops);
-//     }
+    else if (buttonPushCounter == 4) {    // music rainbow
+      EEPROM.update(1, buttonPushCounter);
+      buttonPushCounter = 104;
+      buttonPushCounterDemo = 104;
+      pushAndHold = 0;
+      Serial.println("Rainbow");
+      indicatorDemo(numberLoops);
+    }
 
-//     else if (buttonPushCounter == 5) {   // lamp mode
-//       EEPROM.update(1, buttonPushCounter);
-//       buttonPushCounter = 105;
-//       buttonPushCounterDemo = 105;
-//       Serial.println("Lamp Mode");
-//       pushAndHold = 3;
-//     }
+    else if (buttonPushCounter == 5) {   // lamp mode
+      EEPROM.update(1, buttonPushCounter);
+      buttonPushCounter = 105;
+      buttonPushCounterDemo = 105;
+      Serial.println("Lamp Mode");
+      pushAndHold = 3;
+    }
 
-//     else if (buttonPushCounter == 6) { //      OFF
-//       EEPROM.update(1, buttonPushCounter);
-//       buttonPushCounter = 106;
-//       pushAndHold = 4;
-//       ledCimber = 8;
-//       indcatorDots = 3;
-//       Serial.println("Off");
-//       for (int led = 0; led < NUM_LEDS; led++) {
-//         leds[led].setRGB( 0, 0, 0);
-//       }
-//       FastLED.show();
-//     }
+    else if (buttonPushCounter == 6) { //      OFF
+      EEPROM.update(1, buttonPushCounter);
+      buttonPushCounter = 106;
+      pushAndHold = 4;
+      ledCimber = 8;
+      indcatorDots = 3;
+      Serial.println("Off");
+      for (int led = 0; led < NUM_LEDS; led++) {
+        leds[led].setRGB( 0, 0, 0);
+      }
+      FastLED.show();
+    }
+  } // end normal modes start settings modes
 
+  else {     // if noraml = 0  //  Settings Modes start here
 
-//     // set normal loop modes here:
+    if (buttonPushCounter == 7) { //        frequency
+      buttonPushCounter = 107;
+      pushAndHold = 1;
+      indcatorDots = 8;
+      Serial.println("Freqency Setting");
+      //EEPROM.update(1, buttonPushCounter);
+    }
 
+    else if (buttonPushCounter == 8) { //        sensitivity
+      buttonPushCounter = 108;
+      pushAndHold = 1;
+      indcatorDots = 8;
+      Serial.println("Sensitivity Setting");
+      //EEPROM.update(1, buttonPushCounter);
+    }
 
-//     if (buttonPushCounter == 100) {                 // falling dot
-//       fetchSoundData();
-//       musicmode1(); 
-//     }
-
-//     else if (buttonPushCounter == 101) {                // middle out
-//       fetchSoundData();
-//       musicmode2(); 
-//     }
-
-//     else if (buttonPushCounter == 102) {                // ripple
-//       analyzeFFTall(); 
-//       musicmode3(); 
-//     }
-
-//     else if (buttonPushCounter == 103) {                // fade
-//       fetchSoundData();
-//       musicmode4(); 
-//     }
-
-//     else if (buttonPushCounter == 104) {                // rainbow music
-//       fetchSoundData();
-//       musicmode5(); 
-//     }
-
-//     else if (buttonPushCounter == 105) {                // lamp modes
-//       lampMode();
-//       //hueSelect changes color & type of lamp
-//     }
-
-//     else if (buttonPushCounter == 106) {              // Off
-//     }
-//   } // end normal modes start settings modes
-
-//   else {     // if noraml = 0  //  Settings Modes start here
-
-//     if (buttonPushCounter == 7) { //        frequency
-//       buttonPushCounter = 107;
-//       pushAndHold = 1;
-//       indcatorDots = 8;
-//       Serial.println("Freqency Setting");
-//       //EEPROM.update(1, buttonPushCounter);
-//     }
-
-//     else if (buttonPushCounter == 8) { //        sensitivity
-//       buttonPushCounter = 108;
-//       pushAndHold = 1;
-//       indcatorDots = 8;
-//       Serial.println("Sensitivity Setting");
-//       //EEPROM.update(1, buttonPushCounter);
-//     }
-
-//     else if (buttonPushCounter == 9) { //           brightness
-//       buttonPushCounter = 109;
-//       pushAndHold = 1;
-//       indcatorDots = 8;
-//       Serial.println("Brightness Setting");
-//       //EEPROM.update(1, buttonPushCounter);
-//     }
-
-//     //    else if (buttonPushCounter == 10){  //        demo on switch
-//     //    EEPROM.update(1, buttonPushCounter);
-//     //    buttonPushCounter = 110;
-//     //    pushAndHold = 4;
-//     //    ledCimber = 8;
-//     //    indcatorDots = 3;
-//     //    for(int led = 0; led < NUM_LEDS; led++) {
-//     //      leds[led].setRGB( 0, 0, 0);
-//     //    }
-//     //    FastLED.show();
-//     //  }
-//     else if (buttonPushCounter == 10) { //        reset
-//       buttonPushCounter = 110;
-//       pushAndHold = 4;
-//       ledCimber = 8;
-//       indcatorDots = 3;
-//       Serial.println("Reset Setting");
-//       for (int led = 0; led < NUM_LEDS; led++) {
-//         leds[led].setRGB( 0, 0, 0);
-//       }
-//       FastLED.show();
-//     }
-//     else if (buttonPushCounter == 11) { //        off
-//       buttonPushCounter = 111;
-//       pushAndHold = 4;
-//       ledCimber = 8;
-//       indcatorDots = 3;
-//       Serial.println("Off Setting");
-//       for (int led = 0; led < NUM_LEDS; led++) {
-//         leds[led].setRGB( 0, 0, 0);
-//       }
-//       FastLED.show();
-//       //EEPROM.update(1, buttonPushCounter);
-//     }
+    else if (buttonPushCounter == 9) { //           brightness
+      buttonPushCounter = 109;
+      pushAndHold = 1;
+      indcatorDots = 8;
+      Serial.println("Brightness Setting");
+      //EEPROM.update(1, buttonPushCounter);
+    }
+    else if (buttonPushCounter == 10) { //        reset
+      buttonPushCounter = 110;
+      pushAndHold = 4;
+      ledCimber = 8;
+      indcatorDots = 3;
+      Serial.println("Reset Setting");
+      for (int led = 0; led < NUM_LEDS; led++) {
+        leds[led].setRGB( 0, 0, 0);
+      }
+      FastLED.show();
+    }
+    else if (buttonPushCounter == 11) { //        off
+      buttonPushCounter = 111;
+      pushAndHold = 4;
+      ledCimber = 8;
+      indcatorDots = 3;
+      Serial.println("Off Setting");
+      for (int led = 0; led < NUM_LEDS; led++) {
+        leds[led].setRGB( 0, 0, 0);
+      }
+      FastLED.show();
+      //EEPROM.update(1, buttonPushCounter);
+    }
+  }    //end settings modes here
+}
 
 
-//     if (buttonPushCounter == 107) {              // Frequency
-//       indicators(channel);
-//     }
+void runMode()
+{
+    // set normal loop modes here:
+  if (normal == 1){  
 
-//     else if (buttonPushCounter == 108) {              // Sensitvity
-//       indicators(sensitivity);
-//     }
+    if (buttonPushCounter == 100) {                 // falling dot
+      fetchSoundData();
+      musicmode1(); 
+    }
+    else if (buttonPushCounter == 101) {                // middle out
+      fetchSoundData();
+      musicmode2(); 
+    }
+    else if (buttonPushCounter == 102) {                // ripple
+      analyzeFFTall(); 
+      musicmode3(); 
+    }
+    else if (buttonPushCounter == 103) {                // fade
+      fetchSoundData();
+      musicmode4(); 
+    }
+    else if (buttonPushCounter == 104) {                // rainbow music
+      fetchSoundData();
+      musicmode5(); 
+    }
+    else if (buttonPushCounter == 105) {                // lamp modes
+      lampMode();
+      //hueSelect changes color & type of lamp
+    }
+    else if (buttonPushCounter == 106) {              // Off
+    }
+  } // end normal modes start settings modes
 
-//     else if (buttonPushCounter == 109) {              // Brightness
-//       indicators(Bvariable);
-//     }
 
-//     else if (buttonPushCounter == 110) {              // reset
-//       indicators(reset);
-//     }
+  else {     // if noraml = 0  //  Settings Modes start here
 
-//     else if (buttonPushCounter == 111) {              // off
-//       //indicators(off);
-//     }
-
-//     else if (buttonPushCounter == 112) {              // off
-//       //indicatorDemo(2);
-//     }
-
-//   }    //end settings modes here
-// }
+    if (buttonPushCounter == 107) {              // Frequency
+      indicators(channel);
+    }
+    else if (buttonPushCounter == 108) {              // Sensitvity
+      indicators(sensitivity);
+    }
+    else if (buttonPushCounter == 109) {              // Brightness
+      indicators(Bvariable);
+    }
+    else if (buttonPushCounter == 110) {              // reset
+      indicators(reset);
+    }
+    else if (buttonPushCounter == 111) {              // off
+      //indicators(off);
+    }
+    else if (buttonPushCounter == 112) {              // off
+      //indicatorDemo(2);
+    }
+  }    //end settings modes here
+}
