@@ -361,6 +361,8 @@ void lampMode()      // collection of all the lamp modes
 void lampmode1()  // Neon
 {
   rainbow(0, NUM_LEDS, 0.1);
+  //rainbow(0, NUM_LEDS, 0.1);
+  FastLED.show();
 }
 
 void lampmode2()  // White
@@ -375,6 +377,8 @@ void lampmode2()  // White
 void lampmode3()  // Ombre
 {
   rainbow(0, NUM_LEDS, 1);
+  //rainbow(0, NUM_LEDS, 1);
+  FastLED.show();
 }
 
 void lampmode4()  // Fire
@@ -392,7 +396,7 @@ void rainbow(int startPos, int number, float deltaHue)
       rainbowCounter = 0;
     } // slowly cycle the "base color" through the rainbow
     fill_rainbow( &(leds[startPos]), number, gHue, deltaHue);
-    FastLED.show();
+    //FastLED.show();
 }
   
 void Fire2012()
