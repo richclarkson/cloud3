@@ -13,8 +13,9 @@
     3 - Ombre: Rainbow color gradient with linear cycle
     4 - Fire: Visualization of linear fire
 
-    TODO get rid of press after ledClimber bug
-    TODO ADD in a saftey incase buttonPushCounter picks up a bad value from epprom
+    TODO speed up reaction of ledClimber
+    TODO fix Music Mode Fade lower limit
+
 */
 
 #include <Arduino.h>
@@ -461,31 +462,33 @@ void assignValue()                                                   //assign
   else if (buttonPushCounter == 106) {   // off
     if (ledCimber >= 107) {
       normal = 0;
-      FastLED.setBrightness(255);
       buttonPushCounter = 7;
-      Serial.println("ledClimber activate");
     }
   }
 
   else if (buttonPushCounter == 107) {     // frequency
-    //indicators(variableCounter);     //  change indicator
     channel = variableCounter;
-    //COOLING   =  COOLINGarray[channel];
+    Serial.print("channel = ");
+    Serial.println(channel);
     EEPROM.update(2, channel);
   }
   else if (buttonPushCounter == 108) {     // sensitivity
     sensitivity = variableCounter;
-    //if (sensitivity == 0) sensitivity = 1;
+    Serial.print("sensitivity = ");
+    Serial.println(sensitivity);
     EEPROM.update(5, sensitivity);
   }
   else if (buttonPushCounter == 109) {     //brightness
     Bvariable = variableCounter;
+    Serial.print("Bvariable = ");
+    Serial.println(Bvariable);
+    FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20);
     EEPROM.update(6, Bvariable);
   }
 
   else if (buttonPushCounter == 110) {     // reset
     if (ledCimber >= 107) {
-
+      Serial.print("RESET!");
       fill_solid( leds, NUM_LEDS, CHSV(255, 255, 200));
       FastLED.show();
       delay(200);
@@ -510,7 +513,6 @@ void assignValue()                                                   //assign
   else if (buttonPushCounter == 111) {    // off
     if (ledCimber >= 107) {
       normal = 1;
-      FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20);
       buttonPushCounter = 0;
 
     }
@@ -557,36 +559,16 @@ void fetchValue()                                                  //fetch only 
 
 void indicators(int variableSet) 
 {
-  if      (buttonPushCounter == 106) {
-    modeColor = 120;
-  }
-  else if (buttonPushCounter == 107) {
-    modeColor =  100;  //green
-  }
-  else if (buttonPushCounter == 108) {
-    modeColor =  230; //pink
-  }
-  else if (buttonPushCounter == 109) {
-    modeColor = 160;  // blue
-  }
-  //else if (buttonPushCounter == 110) { modeColor =  60; }  // yellow
-  else if (buttonPushCounter == 110) {
-    modeColor = 10;   // red
-  }
-  else if (buttonPushCounter == 111) {
-    modeColor = 120;
-  }
-
-
   if (indcatorDots == 8) {
+    if      (buttonPushCounter == 107) {  modeColor =  100; }  // green
+    else if (buttonPushCounter == 108) {  modeColor =  230; }  // pink
+    else if (buttonPushCounter == 109) {  modeColor = 160;  }  // blue
 
     if (dotBrightnessDirection == 1)  dotBrightness++;
     else if (dotBrightnessDirection == 0)  dotBrightness--;
 
-
     if (dotBrightness >= 255) dotBrightnessDirection = 0;
     else if (dotBrightness <= 0) dotBrightnessDirection = 1;
-
 
     fill_solid( leds, NUM_LEDS, CRGB(0, 0, 0));
 
@@ -618,6 +600,9 @@ void indicators(int variableSet)
   }
 
   else if (indcatorDots == 3) {
+    if      (buttonPushCounter == 106) {  modeColor = 120;  } // light blue
+    else if (buttonPushCounter == 110) {  modeColor = 10;   } // red
+    else if (buttonPushCounter == 111) {  modeColor = 120;  } // light blue
 
     if (ledCimber <= 8) {
       fill_solid( leds, NUM_LEDS, CRGB(0, 0, 0));
@@ -625,11 +610,10 @@ void indicators(int variableSet)
       FastLED.show();
     }
 
-    for (int i = 9; i < ledCimber; i++) {
-      leds[i] = CHSV(modeColor, 255, 150);
-      FastLED.show();
-    }
-    
+    //for (int i = 9; i < ledCimber; i++) {
+      leds[ledCimber] = CHSV(modeColor, 255, 150);
+   // }
+    FastLED.show();
   }
 }
 
@@ -798,25 +782,28 @@ void press()
 
   else if (pushAndHold == 3) {       // lamp modes = L1      
     variableCounter++;
-    Serial.print("hueSelect = ");
-    Serial.println(hueSelect);
     if (variableCounter > 11) {   variableCounter = 8; }
     if (variableCounter < 8)  {   variableCounter = 8; }
+    Serial.print("hueSelect = ");
+    Serial.println(hueSelect);
     assignValue();
     lampMode();
   }
 
-  if  (pushAndHold == 4) {    //TODO add while() here
+  if  (pushAndHold == 4) { 
     holding = touchRead(capPin);
     while( holding > touchTime ){
-      ledCimber = ledCimber + 5;
-      if (ledCimber > 107){ 
+      ledCimber = ledCimber + 1;
+      if (ledCimber > 107){         
         ledCimber = 108;
+        Serial.println("ledClimber activate");
         assignValue();
+        delay(1000);
+        isTouch = false;
         break; 
       }
-      Serial.print("ledCimber = ");
-      Serial.println(ledCimber);
+      //Serial.print("ledCimber = ");
+      //Serial.println(ledCimber);
       indicators(ledCimber);
       holding = touchRead(capPin);
     }
