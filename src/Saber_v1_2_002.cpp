@@ -162,12 +162,15 @@ void setup()
   loopTime = 0;
   capSensor = TapPressButton(50, 300, 1000, 1000);
   isTouch = false;
+  pinMode(capPin, INPUT);
 }
 
 
 void loop()
 { 
-  isTouch = touchRead(capPin) > touchTime;
+  //isTouch = touchRead(capPin) > touchTime;
+  isTouch = digitalRead(capPin);
+
   loopTime = millis();
     //Serial.println(touchRead(capPin));     // use for callibration
   capSensor.update(isTouch, loopTime);
@@ -504,7 +507,7 @@ void assignValue()                                                   //assign
       delay(200);
       fadeToBlackBy( leds, NUM_LEDS, 255);
       FastLED.show();
-      newEpprom = 73;
+      newEpprom = 1;
       EEPROM.update(0, newEpprom);
       eepromSet();
     }
@@ -973,6 +976,7 @@ void runMode()
       //hueSelect changes color & type of lamp
     }
     else if (buttonPushCounter == 106) {              // Off
+      //analyzeFFTall();
     }
   } // end normal modes start settings modes
 
@@ -992,9 +996,11 @@ void runMode()
       indicators(reset);
     }
     else if (buttonPushCounter == 111) {              // off
+      //analyzeFFTall();
       //indicators(off);
     }
     else if (buttonPushCounter == 112) {              // off
+      //analyzeFFTall();
       //indicatorDemo(2);
     }
   }    //end settings modes here
