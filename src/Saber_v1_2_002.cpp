@@ -23,6 +23,7 @@
 #include <Audio.h>   
 #include <EEPROM.h>
 #include "TapPressButton.h"
+#include <CircularBuffer.h>
 
 FASTLED_USING_NAMESPACE
 TapPressButton capSensor;
@@ -96,6 +97,7 @@ CRGB leds[NUM_LEDS];
 //#define FRAMES_PER_SECOND 120
 
 //TAP HOLD Varriables 
+//uint8_t buttonState;
 const int capPin = 19;
 const int touchTime = 1000;
 unsigned long loopTime;
@@ -162,14 +164,15 @@ void setup()
   loopTime = 0;
   capSensor = TapPressButton(50, 300, 1000, 1000);
   isTouch = false;
-  pinMode(capPin, INPUT);
+  //pinMode(capPin, INPUT);
 }
 
 
 void loop()
 { 
-  //isTouch = touchRead(capPin) > touchTime;
-  isTouch = digitalRead(capPin);
+  isTouch = touchRead(capPin) > touchTime;
+  //isTouch = digitalRead(capPin);
+  if (isTouch == HIGH) { Serial.print("."); }
 
   loopTime = millis();
     //Serial.println(touchRead(capPin));     // use for callibration
