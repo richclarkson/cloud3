@@ -98,6 +98,8 @@ CRGB leds[NUM_LEDS];
 
 //TAP HOLD Varriables 
 //uint8_t buttonState;
+CircularBuffer<int, 40> buffer;
+
 const int capPin = 19;
 const int touchTime = 1000;
 unsigned long loopTime;
@@ -116,6 +118,8 @@ int newEpprom;
 uint8_t automatedIndicator;
 uint8_t reset = 0;
 int numberLoops = 200;
+int capReading;
+int aveCapReading;
 
 // Prototype Functions:
 void musicmode1();
@@ -147,6 +151,7 @@ void tap();
 void press();
 void prepareModes();
 void runMode();
+void readSensor();
 
 
 
@@ -170,10 +175,9 @@ void setup()
 
 void loop()
 { 
-  isTouch = touchRead(capPin) > touchTime;
-  //isTouch = digitalRead(capPin);
-  if (isTouch == HIGH) { Serial.print("."); }
+  readSensor();
 
+  isTouch = aveCapReading > touchTime;
   loopTime = millis();
     //Serial.println(touchRead(capPin));     // use for callibration
   capSensor.update(isTouch, loopTime);
@@ -189,6 +193,10 @@ void loop()
     prepareModes();               // load in startup values for each mode
   }
   runMode();                      // run the loop using selected mode
+  
+  // soundLevel = map(aveCapReading,0,3000,0,115);
+  // soundLevel = constrain(soundLevel,0,115);
+  // musicmode1();
 }   
 
 
@@ -396,9 +404,12 @@ void lampmode3()  // Ombre
 void lampmode4()  // Fire
 {
   random16_add_entropy( random());
-      Fire2012();
-      FastLED.show(); // display this frame
-      FastLED.delay(1000 / 60);
+  if (++dotCount >= 60) {                   // make the dot fall slowly
+    dotCount = 0;
+    Fire2012();
+    FastLED.show(); // display this frame
+    //FastLED.delay(1000 / 60);
+  }
 }
 
 void rainbow(int startPos, int number, float deltaHue) 
@@ -814,9 +825,12 @@ void press()
         ledCimber = 108;
         Serial.println("ledClimber activate");
         assignValue();
-        delay(1000);
-        isTouch = false;
-        break; 
+        while( holding > touchTime){
+          //do nothing
+          //delay(1000);
+          //isTouch = false;
+          //break; 
+        }
       }
       //Serial.print("ledCimber = ");
       //Serial.println(ledCimber);
@@ -1007,4 +1021,22 @@ void runMode()
       //indicatorDemo(2);
     }
   }    //end settings modes here
+}
+
+
+void readSensor(){
+  //isTouch = touchRead(capPin) > touchTime;
+  //if (capReading == HIGH) { Serial.print("."); }
+  //if (capReading > touchTime) { Serial.print("."); }
+
+  capReading = touchRead(capPin);
+
+  buffer.push(capReading);
+  aveCapReading = 0;
+	for (unsigned int i = 0; i < buffer.size(); i++) {
+		aveCapReading += buffer[i] / buffer.size();
+	}
+	// Serial.print("Average is ");
+	//Serial.println(aveCapReading);
+  //if (aveCapReading > touchTime) { Serial.print("."); }
 }
