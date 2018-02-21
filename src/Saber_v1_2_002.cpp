@@ -749,8 +749,9 @@ void indicatorDemo(int loops)
       indicatorModes();
     //}  
     //delay(1);
-    holding = touchRead(capPin);
-    if  (holding > touchTime) {
+    readSensor();
+    //holding = touchRead(capPin);
+    if  (aveCapReading > touchTime) {
      break;
     }
   }
@@ -818,15 +819,15 @@ void press()
   }
 
   if  (pushAndHold == 4) { 
-    holding = touchRead(capPin);
-    while( holding > touchTime ){
+    readSensor();
+    while( aveCapReading > touchTime ){
       ledCimber = ledCimber + 1;
       if (ledCimber > 107){         
         ledCimber = 108;
         Serial.println("ledClimber activate");
         assignValue();
-        while( holding > touchTime){
-          //do nothing
+        while( aveCapReading > touchTime){
+          readSensor();
           //delay(1000);
           //isTouch = false;
           //break; 
@@ -835,7 +836,7 @@ void press()
       //Serial.print("ledCimber = ");
       //Serial.println(ledCimber);
       indicators(ledCimber);
-      holding = touchRead(capPin);
+      readSensor();
     }
     ledCimber = 8;
     indicators(ledCimber);
@@ -994,6 +995,7 @@ void runMode()
     }
     else if (buttonPushCounter == 106) {              // Off
       //analyzeFFTall();
+      delay(3);
     }
   } // end normal modes start settings modes
 
@@ -1013,10 +1015,12 @@ void runMode()
       indicators(reset);
     }
     else if (buttonPushCounter == 111) {              // off
+      delay(3);
       //analyzeFFTall();
       //indicators(off);
     }
     else if (buttonPushCounter == 112) {              // off
+      delay(3);
       //analyzeFFTall();
       //indicatorDemo(2);
     }
@@ -1024,7 +1028,8 @@ void runMode()
 }
 
 
-void readSensor(){
+void readSensor()
+{
   //isTouch = touchRead(capPin) > touchTime;
   //if (capReading == HIGH) { Serial.print("."); }
   //if (capReading > touchTime) { Serial.print("."); }
@@ -1038,5 +1043,5 @@ void readSensor(){
 	}
 	// Serial.print("Average is ");
 	//Serial.println(aveCapReading);
-  //if (aveCapReading > touchTime) { Serial.print("."); }
+  if (aveCapReading > touchTime) { Serial.print("."); }
 }
