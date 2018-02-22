@@ -329,6 +329,10 @@ void musicmode3()    // Ripple
       leds[led] = CHSV(0, 0, rippleBrightness); // fill in LEDs according to the top and bottom of each section deffined above
     }
     blur1d(leds, NUM_LEDS, fftArray[y]);  // blur LEDs for smoother transitions
+    readSensor();
+    if (aveCapReading > touchTime){      //EXIT TEST
+      break;                             
+    }
   }
   FastLED.show();
 }
@@ -743,7 +747,7 @@ void indicatorDemo(int loops)
     //delay(1);
     readSensor();
     //holding = touchRead(capPin);
-    if  (aveCapReading > touchTime) {
+    if  (aveCapReading > touchTime) {  // EXIT
      break;
     }
   }
@@ -794,13 +798,13 @@ void press()
 
   if  (pushAndHold == 4) { 
     readSensor();
-    while( aveCapReading > touchTime ){
+    while(aveCapReading > touchTime){     // while held
       ledCimber = ledCimber + 1;
-      if (ledCimber > 107){         
+      if (ledCimber > 107){        
         ledCimber = 108;
         Serial.println("ledClimber activate");
         assignValue();
-        while( aveCapReading > touchTime){
+        while(aveCapReading > touchTime){   // wait untill not held anymore
           readSensor();
           //delay(1000);
           //isTouch = false;
@@ -812,6 +816,7 @@ void press()
       //Serial.println(ledCimber);
       indicators(ledCimber);
       readSensor();
+      delay(3);
     }
     ledCimber = 8;
     indicators(ledCimber);
