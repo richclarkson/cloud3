@@ -284,7 +284,7 @@ void musicmode1()   // Falling Dot
   }
   FastLED.show(); // send data to LEDs to display
 
-  if (++dotCount >= 20) {                   // make the dot fall slowly
+  if (++dotCount >= 10) {                   // make the dot fall slowly
     dotCount = 0;
     if (dot > 1) {
       dot--;
