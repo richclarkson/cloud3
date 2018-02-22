@@ -101,7 +101,7 @@ CRGB leds[NUM_LEDS];
 CircularBuffer<int, 40> buffer;
 
 const int capPin = 19;
-const int touchTime = 1000;
+const int touchTime = 700;
 unsigned long loopTime;
 bool isTouch;
 int holding = 0;
@@ -120,6 +120,7 @@ uint8_t reset = 0;
 int numberLoops = 200;
 int capReading;
 int aveCapReading;
+
 
 // Prototype Functions:
 void musicmode1();
@@ -167,7 +168,7 @@ void setup()
   Serial.println("Saber v1.2");
   eepromSet();
   loopTime = 0;
-  capSensor = TapPressButton(50, 300, 1000, 1000);
+  capSensor = TapPressButton(25, 300, 1000, 1000);
   isTouch = false;
   //pinMode(capPin, INPUT);
 }
@@ -178,6 +179,21 @@ void loop()
   readSensor();
 
   isTouch = aveCapReading > touchTime;
+
+  if (600 <= aveCapReading && aveCapReading < 700){
+    Serial.print(".");
+  }
+  if (700 <= aveCapReading && aveCapReading < 750){
+    Serial.print(":");
+  }
+  if (750 <= aveCapReading && aveCapReading < 800){
+    Serial.print("!");
+  }
+    if (800 <= aveCapReading){
+    Serial.print("|");
+  }
+
+
   loopTime = millis();
     //Serial.println(touchRead(capPin));     // use for callibration
   capSensor.update(isTouch, loopTime);
@@ -404,11 +420,15 @@ void lampmode3()  // Ombre
 void lampmode4()  // Fire
 {
   random16_add_entropy( random());
-  if (++dotCount >= 60) {                   // make the dot fall slowly
+  if (++dotCount >= 10) {                   // make the dot fall slowly
     dotCount = 0;
     Fire2012();
     FastLED.show(); // display this frame
     //FastLED.delay(1000 / 60);
+  }
+  else {
+    delay(1);
+    //readSensor();
   }
 }
 
@@ -832,6 +852,7 @@ void press()
           //isTouch = false;
           //break; 
         }
+        delay(1000);
       }
       //Serial.print("ledCimber = ");
       //Serial.println(ledCimber);
@@ -910,10 +931,9 @@ void prepareModes()
       ledCimber = 8;
       indcatorDots = 3;
       Serial.println("Off");
-      for (int led = 0; led < NUM_LEDS; led++) {
-        leds[led].setRGB( 0, 0, 0);
-      }
+      turnoffLEDs();
       FastLED.show();
+      isTouch = false;
     }
   } // end normal modes start settings modes
 
@@ -945,9 +965,7 @@ void prepareModes()
       ledCimber = 8;
       indcatorDots = 3;
       Serial.println("Reset Setting");
-      for (int led = 0; led < NUM_LEDS; led++) {
-        leds[led].setRGB( 0, 0, 0);
-      }
+      turnoffLEDs();
       FastLED.show();
     }
     else if (buttonPushCounter == 11) { //        off
@@ -956,9 +974,7 @@ void prepareModes()
       ledCimber = 8;
       indcatorDots = 3;
       Serial.println("Off Setting");
-      for (int led = 0; led < NUM_LEDS; led++) {
-        leds[led].setRGB( 0, 0, 0);
-      }
+      turnoffLEDs();
       FastLED.show();
     }
   }
@@ -996,6 +1012,7 @@ void runMode()
     else if (buttonPushCounter == 106) {              // Off
       //analyzeFFTall();
       delay(3);
+      //readSensor();
     }
   } // end normal modes start settings modes
 
@@ -1018,8 +1035,10 @@ void runMode()
       delay(3);
       //analyzeFFTall();
       //indicators(off);
+      //readSensor();
     }
     else if (buttonPushCounter == 112) {              // off
+      //readSensor();
       delay(3);
       //analyzeFFTall();
       //indicatorDemo(2);
@@ -1043,5 +1062,5 @@ void readSensor()
 	}
 	// Serial.print("Average is ");
 	//Serial.println(aveCapReading);
-  if (aveCapReading > touchTime) { Serial.print("."); }
+  //if (aveCapReading > touchTime) { Serial.print("."); }
 }
