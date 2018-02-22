@@ -157,7 +157,7 @@ void readSensor();
 
 void setup()
 { 
-  AudioMemory(12);     // Audio requires memory to work.
+  AudioMemory(12);
   FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER, DATA_RATE_MHZ(2)>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   FastLED.setBrightness(90);
   turnoffLEDs();
@@ -165,11 +165,12 @@ void setup()
   Serial.begin(9600);
   delay(1000);  // Sanity Delay
   Serial.println("Saber v1.2");
+  //EEPROM.update(0, 1);       // uncomment to load default EPROM values
   eepromSet();
   loopTime = 0;
   capSensor = TapPressButton(25, 300, 1000, 1000);
   isTouch = false;
-  //pinMode(capPin, INPUT);
+  
 }
 
 
@@ -578,9 +579,9 @@ void fetchValue()                                                  //fetch only 
 void indicators(int variableSet) 
 {
   if (indcatorDots == 8) {
-    if      (buttonPushCounter == 107) {  modeColor =  100; }  // green
-    else if (buttonPushCounter == 108) {  modeColor =  230; }  // pink
-    else if (buttonPushCounter == 109) {  modeColor = 160;  }  // blue
+    if      (buttonPushCounter == 110) {  modeColor =  100; }  // green
+    else if (buttonPushCounter == 111) {  modeColor =  230; }  // pink
+    else if (buttonPushCounter == 112) {  modeColor = 160;  }  // blue
 
     if (dotBrightnessDirection == 1)  dotBrightness++;
     else if (dotBrightnessDirection == 0)  dotBrightness--;
@@ -618,9 +619,9 @@ void indicators(int variableSet)
   }
 
   else if (indcatorDots == 3) {
-    if      (buttonPushCounter == 106) {  modeColor = 120;  } // light blue
-    else if (buttonPushCounter == 110) {  modeColor = 10;   } // red
-    else if (buttonPushCounter == 111) {  modeColor = 120;  } // light blue
+    if      (buttonPushCounter == 109) {  modeColor = 120;  } // light blue
+    else if (buttonPushCounter == 113) {  modeColor = 10;   } // red
+    else if (buttonPushCounter == 114) {  modeColor = 120;  } // light blue
 
     if (ledCimber <= 8) {
       fill_solid( leds, NUM_LEDS, CRGB(0, 0, 0));
@@ -759,7 +760,7 @@ void tap()
     else {
       buttonPushCounter ++;
     }
-    if (buttonPushCounter == 7) { buttonPushCounter = 0;  }   //number of modes
+    if (buttonPushCounter == 10) { buttonPushCounter = 0;  }   //number of modes
   }
   
   else if (normal == 0) {      //  settings modes
@@ -771,7 +772,7 @@ void tap()
     else { 
       buttonPushCounter ++;
     }
-    if (buttonPushCounter == 12) {  buttonPushCounter = 7; }
+    if (buttonPushCounter == 15) {  buttonPushCounter = 10; }
   }
 }
 
