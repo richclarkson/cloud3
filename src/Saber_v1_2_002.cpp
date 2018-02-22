@@ -97,10 +97,13 @@ CRGB leds[NUM_LEDS];
 
 //TAP HOLD Varriables 
 //uint8_t buttonState;
-CircularBuffer<int, 40> buffer;
+CircularBuffer<int, 60> buffer;
+
+const int baselinelenght = 10000;
+int baseLineReadings[baselinelenght];
 
 const int capPin = 19;
-const int touchTime = 700;
+int touchTime = 1000;
 unsigned long loopTime;
 bool isTouch;
 int holding = 0;
@@ -119,6 +122,7 @@ uint8_t reset = 0;
 int numberLoops = 200;
 int capReading;
 int aveCapReading;
+bool flag = 0;
 
 
 // Prototype Functions:
@@ -164,13 +168,33 @@ void setup()
   FastLED.show();
   Serial.begin(9600);
   delay(1000);  // Sanity Delay
+  // while (!Serial) {
+  //   ; // wait for serial port to connect. Needed for native USB
+  // }
   Serial.println("Saber v1.2");
   //EEPROM.update(0, 1);       // uncomment to load default EPROM values
   eepromSet();
-  loopTime = 0;
-  capSensor = TapPressButton(25, 300, 1000, 1000);
+
+
+  aveCapReading = 0;
+  for (unsigned int i = 0; i < baselinelenght; i++) {
+  baseLineReadings[i] = touchRead(capPin);
+  //Serial.println(baseLineReadings[i]);
+  aveCapReading = aveCapReading + baseLineReadings[i];
+  }
+  Serial.print("TotalCapReading");
+  Serial.println(aveCapReading);
+  aveCapReading = aveCapReading / baselinelenght;
+  Serial.print("aveCapReading");
+  Serial.println(aveCapReading);
+
+  touchTime = aveCapReading + 100;
+  Serial.print("Base line: ");
+  Serial.println(touchTime);
+
   isTouch = false;
-  
+  loopTime = 0;
+  capSensor = TapPressButton(25, 300, 500, 500);
 }
 
 
@@ -180,18 +204,21 @@ void loop()
 
   isTouch = aveCapReading > touchTime;
 
-  if (600 <= aveCapReading && aveCapReading < 700){
-    Serial.print(".");
-  }
-  if (700 <= aveCapReading && aveCapReading < 750){
-    Serial.print(":");
-  }
-  if (750 <= aveCapReading && aveCapReading < 800){
-    Serial.print("!");
-  }
-    if (800 <= aveCapReading){
-    Serial.print("|");
-  }
+  // if (650 <= aveCapReading && aveCapReading < 700){
+  //   Serial.print(".");
+  // }
+  // if (700 <= aveCapReading && aveCapReading < 750){
+  //   Serial.print(":");
+  //   //delay(1);
+  // }
+  // if (750 <= aveCapReading && aveCapReading < 800){
+  //   Serial.print("!");
+  //   //delay(1);
+  // }
+  //   if (800 <= aveCapReading){
+  //   Serial.print("|");
+  //   //delay(1);
+  // }
 
 
   loopTime = millis();
@@ -200,10 +227,13 @@ void loop()
   if (capSensor.isTap()) {
     Serial.println("tap");
     tap();
+    // lampMode3();
+    // delay(100);
   }
   if (capSensor.isPress()) {
     Serial.println("press");
     press();
+    // lampMode1();
   }
   if (buttonPushCounter < 90){
     prepareModes();               // load in startup values for each mode
@@ -1031,11 +1061,32 @@ void readSensor()
 
   capReading = touchRead(capPin);
 
+  // if (capReading > touchTime){
+  //   capReading = 10000;
+  //   //flag = 0;
+  //   //Serial.println("flag 0");
+  // }
+
+   if (capReading < touchTime){
+    capReading = touchTime;
+    //flag = 0;
+    //Serial.println("flag 0");
+  }
+
+
   buffer.push(capReading);
   aveCapReading = 0;
+  
 	for (unsigned int i = 0; i < buffer.size(); i++) {
 		aveCapReading += buffer[i] / buffer.size();
 	}
+
+  // if (aveCapReading < touchTime && flag == 0){
+  //   flag = 1;
+  //   Serial.println("flag 1");
+  // }
+
+
 	// Serial.print("Average is ");
 	//Serial.println(aveCapReading);
   //if (aveCapReading > touchTime) { Serial.print("."); }
