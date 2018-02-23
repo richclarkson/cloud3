@@ -1,6 +1,10 @@
 
 /*
- Muisc Modes:
+
+  Saber 1.2
+  2018 Richard Clarkson Studio
+
+  Muisc Modes:
     1 - Falling Dot: White bar filled to soundpoint with floating blue dot at top.
     2 - Middle Out: White bar starting at middle filled in both directions to soundpoints
     3 - Ripple: 8 small Middle out type visualisations stacked from lowest to highest channel.
