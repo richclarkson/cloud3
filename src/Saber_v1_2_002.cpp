@@ -123,7 +123,7 @@ uint8_t dotBrightnessDirection = 1;
 int newEpprom;
 uint8_t automatedIndicator;
 uint8_t reset = 0;
-int numberLoops = 200;
+int numberLoops = 100;
 int capReading;
 int aveCapReading;
 bool flag = 0;
@@ -211,17 +211,12 @@ void loop()
   if (capSensor.isTap()) {
     Serial.println("tap");
     tap();
+    //buttonPushCounter = 104;
      delay(100);
   }
   if (capSensor.isPress()) {
-    if (100 <= buttonPushCounter && buttonPushCounter < 109){
-      Serial.println("long_tap");
-      tap();
-    }
-    else{
     Serial.println("press");
     press();
-    }
   }
   if (buttonPushCounter < 90){
     prepareModes();               // load in startup values for each mode
@@ -319,7 +314,7 @@ void musicmode2()   // Middle Out
   }
   if (soundLevel <= 0)  // NO SOUND
   {                                    // If no sound (dot = 0)
-    turnoffLEDs();
+    //turnoffLEDs();
     //fadeToBlackBy( leds, NUM_LEDS, 1);
     leds[NUM_LEDS / 2].setRGB(80, 80, 80); // keep center dot illuminated
   }
@@ -766,7 +761,7 @@ void indicatorDemo(int loops)
       indicatorModes();
     //}  
     //delay(1);
-    readSensor();
+    //readSensor();
     //holding = touchRead(capPin);
     // if  (aveCapReading > touchTime) {  // EXIT
     //  break;
@@ -851,7 +846,9 @@ void prepareModes()
     if      (buttonPushCounter == 0) {    // falling dot
       buttonPushCounter = 100;
       buttonPushCounterDemo = 100;
-      pushAndHold = 0;
+      pushAndHold = 4;
+      ledCimber = 8;
+      indcatorDots = 3;
       Serial.println("Falling Dot");
       indicatorDemo(numberLoops/2);
       previewCounter = 14;
@@ -860,16 +857,20 @@ void prepareModes()
     else if (buttonPushCounter == 1) {    // middle out
       buttonPushCounter = 101;
       buttonPushCounterDemo = 101;
-      pushAndHold = 0;
+      pushAndHold = 4;
+      ledCimber = 8;
+      indcatorDots = 3;
       Serial.println("Middle Out");
-      indicatorDemo(numberLoops*2);
+      indicatorDemo(numberLoops);
       previewCounter = 0;
     }
 
     else if (buttonPushCounter == 2) {    // ripple
       buttonPushCounter = 102;
       buttonPushCounterDemo = 102;
-      pushAndHold = 0;
+      pushAndHold = 4;
+      ledCimber = 8;
+      indcatorDots = 3;
       Serial.println("Ripple");
       indicatorDemo(50);
     }
@@ -877,7 +878,9 @@ void prepareModes()
     else if (buttonPushCounter == 3) {    // fade
       buttonPushCounter = 103;
       buttonPushCounterDemo = 103;
-      pushAndHold = 0;
+      pushAndHold = 4;
+      ledCimber = 8;
+      indcatorDots = 3;
       Serial.println("Fade");
       indicatorDemo(numberLoops);
       previewCounter = 0;
@@ -886,37 +889,47 @@ void prepareModes()
     else if (buttonPushCounter == 4) {    // music rainbow
       buttonPushCounter = 104;
       buttonPushCounterDemo = 104;
-      pushAndHold = 0;
+      pushAndHold = 4;
+      ledCimber = 8;
+      indcatorDots = 3;
       Serial.println("Rainbow");
-      indicatorDemo(numberLoops*2);
+      indicatorDemo(numberLoops);
     }
 
     else if (buttonPushCounter == 5) {   // White
       buttonPushCounter = 105;
       buttonPushCounterDemo = 105;
       Serial.println("White");
-      pushAndHold = 0;
+      pushAndHold = 4;
+      ledCimber = 8;
+      indcatorDots = 3;
     }
 
     else if (buttonPushCounter == 6) {   // Neon
       buttonPushCounter = 106;
       buttonPushCounterDemo = 106;
       Serial.println("Neon");
-      pushAndHold = 0;
+      pushAndHold = 4;
+      ledCimber = 8;
+      indcatorDots = 3;
     }
 
     else if (buttonPushCounter == 7) {   // Ombre
       buttonPushCounter = 107;
       buttonPushCounterDemo = 107;
       Serial.println("Ombre");
-      pushAndHold = 0;
+      pushAndHold = 4;
+      ledCimber = 8;
+      indcatorDots = 3;
     }
 
     else if (buttonPushCounter == 8) {   // Fire
       buttonPushCounter = 108;
       buttonPushCounterDemo = 108;
       Serial.println("Fire");
-      pushAndHold = 0;
+      pushAndHold = 4;
+      ledCimber = 8;
+      indcatorDots = 3;
     }
 
     else if (buttonPushCounter == 9) { //      OFF
