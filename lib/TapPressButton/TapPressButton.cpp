@@ -71,7 +71,7 @@ void TapPressButton::setPressType() {
   else if (pressTypeIsPress())
     pressType = 2; // pressType 2 = Press
   else
-    pressType = 0;
+    pressType = 0; // no press or button is being pressed but not yet a full press
 }
 
 bool TapPressButton::stateHasChanged() {

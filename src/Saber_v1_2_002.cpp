@@ -179,12 +179,11 @@ void setup()
   //EEPROM.update(0, 1);       // uncomment to load default EPROM values
   eepromSet();
 
-
   aveCapReading = 0;
   for (unsigned int i = 0; i < baselinelenght; i++) {
-  baseLineReadings[i] = touchRead(capPin);
-  //Serial.println(baseLineReadings[i]);
-  aveCapReading = aveCapReading + baseLineReadings[i];
+    baseLineReadings[i] = touchRead(capPin);
+    //Serial.println(baseLineReadings[i]);
+    aveCapReading = aveCapReading + baseLineReadings[i];
   }
   Serial.print("TotalCapReading");
   Serial.println(aveCapReading);
@@ -205,48 +204,33 @@ void setup()
 void loop()
 { 
   readSensor();
-
   isTouch = aveCapReading > touchTime;
-
-  // if (650 <= aveCapReading && aveCapReading < 700){
-  //   Serial.print(".");
-  // }
-  // if (700 <= aveCapReading && aveCapReading < 750){
-  //   Serial.print(":");
-  //   //delay(1);
-  // }
-  // if (750 <= aveCapReading && aveCapReading < 800){
-  //   Serial.print("!");
-  //   //delay(1);
-  // }
-  //   if (800 <= aveCapReading){
-  //   Serial.print("|");
-  //   //delay(1);
-  // }
-
-
   loopTime = millis();
     //Serial.println(touchRead(capPin));     // use for callibration
   capSensor.update(isTouch, loopTime);
   if (capSensor.isTap()) {
     Serial.println("tap");
     tap();
-    // lampMode3();
      delay(100);
   }
   if (capSensor.isPress()) {
+    if (100 <= buttonPushCounter && buttonPushCounter < 109){
+      Serial.println("long_tap");
+      tap();
+    }
+    else{
     Serial.println("press");
     press();
-    // lampMode1();
+    }
   }
   if (buttonPushCounter < 90){
     prepareModes();               // load in startup values for each mode
   }
   runMode();                      // run the loop using selected mode
   
-  // soundLevel = map(aveCapReading,0,3000,0,115);
-  // soundLevel = constrain(soundLevel,0,115);
-  // musicmode1();
+  // soundLevel = map(aveCapReading,0,3000,0,115);   // visual debugging backup
+  // soundLevel = constrain(soundLevel,0,115);       // visual debugging backup
+  // musicmode1();                                   // visual debugging backup
 }   
 
 
@@ -336,9 +320,11 @@ void musicmode2()   // Middle Out
   if (soundLevel <= 0)  // NO SOUND
   {                                    // If no sound (dot = 0)
     turnoffLEDs();
+    //fadeToBlackBy( leds, NUM_LEDS, 1);
     leds[NUM_LEDS / 2].setRGB(80, 80, 80); // keep center dot illuminated
   }
   FastLED.show(); // send data to LEDs to display
+  //delay(1);
 }
 
 void musicmode3()    // Ripple
@@ -393,12 +379,13 @@ void musicmode5()     // Rainbow
 { 
   fill_gradient(leds, 0, CHSV(96, 255,255) , NUM_LEDS, CHSV(0,255,255), SHORTEST_HUES);
     for (int led = soundLevel; led < NUM_LEDS; led++)        
-  { //turn off LEDs
+  {
     leds[led] = CHSV( 100, 0, 0);
   }
   if (soundLevel <= 0)  // NO SOUND
   {                                    // If no sound (dot = 0)
    turnoffLEDs();
+   //fadeToBlackBy( leds, NUM_LEDS, 1);
   }
   FastLED.show(); // send data to LEDs to display
 }
@@ -1056,27 +1043,16 @@ void runMode()
   }    //end settings modes here
 }
 
-
 void readSensor()
 {
-  //isTouch = touchRead(capPin) > touchTime;
-  //if (capReading == HIGH) { Serial.print("."); }
-  //if (capReading > touchTime) { Serial.print("."); }
-
   capReading = touchRead(capPin);
 
   if (capReading > touchTime){
     capReading = 10000;
-    //flag = 0;
-    //Serial.print(".");
   }
-
-   if (capReading < touchTime){
+  if (capReading < touchTime){
     capReading = touchTime;
-    //flag = 0;
-    //Serial.println("flag 0");
   }
-
 
   buffer.push(capReading);
   aveCapReading = 0;
@@ -1092,7 +1068,4 @@ void readSensor()
     flag = 1;
     Serial.print("|");
   }
-	// Serial.print("Average is ");
-	//Serial.println(aveCapReading);
-  //if (aveCapReading > touchTime) { Serial.print("."); }
 }
