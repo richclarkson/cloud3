@@ -198,7 +198,7 @@ void setup()
 
   isTouch = false;
   loopTime = 0;
-  capSensor = TapPressButton(25, 300, 500, 500);
+  capSensor = TapPressButton(1, 499, 500, 500);
 }
 
 
@@ -232,7 +232,7 @@ void loop()
     Serial.println("tap");
     tap();
     // lampMode3();
-    // delay(100);
+     delay(100);
   }
   if (capSensor.isPress()) {
     Serial.println("press");
@@ -363,10 +363,10 @@ void musicmode3()    // Ripple
       leds[led] = CHSV(0, 0, rippleBrightness); // fill in LEDs according to the top and bottom of each section deffined above
     }
     blur1d(leds, NUM_LEDS, fftArray[y]);  // blur LEDs for smoother transitions
-    readSensor();
-    if (aveCapReading > touchTime){      //EXIT TEST
-      break;                             
-    }
+    // readSensor();
+    // if (aveCapReading > touchTime){      //EXIT TEST
+    //   break;                             
+    // }
   }
   FastLED.show();
 }
@@ -781,9 +781,9 @@ void indicatorDemo(int loops)
     //delay(1);
     readSensor();
     //holding = touchRead(capPin);
-    if  (aveCapReading > touchTime) {  // EXIT
-     break;
-    }
+    // if  (aveCapReading > touchTime) {  // EXIT
+    //  break;
+    // }
   }
 }
 
@@ -792,8 +792,8 @@ void tap()
   if (normal == 1) {
     if (buttonPushCounter > 99) {
       buttonPushCounter = buttonPushCounter - 99;             //got to next mode
-      Serial.print("buttonPushCounter Normal Modes = ");
-      Serial.println(buttonPushCounter);
+      // Serial.print("buttonPushCounter Normal Modes = ");
+      // Serial.println(buttonPushCounter);
     }
     else {
       buttonPushCounter ++;
@@ -804,8 +804,8 @@ void tap()
   else if (normal == 0) {      //  settings modes
     if (buttonPushCounter > 99) {
       buttonPushCounter = buttonPushCounter - 99;             //got to next mode
-      Serial.print("buttonPushCounter Settings Modes = ");
-      Serial.println(buttonPushCounter);
+      // Serial.print("buttonPushCounter Settings Modes = ");
+      // Serial.println(buttonPushCounter);
     }
     else { 
       buttonPushCounter ++;
@@ -1065,11 +1065,11 @@ void readSensor()
 
   capReading = touchRead(capPin);
 
-  // if (capReading > touchTime){
-  //   capReading = 10000;
-  //   //flag = 0;
-  //   //Serial.println("flag 0");
-  // }
+  if (capReading > touchTime){
+    capReading = 10000;
+    //flag = 0;
+    //Serial.print(".");
+  }
 
    if (capReading < touchTime){
     capReading = touchTime;
@@ -1084,13 +1084,14 @@ void readSensor()
 	for (unsigned int i = 0; i < buffer.size(); i++) {
 		aveCapReading += buffer[i] / buffer.size();
 	}
-
-  // if (aveCapReading < touchTime && flag == 0){
-  //   flag = 1;
-  //   Serial.println("flag 1");
-  // }
-
-
+  if (aveCapReading > touchTime){
+    flag = 0;
+    Serial.print(".");
+  }
+  if (aveCapReading <= touchTime && flag == 0){
+    flag = 1;
+    Serial.print("|");
+  }
 	// Serial.print("Average is ");
 	//Serial.println(aveCapReading);
   //if (aveCapReading > touchTime) { Serial.print("."); }
