@@ -101,7 +101,7 @@ CRGB leds[NUM_LEDS];
 
 //TAP HOLD Varriables 
 //uint8_t buttonState;
-CircularBuffer<int, 60> buffer;
+CircularBuffer<int, 40> buffer;
 
 const int baselinelenght = 10000;
 int baseLineReadings[baselinelenght];
@@ -111,6 +111,7 @@ int touchTime = 1000;
 unsigned long loopTime;
 bool isTouch;
 int holding = 0;
+uint8_t prevButtonPushCounter;
 int modeColor;
 int indcatorDots;
 uint8_t ledCimber = 8;
@@ -478,22 +479,58 @@ void Fire2012()
 void assignValue()                                                   //assign
 {
   if      (buttonPushCounter == 100) {  // falling dot
+    if (ledCimber >= 107) {
+      normal = 0;
+      buttonPushCounter = 10;
+    }
   }
   else if (buttonPushCounter == 101) {  // middle out
+    if (ledCimber >= 107) {
+      normal = 0;
+      buttonPushCounter = 10;
+    }
   }
   else if (buttonPushCounter == 102) {  // ripple
+    if (ledCimber >= 107) {
+      normal = 0;
+      buttonPushCounter = 10;
+    }
   }
   else if (buttonPushCounter == 103) {  //fade
+    if (ledCimber >= 107) {
+      normal = 0;
+      buttonPushCounter = 10;
+    }
   }
   else if (buttonPushCounter == 104) {  // rainbow music
+    if (ledCimber >= 107) {
+      normal = 0;
+      buttonPushCounter = 10;
+    }
   }
   else if (buttonPushCounter == 105) {   // white
+    if (ledCimber >= 107) {
+      normal = 0;
+      buttonPushCounter = 10;
+    }
   }
   else if (buttonPushCounter == 106) {   // neon
+    if (ledCimber >= 107) {
+      normal = 0;
+      buttonPushCounter = 10;
+    }
   }
   else if (buttonPushCounter == 107) {   // ombre
+    if (ledCimber >= 107) {
+      normal = 0;
+      buttonPushCounter = 10;
+    }
   }
   else if (buttonPushCounter == 108) {   // fire
+    if (ledCimber >= 107) {
+      normal = 0;
+      buttonPushCounter = 10;
+    }
   }
   else if (buttonPushCounter == 109) {   // off
     if (ledCimber >= 107) {
@@ -548,7 +585,7 @@ void assignValue()                                                   //assign
   else if (buttonPushCounter == 114) {    // off
     if (ledCimber >= 107) {
       normal = 1;
-      buttonPushCounter = 0;
+      buttonPushCounter = prevButtonPushCounter;
 
     }
     else {
@@ -642,10 +679,11 @@ void indicators(int variableSet)
     if      (buttonPushCounter == 109) {  modeColor = 120;  } // light blue
     else if (buttonPushCounter == 113) {  modeColor = 10;   } // red
     else if (buttonPushCounter == 114) {  modeColor = 120;  } // light blue
+    else modeColor = 120;
 
     if (ledCimber <= 8) {
       fill_solid( leds, NUM_LEDS, CRGB(0, 0, 0));
-      if (buttonPushCounter == 110) { leds[8] = CHSV(modeColor, 255, 150); }
+      if (buttonPushCounter == 113) { leds[8] = CHSV(modeColor, 255, 150); }
       FastLED.show();
     }
 
@@ -814,6 +852,8 @@ void press()
 
   if  (pushAndHold == 4) { 
     readSensor();
+    turnoffLEDs();
+    FastLED.show();
     while(aveCapReading > touchTime){     // while held
       ledCimber = ledCimber + 1;
       if (ledCimber > 107){        
@@ -844,6 +884,7 @@ void prepareModes()
   if (normal == 1) {
     EEPROM.update(1, buttonPushCounter);
     if      (buttonPushCounter == 0) {    // falling dot
+      prevButtonPushCounter = buttonPushCounter;
       buttonPushCounter = 100;
       buttonPushCounterDemo = 100;
       pushAndHold = 4;
@@ -855,6 +896,7 @@ void prepareModes()
     }
 
     else if (buttonPushCounter == 1) {    // middle out
+      prevButtonPushCounter = buttonPushCounter;
       buttonPushCounter = 101;
       buttonPushCounterDemo = 101;
       pushAndHold = 4;
@@ -866,6 +908,7 @@ void prepareModes()
     }
 
     else if (buttonPushCounter == 2) {    // ripple
+      prevButtonPushCounter = buttonPushCounter;
       buttonPushCounter = 102;
       buttonPushCounterDemo = 102;
       pushAndHold = 4;
@@ -876,6 +919,7 @@ void prepareModes()
     }
 
     else if (buttonPushCounter == 3) {    // fade
+      prevButtonPushCounter = buttonPushCounter;
       buttonPushCounter = 103;
       buttonPushCounterDemo = 103;
       pushAndHold = 4;
@@ -887,6 +931,7 @@ void prepareModes()
     }
 
     else if (buttonPushCounter == 4) {    // music rainbow
+      prevButtonPushCounter = buttonPushCounter;
       buttonPushCounter = 104;
       buttonPushCounterDemo = 104;
       pushAndHold = 4;
@@ -897,6 +942,7 @@ void prepareModes()
     }
 
     else if (buttonPushCounter == 5) {   // White
+      prevButtonPushCounter = buttonPushCounter;
       buttonPushCounter = 105;
       buttonPushCounterDemo = 105;
       Serial.println("White");
@@ -906,6 +952,7 @@ void prepareModes()
     }
 
     else if (buttonPushCounter == 6) {   // Neon
+      prevButtonPushCounter = buttonPushCounter;
       buttonPushCounter = 106;
       buttonPushCounterDemo = 106;
       Serial.println("Neon");
@@ -915,6 +962,7 @@ void prepareModes()
     }
 
     else if (buttonPushCounter == 7) {   // Ombre
+      prevButtonPushCounter = buttonPushCounter;
       buttonPushCounter = 107;
       buttonPushCounterDemo = 107;
       Serial.println("Ombre");
@@ -924,6 +972,7 @@ void prepareModes()
     }
 
     else if (buttonPushCounter == 8) {   // Fire
+      prevButtonPushCounter = buttonPushCounter;
       buttonPushCounter = 108;
       buttonPushCounterDemo = 108;
       Serial.println("Fire");
@@ -933,6 +982,7 @@ void prepareModes()
     }
 
     else if (buttonPushCounter == 9) { //      OFF
+      prevButtonPushCounter = buttonPushCounter;
       buttonPushCounter = 109;
       pushAndHold = 4;
       ledCimber = 8;
