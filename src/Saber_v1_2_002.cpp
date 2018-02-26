@@ -124,7 +124,7 @@ uint8_t dotBrightnessDirection = 1;
 int newEpprom;
 uint8_t automatedIndicator;
 uint8_t reset = 0;
-int numberLoops = 100;
+int numberLoops = 50;
 int capReading;
 int aveCapReading;
 bool flag = 0;
@@ -152,10 +152,10 @@ void assignValue();
 void fetchValue(); 
 void indicators(int variableSet);
 void eepromSet();
-void indicatorModes();
+void previewModes();
 void lampMode(); 
 void fetchSoundData();
-void indicatorDemo(int loops);
+void previewController(int loops);
 void tap();
 void press();
 void prepareModes();
@@ -213,7 +213,7 @@ void loop()
     Serial.println("tap");
     tap();
     //buttonPushCounter = 104;
-     delay(100);
+    delay(50);
   }
   if (capSensor.isPress()) {
     Serial.println("press");
@@ -745,7 +745,7 @@ void eepromSet()
       buttonPushCounter = 0;
     }
     prevButtonPushCounter = buttonPushCounter;
-    
+
     if (sensitivity < 0 || sensitivity > 9){    // safety in case bad eprom reading
       sensitivity = 3;
     }
@@ -760,7 +760,7 @@ void eepromSet()
   }
 }
 
-void indicatorModes() 
+void previewModes() 
 {
 
   //soundLevel = random(0, NUM_LEDS * 0.4); //was 80
@@ -794,12 +794,12 @@ void indicatorModes()
   }
 }
 
-void indicatorDemo(int loops)
+void previewController(int loops)
 {
   for (int i = 0; i < loops; i++) {
     //if (++dotCount >= 3) {                   // make the dot fall slowly
      // dotCount = 0;
-      indicatorModes();
+      previewModes();
     //}  
     //delay(1);
     //readSensor();
@@ -843,7 +843,7 @@ void press()
   //ledCimber = 8;
 
   if  (pushAndHold == 0) {        // no push and holds modes = M1 M2 M3 M4  
-    indicatorModes();
+    previewModes();
   }
 
   else if (pushAndHold == 1) {        // settings & off modes     
@@ -894,7 +894,7 @@ void prepareModes()
       ledCimber = 8;
       indcatorDots = 3;
       Serial.println("Falling Dot");
-      indicatorDemo(numberLoops/2);
+      previewController(numberLoops/2);
       previewCounter = 14;
     }
 
@@ -906,7 +906,7 @@ void prepareModes()
       ledCimber = 8;
       indcatorDots = 3;
       Serial.println("Middle Out");
-      indicatorDemo(numberLoops);
+      previewController(numberLoops);
       previewCounter = 0;
     }
 
@@ -918,7 +918,7 @@ void prepareModes()
       ledCimber = 8;
       indcatorDots = 3;
       Serial.println("Ripple");
-      indicatorDemo(50);
+      previewController(25);
     }
 
     else if (buttonPushCounter == 3) {    // fade
@@ -929,7 +929,7 @@ void prepareModes()
       ledCimber = 8;
       indcatorDots = 3;
       Serial.println("Fade");
-      indicatorDemo(numberLoops);
+      previewController(numberLoops);
       previewCounter = 0;
     }
 
@@ -941,7 +941,7 @@ void prepareModes()
       ledCimber = 8;
       indcatorDots = 3;
       Serial.println("Rainbow");
-      indicatorDemo(numberLoops);
+      previewController(numberLoops);
     }
 
     else if (buttonPushCounter == 5) {   // White
