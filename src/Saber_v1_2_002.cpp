@@ -701,6 +701,7 @@ void eepromSet()
     // eeprom values:
     newEpprom = 73;
     buttonPushCounter = 0;                  //
+    prevButtonPushCounter = buttonPushCounter;
     channel = 8;                            //
     Bvariable = 3;                          //
     sensitivity = 3;                        //
@@ -740,9 +741,11 @@ void eepromSet()
     sensitivity =        (int)EEPROM.read(4);
 
 
-    if (buttonPushCounter < 0 || buttonPushCounter > 6){    // safety in case bad eprom reading
+    if (buttonPushCounter < 0 || buttonPushCounter > 9){    // safety in case bad eprom reading
       buttonPushCounter = 0;
     }
+    prevButtonPushCounter = buttonPushCounter;
+    
     if (sensitivity < 0 || sensitivity > 9){    // safety in case bad eprom reading
       sensitivity = 3;
     }
