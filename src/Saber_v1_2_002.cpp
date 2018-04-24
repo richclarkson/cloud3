@@ -27,7 +27,6 @@
 #include <Audio.h>   
 #include <EEPROM.h>
 #include "TapPressButton.h"
-#include <CircularBuffer.h>
 
 FASTLED_USING_NAMESPACE
 TapPressButton capSensor;
@@ -101,10 +100,7 @@ CRGB leds[NUM_LEDS];
 
 //TAP HOLD Varriables 
 //uint8_t buttonState;
-CircularBuffer<int, 40> buffer;
 
-const int baselinelenght = 10000;
-int baseLineReadings[baselinelenght];
 
 const int capPin = 19;
 int touchTime = 1000;
@@ -160,7 +156,6 @@ void tap();
 void press();
 void prepareModes();
 void runMode();
-void readSensor();
 
 
 
@@ -180,22 +175,22 @@ void setup()
   //EEPROM.update(0, 1);       // uncomment to load default EPROM values
   eepromSet();
 
-  aveCapReading = 0;
-  for (unsigned int i = 0; i < baselinelenght; i++) {
-    baseLineReadings[i] = touchRead(capPin);
-    //Serial.println(baseLineReadings[i]);
-    aveCapReading = aveCapReading + baseLineReadings[i];
-  }
-  Serial.print("TotalCapReading");
-  Serial.println(aveCapReading);
-  aveCapReading = aveCapReading / baselinelenght;
-  Serial.print("aveCapReading");
-  Serial.println(aveCapReading);
+  // aveCapReading = 0;
+  // for (unsigned int i = 0; i < baselinelenght; i++) {
+  //   baseLineReadings[i] = touchRead(capPin);
+  //   //Serial.println(baseLineReadings[i]);
+  //   aveCapReading = aveCapReading + baseLineReadings[i];
+  // }
+  // Serial.print("TotalCapReading");
+  // Serial.println(aveCapReading);
+  // aveCapReading = aveCapReading / baselinelenght;
+  // Serial.print("aveCapReading");
+  // Serial.println(aveCapReading);
 
-  touchTime = aveCapReading + 100;
-  Serial.print("Base line: ");
-  Serial.println(touchTime);
-
+  // touchTime = aveCapReading + 100;
+  // Serial.print("Base line: ");
+  // Serial.println(touchTime);
+  pinMode(capPin, INPUT_PULLUP);
   isTouch = false;
   loopTime = 0;
   capSensor = TapPressButton(1, 499, 500, 500);
@@ -204,8 +199,7 @@ void setup()
 
 void loop()
 { 
-  readSensor();
-  isTouch = aveCapReading > touchTime;
+  isTouch = digitalRead(capPin);
   loopTime = millis();
     //Serial.println(touchRead(capPin));     // use for callibration
   capSensor.update(isTouch, loopTime);
@@ -854,17 +848,18 @@ void press()
   }
 
   if  (pushAndHold == 4) { 
-    readSensor();
+    //readSensor();
     turnoffLEDs();
     FastLED.show();
-    while(aveCapReading > touchTime){     // while held
+    while(digitalRead(capPin) == false){     // while held
       ledCimber = ledCimber + 1;
       if (ledCimber > 107){        
         ledCimber = 108;
         Serial.println("ledClimber activate");
         assignValue();
-        while(aveCapReading > touchTime){   // wait untill not held anymore
-          readSensor();
+        while(digitalRead(capPin) == false){   // wait untill not held anymore
+          //isTouch = digitalRead(capPin);
+          //readSensor();
           //delay(1000);
           //isTouch = false;
           //break; 
@@ -874,7 +869,7 @@ void press()
       //Serial.print("ledCimber = ");
       //Serial.println(ledCimber);
       indicators(ledCimber);
-      readSensor();
+      //readSensor();
       delay(3);
     }
     ledCimber = 8;
@@ -1107,31 +1102,4 @@ void runMode()
       //readSensor();
     }
   }    //end settings modes here
-}
-
-void readSensor()
-{
-  capReading = touchRead(capPin);
-
-  if (capReading > touchTime){
-    capReading = 10000;
-  }
-  if (capReading < touchTime){
-    capReading = touchTime;
-  }
-
-  buffer.push(capReading);
-  aveCapReading = 0;
-  
-	for (unsigned int i = 0; i < buffer.size(); i++) {
-		aveCapReading += buffer[i] / buffer.size();
-	}
-  if (aveCapReading > touchTime){
-    flag = 0;
-    Serial.print(".");
-  }
-  if (aveCapReading <= touchTime && flag == 0){
-    flag = 1;
-    Serial.print("|");
-  }
 }

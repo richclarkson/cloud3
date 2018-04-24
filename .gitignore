@@ -79,3 +79,5 @@ eagle.epf
 /old_src/saber_main.ino
 .vscode/browse.vc.db
 .vscode/launch.json
+.vscode/*.db
+.vscode/.browse.c_cpp.db*

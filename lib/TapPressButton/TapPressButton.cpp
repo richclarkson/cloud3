@@ -8,8 +8,8 @@ TapPressButton::TapPressButton() {
   tapTimer = 0;
   pressTimer = 0;
   prevTimerVal = 0;
-  currentButtonState = false;
-  prevButtonState = false;
+  currentButtonState = true;
+  prevButtonState = true;
   pressType = 0;
 }
 
@@ -22,8 +22,8 @@ TapPressButton::TapPressButton(int tap_threshold, int tap_length,
   tapTimer = 0;
   pressTimer = 0;
   prevTimerVal = 0;
-  currentButtonState = false;
-  prevButtonState = false;
+  currentButtonState = true;
+  prevButtonState = true;
   pressType = 0;
 }
 
@@ -31,7 +31,7 @@ void TapPressButton::update(bool input, unsigned long timerVal) {
   setStates(input);
   setTimers(timerVal);
   setPressType();
-  if (stateHasChanged() || currentButtonState == false) {
+  if (stateHasChanged() || currentButtonState == true) {
     pressTimer = 0;
     tapTimer = 0;
   }
@@ -57,12 +57,12 @@ void TapPressButton::setStates(bool buttonInput) {
 }
 
 bool TapPressButton::pressTypeIsTap() {
-  return stateHasChanged() && currentButtonState == false &&
+  return stateHasChanged() && currentButtonState == true &&
          isPressInTapWindow();
 }
 
 bool TapPressButton::pressTypeIsPress() {
-  return currentButtonState == true && isPressInPressWindow();
+  return currentButtonState == false && isPressInPressWindow();
 }
 
 void TapPressButton::setPressType() {
