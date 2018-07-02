@@ -20,8 +20,13 @@
     TODO:
     Fix sometimes freezeing in lamp mode to off mode?
 
-*/
+    Layout:
+    LED DATA_PIN 2 //MOSI  // Green
+    LED CLK_PIN 3  //SCK  // Blue
+    Button: pin 19
 
+*/
+//#define FASTLED_FORCE_SOFTWARE_SPI 1
 #include <Arduino.h>
 #include <FastLED.h>
 #include <Audio.h>   
@@ -162,6 +167,7 @@ void runMode();
 void setup()
 { 
   AudioMemory(12);
+  //FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER, DATA_RATE_MHZ(2)>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   FastLED.setBrightness(90);
   turnoffLEDs();
@@ -392,6 +398,9 @@ void turnoffLEDs()
 
 void lampMode1()  // Neon
 {
+  if (lampMode2Count == 0){
+    lampMode2Count = 1;
+  }
   rainbow(0, NUM_LEDS, 0.1);
   //rainbow(0, NUM_LEDS, 0.1);
   FastLED.show();
@@ -399,11 +408,13 @@ void lampMode1()  // Neon
 
 void lampMode2()  // White
 {
-  for (int led = 0; led < NUM_LEDS; led++) {
-        leds[led] = CHSV( 100, 0, 200);
+  if (lampMode2Count == 1){
+   for (int led = 0; led < NUM_LEDS; led++) {
+        leds[led] = CHSV( 100, 0, 255);
       }
       FastLED.show();
       lampMode2Count = 0;
+  }
 }
 
 void lampMode3()  // Ombre
