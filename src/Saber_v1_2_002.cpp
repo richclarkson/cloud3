@@ -95,8 +95,8 @@ int COOLING = 90;         // Fire Mode varriable
 int capture[100];
 
 //LED Variables
-#define DATA_PIN 2 //MOSI  //7 Green
-#define CLK_PIN 3  //SCK  //14 Blue
+#define DATA_PIN 3 //MOSI  //7 Green
+#define CLK_PIN 4  //SCK  //14 Blue
 #define LED_TYPE APA102
 #define COLOR_ORDER BGR
 #define NUM_LEDS 115 //115 for normal Saber, 48 for half saber
