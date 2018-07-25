@@ -187,9 +187,9 @@ int capture[100];
 //LED Variables
 #define DATA_PIN 2 //MOSI  //7 Green
 #define CLK_PIN 3  //SCK  //14 Blue
-#define LED_TYPE APA102
-#define COLOR_ORDER BGR
-#define NUM_LEDS 115 //115 for normal Saber, 48 for half saber
+#define LED_TYPE WS2801//APA102
+#define COLOR_ORDER RGB
+#define NUM_LEDS 25 //115 for normal Saber, 48 for half saber
 CRGB leds[NUM_LEDS];
 //#define FRAMES_PER_SECOND 120
 
@@ -257,20 +257,26 @@ void runMode();
 void setup()
 { 
   AudioMemory(12);
-  //FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
-  FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER, DATA_RATE_MHZ(2)>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
-  FastLED.setBrightness(90);
+  FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+  //FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER, DATA_RATE_MHZ(2)>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+  FastLED.setBrightness(255);
   turnoffLEDs();
   FastLED.show();
   Serial.begin(9600);
   irrecv.enableIRIn(); // Start the receiver
-  delay(1000);  // Sanity Delay
+  delay(3000);  // Sanity Delay
   // while (!Serial) {
   //   ; // wait for serial port to connect. Needed for native USB
   // }
   Serial.println("Saber v1.2");
   //EEPROM.update(0, 1);       // uncomment to load default EPROM values
-  eepromSet();
+  //eepromSet();
+
+    buttonPushCounter = 0;                  //
+    prevButtonPushCounter = buttonPushCounter;
+    channel = 8;                            //
+    Bvariable = 8;                          //
+    sensitivity = 3;                        //
 
   // aveCapReading = 0;
   // for (unsigned int i = 0; i < baselinelenght; i++) {
@@ -511,7 +517,7 @@ void lampMode2()  // White
 
 void lampMode3()  // Ombre
 {
-  rainbow(0, NUM_LEDS, 1);
+  rainbow(0, NUM_LEDS, 5);
   //rainbow(0, NUM_LEDS, 1);
   FastLED.show();
 }
@@ -800,12 +806,12 @@ void eepromSet()
     buttonPushCounter = 0;                  //
     prevButtonPushCounter = buttonPushCounter;
     channel = 8;                            //
-    Bvariable = 3;                          //
+    Bvariable = 8;                          //
     sensitivity = 3;                        //
 
 
     normal = 1;
-    FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20); // set master brightness control
+    //FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20); // set master brightness control
 
     EEPROM.update(0, newEpprom);
     EEPROM.update(1, buttonPushCounter);
@@ -853,7 +859,7 @@ void eepromSet()
       channel = 8;
     }
     normal = 1;
-    FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20); // set master brightness control
+    //FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20); // set master brightness control
   }
 }
 
