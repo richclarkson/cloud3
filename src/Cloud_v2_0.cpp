@@ -268,7 +268,7 @@ void setup()
   // while (!Serial) {
   //   ; // wait for serial port to connect. Needed for native USB
   // }
-  Serial.println("Saber v1.2");
+  Serial.println("Cloud v2.0");
   //EEPROM.update(0, 1);       // uncomment to load default EPROM values
   //eepromSet();
 
@@ -276,7 +276,7 @@ void setup()
     prevButtonPushCounter = buttonPushCounter;
     channel = 8;                            //
     Bvariable = 8;                          //
-    sensitivity = 3;                        //
+    sensitivity = 1;                        //
 
   // aveCapReading = 0;
   // for (unsigned int i = 0; i < baselinelenght; i++) {
@@ -453,15 +453,15 @@ void musicmode3()    // Ripple
 
 void musicmode4()   // Fade
 { 
-  if (soundLevel > dot){    dot = soundLevel;  } // Keep dot on top of soundLevel
-  if (dot > NUM_LEDS){    dot = NUM_LEDS-1;  }// Keep dot from going out of frame
+  if (soundLevel * 5 > dot){    dot = soundLevel * 5;  } // Keep dot on top of soundLevel
+  if (dot > 255){    dot = 255;  }// Keep dot from going out of frame
 
   for (int led = 0; led < NUM_LEDS; led++)
   {
-    leds[led] = CHSV( 100, 0, dot);
+    leds[led] = CHSV( 200, 0, dot);
   }
   FastLED.show();
-  if (++dotCount >= 10) {                   // make the dot fall slowly
+  if (++dotCount >= 5) {                   // make the dot fall slowly
     dotCount = 0;
     if (dot > 20) {
       dot--;
