@@ -49,7 +49,7 @@ int lampMode2Count = 1;
 //IR Varriables
 #define NUM_BUTTONS 9 // The remote has 9 buttons
 
-int RECV_PIN = 4;       //
+int RECV_PIN = 15;       //
 
 // Prototype Functions:
 void remote();
@@ -185,9 +185,9 @@ int COOLING = 90;         // Fire Mode varriable
 int capture[100];
 
 //LED Variables
-#define DATA_PIN 2 //MOSI  //7 Green
+#define DATA_PIN 4 //MOSI  //7 Green
 #define CLK_PIN 3  //SCK  //14 Blue
-#define LED_TYPE WS2801//APA102
+#define LED_TYPE WS2801 //APA102
 #define COLOR_ORDER RGB
 #define NUM_LEDS 25 //115 for normal Saber, 48 for half saber
 CRGB leds[NUM_LEDS];
@@ -256,6 +256,7 @@ void runMode();
 
 void setup()
 { 
+  irrecv.enableIRIn(); // Start the receiver
   AudioMemory(12);
   FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   //FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER, DATA_RATE_MHZ(2)>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
@@ -263,7 +264,6 @@ void setup()
   turnoffLEDs();
   FastLED.show();
   Serial.begin(9600);
-  irrecv.enableIRIn(); // Start the receiver
   delay(3000);  // Sanity Delay
   // while (!Serial) {
   //   ; // wait for serial port to connect. Needed for native USB
@@ -298,6 +298,7 @@ void setup()
   loopTime = 0;
   capSensor = TapPressButton(1, 499, 500, 500);
 }
+
 
 
 void loop()
