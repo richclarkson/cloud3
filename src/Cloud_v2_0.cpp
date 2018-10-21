@@ -219,6 +219,7 @@ int numberLoops = 50;
 int capReading;
 int aveCapReading;
 bool flag = 0;
+int flashCount = 1;
 
 
 // Prototype Functions:
@@ -265,6 +266,14 @@ void setup()
   FastLED.show();
   Serial.begin(9600);
   delay(3000);  // Sanity Delay
+  for (int led = 0; led < NUM_LEDS; led++) {
+    leds[led] = CHSV( 100, 0, 255);
+  }
+  FastLED.show();
+  delay(250);
+  turnoffLEDs();
+  FastLED.show();
+
   // while (!Serial) {
   //   ; // wait for serial port to connect. Needed for native USB
   // }
@@ -297,6 +306,7 @@ void setup()
   isTouch = false;
   loopTime = 0;
   capSensor = TapPressButton(1, 499, 500, 500);
+  remoteState = BUTTON_B_HELD;
 }
 
 
@@ -308,18 +318,24 @@ void loop()
   //loopTime = millis();
 
   if      (remoteState == BUTTON_POWER){
-    //donothing();
+     if (flashCount == 1){
+     for (int led = 0; led < NUM_LEDS; led++) {
+        leds[led] = CHSV( 100, 0, 255);
+      }
+      FastLED.show();
+      delay(200);
+      turnoffLEDs();
+      FastLED.show();
+      flashCount = 0;
+  }
     delay(3);
   }
   else if (remoteState == BUTTON_POWER_HELD){
     //reset();
   }
   else if (remoteState == BUTTON_A){
-    Serial.println("Fetching Data");
     fetchSoundData();
-    Serial.println("Data Fetched");
     musicmode2();
-    Serial.println("Middle Out"); 
   }
   else if (remoteState == BUTTON_A_HELD){
     fetchSoundData();
@@ -442,19 +458,19 @@ void musicmode3()    // Ripple
 { 
   fadeToBlackBy( leds, NUM_LEDS, 1);
   //turnoffLEDs();
-  for (int y = 1; y < 9; y++) // create 8 different LED sections of saber each based on the 8 FFT channels
+  for (int y = 0; y < 8; y++) // create 8 different LED sections of saber each based on the 8 FFT channels
   {
-    int bottomOfRipple = ((NUM_LEDS / 10) * y) - (fftArray[y-1] / (NUM_LEDS*0.05));
+    int bottomOfRipple = ((NUM_LEDS / 8) * y);
     if (bottomOfRipple <= 0)
     {
       bottomOfRipple = 0;
     }
-    int topOfRipple = ((NUM_LEDS / 10) * y) + (fftArray[y-1] / (NUM_LEDS*0.05));
-    if (topOfRipple >= NUM_LEDS - 1)
+    int topOfRipple = ((NUM_LEDS / 8) * y) + (NUM_LEDS/8);
+    if (topOfRipple >= NUM_LEDS)
     {
-      topOfRipple = NUM_LEDS - 1;
+      topOfRipple = NUM_LEDS;
     }
-    int rippleBrightness = constrain(fftArray[y-1] * 3, 0, 254);
+    int rippleBrightness = constrain(fftArray[y] * 20, 0, 254);
     for (int led = bottomOfRipple; led < topOfRipple; led++)
     {
       leds[led] = CHSV(0, 0, rippleBrightness); // fill in LEDs according to the top and bottom of each section deffined above
@@ -468,36 +484,6 @@ void musicmode3()    // Ripple
   }
   FastLED.show();
 }
-
-// void musicmode3()    // Ripple
-// { 
-//   fadeToBlackBy( leds, NUM_LEDS, 1);
-//   //turnoffLEDs();
-//   for (int y = 0; y < 8; y++) // create 8 different LED sections of saber each based on the 8 FFT channels
-//   {
-//     int bottomOfRipple = ((y * 15) + 6) - (fftArray[y] / 10);
-//     if (bottomOfRipple <= 0)
-//     {
-//       bottomOfRipple = 0;
-//     }
-//     int topOfRipple = ((y * 15) + 6) + (fftArray[y] / 10);
-//     if (topOfRipple >= NUM_LEDS - 1)
-//     {
-//       topOfRipple = NUM_LEDS - 1;
-//     }
-//     int rippleBrightness = constrain(fftArray[y] * 3, 0, 254);
-//     for (int led = bottomOfRipple; led < topOfRipple; led++)
-//     {
-//       leds[led] = CHSV(0, 0, rippleBrightness); // fill in LEDs according to the top and bottom of each section deffined above
-//     }
-//     blur1d(leds, NUM_LEDS, fftArray[y]);  // blur LEDs for smoother transitions
-//     // readSensor();
-//     // if (aveCapReading > touchTime){      //EXIT TEST
-//     //   break;                             
-//     // }
-//   }
-//   FastLED.show();
-// }
 
 void musicmode4()   // Fade
 { 
@@ -1046,7 +1032,7 @@ void prepareModes()
       ledCimber = 8;
       indcatorDots = 3;
       Serial.println("Falling Dot");
-      previewController(numberLoops/2);
+      //previewController(numberLoops/2);
       previewCounter = 14;
     }
 
@@ -1143,6 +1129,7 @@ void prepareModes()
       pushAndHold = 4;
       ledCimber = 8;
       indcatorDots = 3;
+      flashCount = 1;
       Serial.println("Off");
       turnoffLEDs();
       FastLED.show();
@@ -1455,9 +1442,9 @@ void remote()
             remoteState = BUTTON_CIRCLE;
           }
         }
-        Serial.println("Preparing");
+        //Serial.println("Preparing");
         prepareModes();               // load in startup values for each mode and run preview
-        Serial.println("Prepaired");
+        //Serial.println("Prepaired");
         buttonHeld = 0;
 
       }
