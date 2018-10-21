@@ -1273,124 +1273,28 @@ void remote()
 
 
         if (currentButton == 'L') {
-          if (locked == 0) {
-            upDownLeftRightRemoteHeld();
-            remoteState = BUTTON_LEFT;
-            colourVariable = 20;
-          }
+          upDownLeftRightRemoteHeld();
+          remoteState = BUTTON_LEFT;
+          colourVariable = 20;
         }
         else if (currentButton == 'R') {
-          if (locked == 0) {
-            upDownLeftRightRemoteHeld();
-            remoteState = BUTTON_RIGHT;
-            colourVariable = 20;
-          }
+          upDownLeftRightRemoteHeld();
+          remoteState = BUTTON_RIGHT;
+          colourVariable = 20;
         }
         else if (currentButton == 'U') {
-          if (locked == 0) {
-            upDownLeftRightRemoteHeld();
-            remoteState = BUTTON_UP;
-          }
+          upDownLeftRightRemoteHeld();
+          remoteState = BUTTON_UP;
         }
         else if (currentButton == 'D') {
-          if (locked == 0) {
-            upDownLeftRightRemoteHeld();
-            remoteState = BUTTON_DOWN;
-          }
+          upDownLeftRightRemoteHeld();
+          remoteState = BUTTON_DOWN;
         }
 
-        if (buttonHeld == 10) {
-
-          if ((remoteState != BUTTON_LEFT) && (remoteState != BUTTON_RIGHT)) {
-          }
-        }
-
-      }
-      else {
-        for (int i = 0; i < 9; i++) 
-        {              //compare against each of the button codes
-          if (resultCode == BUTTON_ARRAY[i]) {
-
-            // ACTUAL BUTTON
-
-            if (resultCode == BUTTON_POWER) {
-              currentButton = 'P';
-            }
-            else if (resultCode == BUTTON_A) {
-              currentButton = 'A';
-            }
-            else if (resultCode == BUTTON_B) {
-              currentButton = 'B';
-            }
-            else if (resultCode == BUTTON_C) {
-              currentButton = 'C';
-            }
-            else if (resultCode == BUTTON_UP) {
-              currentButton = 'U';
-              if (locked == 0) {
-                upDownLeftRightRemote();
-                remoteState = BUTTON_UP;
-              }
-            }
-            else if (resultCode == BUTTON_DOWN) {
-              currentButton = 'D';
-              if (locked == 0) {
-                upDownLeftRightRemote();
-                remoteState = BUTTON_DOWN;
-              }
-            }
-            else if (resultCode == BUTTON_LEFT) {
-              currentButton = 'L';
-              if (locked == 0) {
-                upDownLeftRightRemote();
-                remoteState = BUTTON_LEFT;
-                colourVariable = 4;
-              }
-            }
-            else if (resultCode == BUTTON_RIGHT) {
-              currentButton = 'R';
-              if (locked == 0) {
-                upDownLeftRightRemote();
-                remoteState = BUTTON_RIGHT;
-                colourVariable = 4;
-              }
-            }
-            else if (resultCode == BUTTON_CIRCLE) {
-              currentButton = 'O';
-            }
-
-            newButtonPress = 1;
-
-          }
-          else {
-
-            // NOT A REAL BUTTON
-            //       #if defined(DEVMODE)
-            //       if (newButtonPress == 0){
-            //         Serial.print("NOT A REAL BUTTON    ");
-            //         Serial.println(currentButton);
-            //         }
-            //       #endif
-          }
-
-        }
-        buttonHeld = 0;
-      }
-      irrecv.resume(); // Receive the next value
-
-    }
-    else {
-
-      // THIS IS WHERE BUTTONS ARE SET GIVEN A NEW BUTTON PRESS
-
-      if (newButtonPress == 1) {
-        newButtonPress = 0;
-
-        if (buttonHeld > 9) { // number of seconds/ 4-1       // Button Holds
-          // Current Button Held
-
-          Serial.print("buttonHeld :    ");
-          Serial.println(currentButton);
+        else {
+          if (buttonHeld >= 4) {                                   // Button Holds
+             Serial.print("buttonHeld :    ");
+             Serial.println(currentButton);
 
             if (currentButton == 'O') {
               remoteState = BUTTON_CIRCLE_HELD;
@@ -1413,7 +1317,86 @@ void remote()
             else if (currentButton == 'C') {
               previousRemoteState = remoteState;
               remoteState = BUTTON_C_HELD;
+            }
           }
+        }
+      }
+      else {
+        for (int i = 0; i < 9; i++) 
+        {              //compare against each of the button codes
+          if (resultCode == BUTTON_ARRAY[i]) {
+
+            // ACTUAL BUTTON
+
+            if (resultCode == BUTTON_POWER) {
+              currentButton = 'P';
+            }
+            else if (resultCode == BUTTON_A) {
+              currentButton = 'A';
+            }
+            else if (resultCode == BUTTON_B) {
+              currentButton = 'B';
+            }
+            else if (resultCode == BUTTON_C) {
+              currentButton = 'C';
+            }
+            else if (resultCode == BUTTON_UP) {
+              currentButton = 'U';
+                upDownLeftRightRemote();
+                remoteState = BUTTON_UP;
+              }
+            else if (resultCode == BUTTON_DOWN) {
+              currentButton = 'D';
+                upDownLeftRightRemote();
+                remoteState = BUTTON_DOWN;
+              }
+            else if (resultCode == BUTTON_LEFT) {
+              currentButton = 'L';
+                upDownLeftRightRemote();
+                remoteState = BUTTON_LEFT;
+                colourVariable = 4;
+              }
+            else if (resultCode == BUTTON_RIGHT) {
+              currentButton = 'R';
+                upDownLeftRightRemote();
+                remoteState = BUTTON_RIGHT;
+                colourVariable = 4;
+              }
+            else if (resultCode == BUTTON_CIRCLE) {
+              currentButton = 'O';
+            }
+
+            newButtonPress = 1;
+            Serial.println("Comparing Button Code");
+
+          }
+          else {
+
+            // NOT A REAL BUTTON
+            //       #if defined(DEVMODE)
+            //       if (newButtonPress == 0){
+            //         Serial.print("NOT A REAL BUTTON    ");
+            //         Serial.println(currentButton);
+            //         }
+            //       #endif
+          }
+
+        }
+        buttonHeld = 0;
+      }
+        irrecv.resume(); // Receive the next value
+    }
+    else {
+
+      // THIS IS WHERE BUTTONS ARE SET GIVEN A NEW BUTTON PRESS
+
+      if (newButtonPress == 1) {
+        newButtonPress = 0;
+
+        if (buttonHeld > 4) { // number of seconds/ 4-1       // Button Holds
+          // Current Button Held
+
+          
         }
 
 
