@@ -304,22 +304,26 @@ void setup()
 void loop()
 { 
   remote();
-  isTouch = digitalRead(capPin);
-  loopTime = millis();
+  //isTouch = digitalRead(capPin);
+  //loopTime = millis();
 
   if      (remoteState == BUTTON_POWER){
-    //reset();
+    //donothing();
+    delay(3);
   }
   else if (remoteState == BUTTON_POWER_HELD){
-    //donothing();
+    //reset();
   }
   else if (remoteState == BUTTON_A){
+    Serial.println("Fetching Data");
     fetchSoundData();
-    musicmode1();
+    Serial.println("Data Fetched");
+    musicmode2();
+    Serial.println("Middle Out"); 
   }
   else if (remoteState == BUTTON_A_HELD){
     fetchSoundData();
-    //Lightening();
+    musicmode1();
   }
   else if (remoteState == BUTTON_B){
     fetchSoundData();
@@ -431,31 +435,32 @@ void musicmode2()   // Middle Out
     leds[NUM_LEDS / 2].setRGB(80, 80, 80); // keep center dot illuminated
   }
   FastLED.show(); // send data to LEDs to display
-  //delay(1);
+  delay(10);
 }
 
 void musicmode3()    // Ripple
 { 
   fadeToBlackBy( leds, NUM_LEDS, 1);
   //turnoffLEDs();
-  for (int y = 0; y < 8; y++) // create 8 different LED sections of saber each based on the 8 FFT channels
+  for (int y = 1; y < 9; y++) // create 8 different LED sections of saber each based on the 8 FFT channels
   {
-    int bottomOfRipple = ((y * 15) + 6) - (fftArray[y] / 10);
+    int bottomOfRipple = ((NUM_LEDS / 10) * y) - (fftArray[y-1] / (NUM_LEDS*0.05));
     if (bottomOfRipple <= 0)
     {
       bottomOfRipple = 0;
     }
-    int topOfRipple = ((y * 15) + 6) + (fftArray[y] / 10);
+    int topOfRipple = ((NUM_LEDS / 10) * y) + (fftArray[y-1] / (NUM_LEDS*0.05));
     if (topOfRipple >= NUM_LEDS - 1)
     {
       topOfRipple = NUM_LEDS - 1;
     }
-    int rippleBrightness = constrain(fftArray[y] * 3, 0, 254);
+    int rippleBrightness = constrain(fftArray[y-1] * 3, 0, 254);
     for (int led = bottomOfRipple; led < topOfRipple; led++)
     {
       leds[led] = CHSV(0, 0, rippleBrightness); // fill in LEDs according to the top and bottom of each section deffined above
     }
-    blur1d(leds, NUM_LEDS, fftArray[y]);  // blur LEDs for smoother transitions
+    //blur1d(leds, NUM_LEDS, fftArray[y]);  // blur LEDs for smoother transitions
+    
     // readSensor();
     // if (aveCapReading > touchTime){      //EXIT TEST
     //   break;                             
@@ -463,6 +468,36 @@ void musicmode3()    // Ripple
   }
   FastLED.show();
 }
+
+// void musicmode3()    // Ripple
+// { 
+//   fadeToBlackBy( leds, NUM_LEDS, 1);
+//   //turnoffLEDs();
+//   for (int y = 0; y < 8; y++) // create 8 different LED sections of saber each based on the 8 FFT channels
+//   {
+//     int bottomOfRipple = ((y * 15) + 6) - (fftArray[y] / 10);
+//     if (bottomOfRipple <= 0)
+//     {
+//       bottomOfRipple = 0;
+//     }
+//     int topOfRipple = ((y * 15) + 6) + (fftArray[y] / 10);
+//     if (topOfRipple >= NUM_LEDS - 1)
+//     {
+//       topOfRipple = NUM_LEDS - 1;
+//     }
+//     int rippleBrightness = constrain(fftArray[y] * 3, 0, 254);
+//     for (int led = bottomOfRipple; led < topOfRipple; led++)
+//     {
+//       leds[led] = CHSV(0, 0, rippleBrightness); // fill in LEDs according to the top and bottom of each section deffined above
+//     }
+//     blur1d(leds, NUM_LEDS, fftArray[y]);  // blur LEDs for smoother transitions
+//     // readSensor();
+//     // if (aveCapReading > touchTime){      //EXIT TEST
+//     //   break;                             
+//     // }
+//   }
+//   FastLED.show();
+// }
 
 void musicmode4()   // Fade
 { 
@@ -1023,7 +1058,7 @@ void prepareModes()
       ledCimber = 8;
       indcatorDots = 3;
       Serial.println("Middle Out");
-      previewController(numberLoops);
+      //previewController(numberLoops);
       previewCounter = 0;
     }
 
@@ -1066,6 +1101,7 @@ void prepareModes()
       buttonPushCounter = 105;
       buttonPushCounterDemo = 105;
       Serial.println("White");
+      lampMode2Count = 1;
       pushAndHold = 4;
       ledCimber = 8;
       indcatorDots = 3;
@@ -1371,21 +1407,25 @@ void remote()
 
             if (currentButton == 'O') {
               remoteState = BUTTON_CIRCLE_HELD;
+              buttonPushCounter = 13;
             }
             else if (currentButton == 'A') {
               previousRemoteState = remoteState;
               remoteState = BUTTON_A_HELD;
+              buttonPushCounter = 0;
             }
             else if (currentButton == 'B') {
               previousRemoteState = remoteState;
               remoteState = BUTTON_B_HELD;
+              buttonPushCounter = 2;
             }
             else if (currentButton == 'P') {
-            remoteState = BUTTON_POWER_HELD;
+              remoteState = BUTTON_POWER_HELD;
+              buttonPushCounter = 7;
             }
             else if (currentButton == 'C') {
-            previousRemoteState = remoteState;
-            remoteState = BUTTON_C_HELD;
+              previousRemoteState = remoteState;
+              remoteState = BUTTON_C_HELD;
           }
         }
 
@@ -1396,22 +1436,28 @@ void remote()
 
             if (currentButton == 'P') {
               remoteState = BUTTON_POWER;
+              buttonPushCounter = 9;
             }
             else if (currentButton == 'A') {
               remoteState = BUTTON_A;
+              buttonPushCounter = 1;
             }
             else if (currentButton == 'B') {
               remoteState = BUTTON_B;
+              buttonPushCounter = 3;
             }
             else if (currentButton == 'C') {
               remoteState = BUTTON_C;
+              buttonPushCounter = 5;
             }
             else if (currentButton == 'O') {
             previousRemoteState = remoteState;
             remoteState = BUTTON_CIRCLE;
           }
         }
-
+        Serial.println("Preparing");
+        prepareModes();               // load in startup values for each mode and run preview
+        Serial.println("Prepaired");
         buttonHeld = 0;
 
       }
