@@ -306,31 +306,43 @@ void loop()
   remote();
   isTouch = digitalRead(capPin);
   loopTime = millis();
-    //Serial.println(touchRead(capPin));     // use for callibration
-  capSensor.update(isTouch, loopTime);
-  if (capSensor.isTap()) {
-    Serial.println("tap");
-    tap();
-    //buttonPushCounter = 104;
-    delay(50);
+
+  if      (remoteState == BUTTON_POWER){
+    //reset();
   }
-  if (capSensor.isPress()) {
-    Serial.println("press");
-    press();
+  else if (remoteState == BUTTON_POWER_HELD){
+    //donothing();
   }
-  if (buttonPushCounter < 90){
-    prepareModes();               // load in startup values for each mode
+  else if (remoteState == BUTTON_A){
+    fetchSoundData();
+    musicmode1();
   }
-  runMode();                      // run the loop using selected mode
-  
+  else if (remoteState == BUTTON_A_HELD){
+    fetchSoundData();
+    //Lightening();
+  }
+  else if (remoteState == BUTTON_B){
+    fetchSoundData();
+    musicmode4();
+  }
+  else if (remoteState == BUTTON_B_HELD){
+    analyzeFFTall(); 
+    musicmode3();
+  }
+  else if (remoteState == BUTTON_C){
+    lampMode2();
+  }
+  else if (remoteState == BUTTON_C_HELD){
+    lampMode3();
+  }
+}
+
+
+  // prepareModes();               // load in startup values for each mode
+  // runMode();                      // run the loop using selected mode
   // soundLevel = map(aveCapReading,0,3000,0,115);   // visual debugging backup
   // soundLevel = constrain(soundLevel,0,115);       // visual debugging backup
   // musicmode1();                                   // visual debugging backup
-}   
-
-
-
-
 
 
 //*******************************       Music Modes    ******************************************//
@@ -1224,8 +1236,7 @@ void remote()
   if (millis() - checking > 250)
   {
 
-
-    if (irrecv.decode(&results))
+    if (irrecv.decode(&results))     //check remote
     {
 
       resultCode = (results.value & 0xFFFF);
@@ -1234,7 +1245,7 @@ void remote()
       Serial.println(resultCode);
 
 
-      if (resultCode == 0xFFFF) {
+      if (resultCode == 0xFFFF) {     //button held check
         buttonHeld++;
 
 
@@ -1268,17 +1279,13 @@ void remote()
         if (buttonHeld == 10) {
 
           if ((remoteState != BUTTON_LEFT) && (remoteState != BUTTON_RIGHT)) {
-            //flashon (N_PIXELS, 0, 100, 100, 100);
-            //runningFlashOFF(N_PIXELS, 0, 100, 100, 100);
-            //flashon (N_PIXELS, 0, 100, 100, 100);
-            //runningFlashOFF(N_PIXELS, 0, 100, 100, 100);
           }
         }
 
       }
       else {
-
-        for (int i = 0; i < 9; i++) {              //compare against each of the button codes
+        for (int i = 0; i < 9; i++) 
+        {              //compare against each of the button codes
           if (resultCode == BUTTON_ARRAY[i]) {
 
             // ACTUAL BUTTON
@@ -1344,11 +1351,8 @@ void remote()
           }
 
         }
-
         buttonHeld = 0;
-
       }
-
       irrecv.resume(); // Receive the next value
 
     }
@@ -1356,18 +1360,14 @@ void remote()
 
       // THIS IS WHERE BUTTONS ARE SET GIVEN A NEW BUTTON PRESS
 
-
       if (newButtonPress == 1) {
         newButtonPress = 0;
-
 
         if (buttonHeld > 9) { // number of seconds/ 4-1       // Button Holds
           // Current Button Held
 
           Serial.print("buttonHeld :    ");
           Serial.println(currentButton);
-
-          if (locked == 0) { //IF NOT LOCKED
 
             if (currentButton == 'O') {
               remoteState = BUTTON_CIRCLE_HELD;
@@ -1380,35 +1380,22 @@ void remote()
               previousRemoteState = remoteState;
               remoteState = BUTTON_B_HELD;
             }
-          }
-
-          if (currentButton == 'P') {
+            else if (currentButton == 'P') {
             remoteState = BUTTON_POWER_HELD;
-          }
-
-          else if (currentButton == 'C') {
+            }
+            else if (currentButton == 'C') {
             previousRemoteState = remoteState;
             remoteState = BUTTON_C_HELD;
           }
-
-
         }
 
 
         else {                                         // Button Single Presses
-
-
-          if (locked == 0) { // IF NOT LOCKED
-
             // Current Button
             Serial.println(currentButton);
 
-
-
-
             if (currentButton == 'P') {
               remoteState = BUTTON_POWER;
-              tap();
             }
             else if (currentButton == 'A') {
               remoteState = BUTTON_A;
@@ -1419,10 +1406,7 @@ void remote()
             else if (currentButton == 'C') {
               remoteState = BUTTON_C;
             }
-          }
-
-
-          if (currentButton == 'O') {
+            else if (currentButton == 'O') {
             previousRemoteState = remoteState;
             remoteState = BUTTON_CIRCLE;
           }
@@ -1433,10 +1417,8 @@ void remote()
       }
       //EEPROM.write(0, remoteState);             //fix this later
     }
-
     checking = millis();
   }
-
 }
 
 
