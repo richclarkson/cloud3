@@ -104,7 +104,6 @@ uint16_t BUTTON_ARRAY[9] = {BUTTON_POWER, BUTTON_A, BUTTON_B, BUTTON_C, BUTTON_U
 //*******************************       IR CONSTANTS    ******************************************//
 
 int colourVariable = 20;
-int locked;
 int variableState = 0;
 unsigned long previousMillisSensor = 0;
 unsigned long variableMillis = millis();
@@ -1367,7 +1366,7 @@ void remote()
             }
 
             newButtonPress = 1;
-            Serial.println("Comparing Button Code");
+            //Serial.println("Comparing Button Code");
 
           }
           else {
