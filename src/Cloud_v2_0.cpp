@@ -196,6 +196,9 @@ int minLEDvalue[NUM_LEDS];
 int goingUp[NUM_LEDS];
 int currentValue[NUM_LEDS];
 
+int currentValueFade = 15;
+int goingUpFade = 1;
+
 //TAP HOLD Varriables 
 //uint8_t buttonState;
 
@@ -262,7 +265,8 @@ void setup()
 { 
   irrecv.enableIRIn(); // Start the receiver
   AudioMemory(12);
-  FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+  FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS);
+  //FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   //FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER, DATA_RATE_MHZ(2)>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   FastLED.setBrightness(255);
   turnoffLEDs();
@@ -551,7 +555,7 @@ void lampMode1()  // Neon
   FastLED.show();
 }
 
-void lampMode2()  // White
+void lampMode2()  // Fairy Light
 {
   if (lampMode2Count == 1){
    for (int led = 0; led < NUM_LEDS; led++) {
@@ -583,19 +587,22 @@ void lampMode3()  // Ombre
   FastLED.show();
 }
 
-void lampMode4()  // Fire
+void lampMode4()  // Breathing Light
 {
-  random16_add_entropy( random());
-  if (++dotCount >= 10) {                   // make the dot fall slowly
-    dotCount = 0;
-    Fire2012();
-    FastLED.show(); // display this frame
-    //FastLED.delay(1000 / 60);
+  EVERY_N_MILLISECONDS(30) {
+    if(goingUpFade == 1){
+      currentValueFade++;
+      if (currentValueFade >= 255) {goingUpFade = 0;}
+    }
+    else{
+      currentValueFade--;
+      if (currentValueFade <= 10) {goingUpFade = 1;}
+    }
+    for (int x = 0; x < NUM_LEDS; x++) {
+    leds[x] = CHSV(100, 0, currentValueFade);
   }
-  else {
-    delay(1);
-    //readSensor();
-  }
+  FastLED.show();
+ }
 }
 
 void rainbow(int startPos, int number, float deltaHue) 
@@ -606,35 +613,6 @@ void rainbow(int startPos, int number, float deltaHue)
     } // slowly cycle the "base color" through the rainbow
     fill_rainbow( &(leds[startPos]), number, gHue, deltaHue);
     //FastLED.show();
-}
-  
-void Fire2012()
-{
-  // Array of temperature readings at each simulation cell
-  static byte heat[115];
-
-  // Step 1.  Cool down every cell a little
-    for( int i = 0; i < NUM_LEDS; i++) {
-      heat[i] = qsub8( heat[i],  random8(0, ((COOLING * 10) / NUM_LEDS) + 2));
-    }
-  
-    // Step 2.  Heat from each cell drifts 'up' and diffuses a little
-    for( int k= NUM_LEDS - 1; k >= 2; k--) {
-      heat[k] = (heat[k - 1] + heat[k - 2] + heat[k - 2] ) / 3;
-    }
-    
-    // Step 3.  Randomly ignite new 'sparks' of heat near the bottom
-    if( random8() < SPARKING ) {
-      int y = random8(7);
-      heat[y] = qadd8( heat[y], random8(160,255) );
-    }
-
-    // Step 4.  Map from heat cells to LED colors
-    for( int j = 0; j < NUM_LEDS; j++) {
-      CRGB color = HeatColor( heat[j]);
-      int pixelnumber = j;
-      leds[pixelnumber] = color;
-    }
 }
 
 //*******************************      State Modes    ******************************************//
