@@ -199,6 +199,10 @@ int currentValue[NUM_LEDS];
 int currentValueFade = 15;
 int goingUpFade = 1;
 
+int ledSingle1;
+int ledSingle2;
+int ledSingle3;
+
 //TAP HOLD Varriables 
 //uint8_t buttonState;
 
@@ -614,6 +618,95 @@ void rainbow(int startPos, int number, float deltaHue)
     fill_rainbow( &(leds[startPos]), number, gHue, deltaHue);
     //FastLED.show();
 }
+
+void strom()
+{
+  for (int led = 0; led < int(random(NUM_LEDS)); led++) {
+        leds[led] = CHSV( 100, 0, 255);
+        FastLED.show();
+      }
+
+  for (int led = 0; led < int(random(NUM_LEDS)); led++) {  leds[led] = CHSV( 100, 0, 255);    }
+      FastLED.show();
+      delay(random(10, 40));
+  for (int led = 0; led < int(random(NUM_LEDS)); led++) {  leds[led] = CHSV( 100, 0, 0);      }
+      FastLED.show();
+      delay(random(10, 200));
+  for (int led = 0; led < NUM_LEDS; led++) {          leds[led] = CHSV( 100, 0, 0);      }
+      FastLED.show();
+  
+  for (int led = 0; led < int(random(NUM_LEDS)); led++) {  leds[led] = CHSV( 100, 0, 255);    }
+      FastLED.show();
+      delay(random(10, 50));
+  for (int led = 0; led < int(random(NUM_LEDS)); led++) {  leds[led] = CHSV( 100, 0, 0);      }
+      FastLED.show();
+      delay(random(10, 100));
+
+  for (int led = 0; led < NUM_LEDS; led++) {          leds[led] = CHSV( 100, 0, 0);      }
+      FastLED.show();
+
+  ledSingle1 = random(NUM_LEDS);
+  leds[ledSingle1] = CHSV( 100, 0, 255);
+  FastLED.show();
+  delay(random (10, 100));
+  leds[ledSingle1] = CHSV( 100, 0, 0);
+  FastLED.show();
+  leds[ledSingle1] = CHSV( 100, 0, 255);
+  FastLED.show();
+  delay(random (40, 100));
+  leds[ledSingle1] = CHSV( 100, 0, 0);
+  FastLED.show();
+
+  if (random(1, 3) == 2) {
+    ledSingle1 = random (NUM_LEDS);
+    ledSingle2 = random (50);
+    leds[ledSingle1] = CHSV( 100, 0, 255);
+    if(ledSingle2 < NUM_LEDS){   leds[ledSingle2] = CHSV( 100, 0, 255);  }
+    FastLED.show();
+  }
+  else {
+    ledSingle1 = random (NUM_LEDS);
+    ledSingle2 = ledSingle1 + 1;
+    ledSingle3 = ledSingle2 + 2;
+    leds[ledSingle1] = CHSV( 100, 0, 255);
+    FastLED.show();
+    delay(random (20));
+    if(ledSingle2 < NUM_LEDS){   leds[ledSingle2] = CHSV( 100, 0, 255); }
+    FastLED.show();
+    delay(random (20));
+    if(ledSingle3 < NUM_LEDS){   leds[ledSingle3] = CHSV( 100, 0, 255); }
+    FastLED.show();
+  }
+
+  for (int led = 0; led < NUM_LEDS; led++) {          leds[led] = CHSV( 100, 0, 0);      }
+      FastLED.show();
+
+  if (random(1, 3) == 2) {
+    ledSingle1 = random (NUM_LEDS);
+    ledSingle2 = random (50);
+    leds[ledSingle1] = CHSV( 100, 0, 255);
+    if(ledSingle2 < NUM_LEDS){   leds[ledSingle2] = CHSV( 100, 0, 255);  }
+    FastLED.show();
+  }
+  else {
+    ledSingle1 = random (NUM_LEDS);
+    ledSingle2 = ledSingle1 + 1;
+    ledSingle3 = ledSingle2 + 2;
+    leds[ledSingle1] = CHSV( 100, 0, 255);
+    FastLED.show();
+    delay(random (20));
+    if(ledSingle2 < NUM_LEDS){   leds[ledSingle2] = CHSV( 100, 0, 255); }
+    FastLED.show();
+    delay(random (20));
+    if(ledSingle3 < NUM_LEDS){   leds[ledSingle3] = CHSV( 100, 0, 255); }
+    FastLED.show();
+  }
+
+  for (int led = 0; led < NUM_LEDS; led++) {          leds[led] = CHSV( 100, 0, 0);      }
+      FastLED.show();
+      
+} 
+
 
 //*******************************      State Modes    ******************************************//
 
