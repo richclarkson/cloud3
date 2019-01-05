@@ -192,6 +192,10 @@ int capture[100];
 CRGB leds[NUM_LEDS];
 //#define FRAMES_PER_SECOND 120
 
+int minLEDvalue[NUM_LEDS];
+int goingUp[NUM_LEDS];
+int currentValue[NUM_LEDS];
+
 //TAP HOLD Varriables 
 //uint8_t buttonState;
 
@@ -268,6 +272,16 @@ void setup()
   for (int led = 0; led < NUM_LEDS; led++) {
     leds[led] = CHSV( 100, 0, 255);
   }
+  for (int i = 0; i < NUM_LEDS; i++) {    //fill up the minimum LED value array for Fairy Light Mode
+    minLEDvalue[i] = random(20,100);
+  } 
+  for (int i = 0; i < NUM_LEDS; i++) {    //fill up the going up value array for Fairy Light Mode
+    goingUp[i] = random(0,1);
+  }
+    for (int i = 0; i < NUM_LEDS; i++) {    //fill up the current value array for Fairy Light Mode
+    currentValue[i] = random(101,254);
+  }
+
   FastLED.show();
   delay(250);
   turnoffLEDs();
@@ -546,6 +560,20 @@ void lampMode2()  // White
       FastLED.show();
       lampMode2Count = 0;
   }
+    EVERY_N_MILLISECONDS(30) {
+    for (int x = 0; x < NUM_LEDS; x++) {
+    if(goingUp[x] == 1){
+      currentValue[x]++;
+      if (currentValue[x] >= 255) {goingUp[x] = 0;}
+    }
+    else{
+      currentValue[x]--;
+      if (currentValue[x] <= minLEDvalue[x]) {goingUp[x] = 1;}
+    }
+    leds[x] = CHSV( 100, 0, currentValue[x]);
+  }
+  FastLED.show();
+ }
 }
 
 void lampMode3()  // Ombre
@@ -1186,7 +1214,7 @@ void runMode()
 
     if (buttonPushCounter == 100) {                 // falling dot
       fetchSoundData();
-      musicmode1(); 
+      musicmode4(); 
     }
     else if (buttonPushCounter == 101) {                // middle out
       fetchSoundData();
@@ -1196,24 +1224,23 @@ void runMode()
       analyzeFFTall(); 
       musicmode3(); 
     }
-    else if (buttonPushCounter == 103) {                // fade
-      fetchSoundData();
-      musicmode4(); 
+    else if (buttonPushCounter == 103) {                // sectional colour
+      
     }
     else if (buttonPushCounter == 104) {                // rainbow music
       fetchSoundData();
       musicmode5(); 
     }
-    else if (buttonPushCounter == 105) {                // white
+    else if (buttonPushCounter == 105) {                // Fairy Lamp
       lampMode1();
     }
-    else if (buttonPushCounter == 106) {                // neon
+    else if (buttonPushCounter == 106) {                // neon Lamp
       lampMode2();
     }
-    else if (buttonPushCounter == 107) {                // ombre
+    else if (buttonPushCounter == 107) {                // ombre Lamp
       lampMode3();
     }
-    else if (buttonPushCounter == 108) {                // fire
+    else if (buttonPushCounter == 108) {                // Breathing Lamp
       lampMode4();
     }
     
