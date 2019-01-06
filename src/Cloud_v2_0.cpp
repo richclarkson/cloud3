@@ -46,6 +46,10 @@ int dot = 100;           // this is a slowly falling value based on the peaks of
 int dotCount = 1;
 int lampMode2Count = 1;
 
+int Bass;
+int Mid;
+int High;
+
 //IR Varriables
 #define NUM_BUTTONS 9 // The remote has 9 buttons
 
@@ -524,19 +528,16 @@ void musicmode4()   // Fade
   }
 }
 
-void musicmode5()     // Rainbow 
+void musicmode5()     // Colorful  
 { 
-  fill_gradient(leds, 0, CHSV(96, 255,255) , NUM_LEDS, CHSV(0,255,255), SHORTEST_HUES);
-    for (int led = soundLevel; led < NUM_LEDS; led++)        
-  {
-    leds[led] = CHSV( 100, 0, 0);
+    Bass = fftArray[0] + fftArray[1];
+    Mid = fftArray[2] + fftArray[3];
+    High = fftArray[4] + fftArray[5] + fftArray[6] + fftArray[7];
+
+    for (int x = 0; x < NUM_LEDS; x++) {
+    leds[x].setRGB(High, Mid, Bass);
   }
-  if (soundLevel <= 0)  // NO SOUND
-  {                                    // If no sound (dot = 0)
-   turnoffLEDs();
-   //fadeToBlackBy( leds, NUM_LEDS, 1);
-  }
-  FastLED.show(); // send data to LEDs to display
+  FastLED.show();
 }
 
 //*******************************      Lamp Modes    ******************************************//
