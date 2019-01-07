@@ -50,6 +50,30 @@ int Bass;
 int Mid;
 int High;
 
+int prevBass;
+int prevMid;
+int prevHigh;
+
+const int numReadings = 60;
+
+int readings[numReadings];      // the readings from the analog input
+int readIndex = 0;              // the index of the current reading
+int total = 0;                  // the running total
+int average = 0;                // the average
+
+int readingsM[numReadings];      // the readings from the analog input
+int readIndexM = 0;              // the index of the current reading
+int totalM = 0;                  // the running total
+int averageM = 0;                // the average
+
+int readingsH[numReadings];      // the readings from the analog input
+int readIndexH = 0;              // the index of the current reading
+int totalH = 0;                  // the running total
+int averageH = 0;                // the average
+
+
+
+
 //IR Varriables
 #define NUM_BUTTONS 9 // The remote has 9 buttons
 
@@ -123,6 +147,8 @@ int remoteState;
 int stateCounter = 0;
 
 int previousRemoteState;
+
+int butStateCounter = 1;
 
 
 int mode;
@@ -332,6 +358,9 @@ void setup()
   loopTime = 0;
   capSensor = TapPressButton(1, 499, 500, 500);
   remoteState = BUTTON_B_HELD;
+  for (int thisReading = 0; thisReading < numReadings; thisReading++) { readings[thisReading] = 0;  }  //for smothing readings fill array with 0s
+  for (int thisReading = 0; thisReading < numReadings; thisReading++) { readingsM[thisReading] = 0;  }  //for smothing readings fill array with 0s
+  for (int thisReading = 0; thisReading < numReadings; thisReading++) { readingsH[thisReading] = 0;  }  //for smothing readings fill array with 0s
 }
 
 
@@ -359,26 +388,65 @@ void loop()
     //reset();
   }
   else if (remoteState == BUTTON_A){
-    fetchSoundData();
-    musicmode2();
+    if      (butStateCounter == 1){    
+      //fetchSoundData();
+      //musicmode1();     
+      }
+    else if (butStateCounter == 2){    
+      //fetchSoundData();
+      //musicmode2();     
+      }
+    else if (butStateCounter == 3){    
+      //analyzeFFTall(); 
+      //musicmode3();     
+    }
+    else if (butStateCounter == 4){    
+      //fetchSoundData();
+      //musicmode4();     
+      }
   }
   else if (remoteState == BUTTON_A_HELD){
-    fetchSoundData();
-    musicmode1();
+    //fetchSoundData();
+    //musicmode1();
   }
   else if (remoteState == BUTTON_B){
-    fetchSoundData();
-    musicmode4();
+    if      (butStateCounter == 1){    
+      fetchSoundData();
+      musicmode4();     
+      }
+    else if (butStateCounter == 2){    
+      analyzeFFTall(); 
+      musicmode5();     
+      }
+    else if (butStateCounter == 3){    
+      fetchSoundData(); 
+      musicmode2();     
+    }
+    else if (butStateCounter == 4){    
+      analyzeFFTall(); ;
+      musicmode3();     
+      }
   }
   else if (remoteState == BUTTON_B_HELD){
-    analyzeFFTall(); 
-    musicmode3();
+    //analyzeFFTall(); 
+    //musicmode3();
   }
   else if (remoteState == BUTTON_C){
-    lampMode2();
+    if      (butStateCounter == 1){    
+      lampMode2();    
+      }
+    else if (butStateCounter == 2){    
+      lampMode1();    
+      }
+    else if (butStateCounter == 3){    
+      lampMode3();   
+    }
+    else if (butStateCounter == 4){    
+      lampMode4();     
+      }
   }
   else if (remoteState == BUTTON_C_HELD){
-    lampMode3();
+    //lampMode3();
   }
 }
 
@@ -529,15 +597,67 @@ void musicmode4()   // Fade
 }
 
 void musicmode5()     // Colorful  
-{ 
-    Bass = fftArray[0] + fftArray[1];
-    Mid = fftArray[2] + fftArray[3];
-    High = fftArray[4] + fftArray[5] + fftArray[6] + fftArray[7];
+{   
+  total = total - readings[readIndex];   // subtract the last reading:
+  readings[readIndex] = constrain((fftArray[0] + fftArray[1]),0,255);   // read from the sensor:
+  total = total + readings[readIndex];   // add the reading to the total:
+  readIndex = readIndex + 1;   // advance to the next position in the array:
+  if (readIndex >= numReadings) { readIndex = 0; }     // if we're at the end of the array wrap around to the beginning:
+  average = total / numReadings;   // calculate the average:
+
+  totalM = totalM - readingsM[readIndexM];   // subtract the last reading:
+  readingsM[readIndexM] = constrain((fftArray[2] + fftArray[3]),0,255);   // read from the sensor:
+  totalM = totalM + readingsM[readIndexM];   // add the reading to the total:
+  readIndexM = readIndexM + 1;   // advance to the next position in the array:
+  if (readIndexM >= numReadings) { readIndexM = 0; }     // if we're at the end of the array wrap around to the beginning:
+  averageM = totalM / numReadings;   // calculate the average:
+
+  totalH = totalH - readingsH[readIndexH];   // subtract the last reading:
+  readingsH[readIndexH] = constrain((fftArray[4] + fftArray[5] + fftArray[6] + fftArray[7]),0,255);   // read from the sensor:
+  totalH = totalH + readingsH[readIndexH];   // add the reading to the total:
+  readIndexH = readIndexH + 1;   // advance to the next position in the array:
+  if (readIndexH >= numReadings) { readIndexH = 0; }     // if we're at the end of the array wrap around to the beginning:
+  averageH = totalH / numReadings;   // calculate the average:
+
+    //Bass = constrain((fftArray[0] + fftArray[1])*2,2,255);
+    //Mid = constrain((fftArray[2] + fftArray[3])*2,2,255);
+    //High = constrain((fftArray[4] + fftArray[5] + fftArray[6] + fftArray[7])*2,2,255);
+
+    // if (Bass < prevBass){ 
+    //   Bass = prevBass - 1;
+    //   if(prevBass > 3){
+    //     prevBass--;
+    //   }
+    //  }
+    // else {
+    //   prevBass = Bass;
+    // }
+
+    // if (Mid < prevMid){ 
+    //   Mid = prevMid - 1;
+    //   if(prevMid > 3){
+    //     prevMid--;
+    //   }
+    //  } 
+    // else {
+    //   prevMid = Mid;
+    // }
+
+    // if (High < prevHigh){ 
+    //   High = prevHigh - 1;
+    //   if(prevHigh > 3){
+    //     prevHigh--;
+    //   }
+    //  }
+    // else {
+    //   prevHigh = High;
+    // }
 
     for (int x = 0; x < NUM_LEDS; x++) {
-    leds[x].setRGB(High, Mid, Bass);
+    leds[x].setRGB(averageH, averageM, average);
   }
   FastLED.show();
+  //delay(10);
 }
 
 //*******************************      Lamp Modes    ******************************************//
@@ -1503,20 +1623,54 @@ void remote()
             Serial.println(currentButton);
 
             if (currentButton == 'P') {
+              previousRemoteState = remoteState;
               remoteState = BUTTON_POWER;
               buttonPushCounter = 9;
             }
             else if (currentButton == 'A') {
+              previousRemoteState = remoteState;
               remoteState = BUTTON_A;
-              buttonPushCounter = 1;
+              if (previousRemoteState == remoteState){ 
+                if (butStateCounter < 4){     butStateCounter++;    }
+                else {      butStateCounter = 1;     }
+              }
+              else {        butStateCounter = 1;     }
+              Serial.print("butStateCounter:");
+              Serial.println(butStateCounter);
+              if      (butStateCounter == 1){    buttonPushCounter = 1;     }
+              else if (butStateCounter == 2){    buttonPushCounter = 2;     }
+              else if (butStateCounter == 3){    buttonPushCounter = 3;     }
+              else if (butStateCounter == 4){    buttonPushCounter = 4;     }
             }
             else if (currentButton == 'B') {
+              previousRemoteState = remoteState;
               remoteState = BUTTON_B;
-              buttonPushCounter = 3;
+              if (previousRemoteState == remoteState){ 
+                if (butStateCounter < 4){     butStateCounter++;    }
+                else {      butStateCounter = 1;     }
+              }
+              else {        butStateCounter = 1;     }
+              Serial.print("butStateCounter:");
+              Serial.println(butStateCounter);
+              if      (butStateCounter == 1){    buttonPushCounter = 3;     }
+              else if (butStateCounter == 2){    buttonPushCounter = 4;     }
+              else if (butStateCounter == 3){    buttonPushCounter = 1;     }
+              else if (butStateCounter == 4){    buttonPushCounter = 2;     }
             }
             else if (currentButton == 'C') {
+              previousRemoteState = remoteState;
               remoteState = BUTTON_C;
-              buttonPushCounter = 5;
+              if (previousRemoteState == remoteState){ 
+                if (butStateCounter < 4){     butStateCounter++;    }
+                else {      butStateCounter = 1;     }
+              }
+              else {        butStateCounter = 1;     }
+              Serial.print("butStateCounter:");
+              Serial.println(butStateCounter);
+              if      (butStateCounter == 1){    buttonPushCounter = 5;     }
+              else if (butStateCounter == 2){    buttonPushCounter = 6;     }
+              else if (butStateCounter == 3){    buttonPushCounter = 7;     }
+              else if (butStateCounter == 4){    buttonPushCounter = 8;     }
             }
             else if (currentButton == 'O') {
             previousRemoteState = remoteState;
