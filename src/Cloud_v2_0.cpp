@@ -336,7 +336,7 @@ void setup()
     prevButtonPushCounter = buttonPushCounter;
     channel = 8;                            //
     Bvariable = 8;                          //
-    sensitivity = 1;                        //
+    sensitivity = 4;                        //
 
   // aveCapReading = 0;
   // for (unsigned int i = 0; i < baselinelenght; i++) {
@@ -357,7 +357,7 @@ void setup()
   isTouch = false;
   loopTime = 0;
   capSensor = TapPressButton(1, 499, 500, 500);
-  remoteState = BUTTON_B_HELD;
+  remoteState = BUTTON_B;
   for (int thisReading = 0; thisReading < numReadings; thisReading++) { readings[thisReading] = 0;  }  //for smothing readings fill array with 0s
   for (int thisReading = 0; thisReading < numReadings; thisReading++) { readingsM[thisReading] = 0;  }  //for smothing readings fill array with 0s
   for (int thisReading = 0; thisReading < numReadings; thisReading++) { readingsH[thisReading] = 0;  }  //for smothing readings fill array with 0s
@@ -580,7 +580,7 @@ void musicmode3()    // Ripple
 
 void musicmode4()   // Fade
 { 
-  if (soundLevel * 5 > dot){    dot = soundLevel * 5;  } // Keep dot on top of soundLevel
+  if (soundLevel * 3 > dot){    dot = soundLevel * 3;  } // Keep dot on top of soundLevel
   if (dot > 255){    dot = 255;  }// Keep dot from going out of frame
 
   for (int led = 0; led < NUM_LEDS; led++)
@@ -590,7 +590,7 @@ void musicmode4()   // Fade
   FastLED.show();
   if (++dotCount >= 5) {                   // make the dot fall slowly
     dotCount = 0;
-    if (dot > 20) {
+    if (dot > 0) {
       dot--;
     }
   }
@@ -1253,6 +1253,10 @@ void prepareModes()
       Serial.println("Falling Dot");
       //previewController(numberLoops/2);
       previewCounter = 14;
+      for (int x = 0; x < NUM_LEDS; x++) {
+        leds[x] = CHSV(100, 200, 100);
+        FastLED.show();
+      }
     }
 
     else if (buttonPushCounter == 1) {    // middle out
@@ -1265,6 +1269,10 @@ void prepareModes()
       Serial.println("Middle Out");
       //previewController(numberLoops);
       previewCounter = 0;
+      for (int x = 0; x < NUM_LEDS; x++) {
+        leds[x] = CHSV(100, 200, 100);
+        FastLED.show();
+      }
     }
 
     else if (buttonPushCounter == 2) {    // ripple
@@ -1276,6 +1284,10 @@ void prepareModes()
       indcatorDots = 3;
       Serial.println("Ripple");
       previewController(25);
+      for (int x = 0; x < NUM_LEDS; x++) {
+        leds[x] = CHSV(100, 200, 100);
+        FastLED.show();
+      }
     }
 
     else if (buttonPushCounter == 3) {    // fade
@@ -1288,6 +1300,10 @@ void prepareModes()
       Serial.println("Fade");
       previewController(numberLoops);
       previewCounter = 0;
+      for (int x = 0; x < NUM_LEDS; x++) {
+        leds[x] = CHSV(100, 200, 100);
+        FastLED.show();
+      }
     }
 
     else if (buttonPushCounter == 4) {    // music rainbow
@@ -1299,6 +1315,10 @@ void prepareModes()
       indcatorDots = 3;
       Serial.println("Rainbow");
       previewController(numberLoops);
+      for (int x = 0; x < NUM_LEDS; x++) {
+        leds[x] = CHSV(100, 200, 100);
+        FastLED.show();
+      }
     }
 
     else if (buttonPushCounter == 5) {   // White
