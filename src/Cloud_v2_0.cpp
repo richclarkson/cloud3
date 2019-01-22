@@ -389,20 +389,17 @@ void loop()
   }
   else if (remoteState == BUTTON_A){
     if      (butStateCounter == 1){    
-      //fetchSoundData();
-      //musicmode1();     
+      fetchSoundData();
+      soundLightening();     
       }
     else if (butStateCounter == 2){    
-      //fetchSoundData();
-      //musicmode2();     
+      //demo of all lamp modes     
       }
     else if (butStateCounter == 3){    
-      //analyzeFFTall(); 
-      //musicmode3();     
+      timedLightening(100);    
     }
     else if (butStateCounter == 4){    
-      //fetchSoundData();
-      //musicmode4();     
+      timedLightening(3000);    
       }
   }
   else if (remoteState == BUTTON_A_HELD){
@@ -457,6 +454,21 @@ void loop()
   // soundLevel = constrain(soundLevel,0,115);       // visual debugging backup
   // musicmode1();                                   // visual debugging backup
 
+//*******************************       Cloud Modes    ******************************************//
+
+void timedLightening(int gap)
+{
+  EVERY_N_SECONDS(random(gap)){
+  strom();
+  }
+}
+
+void soundLightening()
+{
+  if (soundLevel > 50){
+  strom();
+ }
+}
 
 //*******************************       Music Modes    ******************************************//
 
@@ -1601,7 +1613,10 @@ void remote()
                 colourVariable = 4;
               }
             else if (resultCode == BUTTON_CIRCLE) {
-              currentButton = 'O';
+              //currentButton = 'O';
+              strom();
+              remoteState = previousRemoteState;
+              if(butStateCounter != 1){ butStateCounter--; }
             }
 
             newButtonPress = 1;
@@ -1693,8 +1708,9 @@ void remote()
               else if (butStateCounter == 4){    buttonPushCounter = 8;     }
             }
             else if (currentButton == 'O') {
-            previousRemoteState = remoteState;
-            remoteState = BUTTON_CIRCLE;
+            //previousRemoteState = remoteState;
+          
+            //remoteState = previousRemoteState;
           }
         }
         //Serial.println("Preparing");
