@@ -149,7 +149,7 @@ int stateCounter = 0;
 int previousRemoteState;
 
 int butStateCounter = 1;
-
+int demoCounter = 1;
 
 int mode;
 
@@ -260,6 +260,7 @@ int capReading;
 int aveCapReading;
 bool flag = 0;
 int flashCount = 1;
+int calm = 10;
 
 
 // Prototype Functions:
@@ -292,7 +293,11 @@ void tap();
 void press();
 void prepareModes();
 void runMode();
-
+void timedLightening(int gap);
+void demo();
+void soundLightening();
+void strom();
+void flash(int hue, int saturation);
 
 
 void setup()
@@ -306,10 +311,7 @@ void setup()
   turnoffLEDs();
   FastLED.show();
   Serial.begin(9600);
-  delay(3000);  // Sanity Delay
-  for (int led = 0; led < NUM_LEDS; led++) {
-    leds[led] = CHSV( 100, 0, 255);
-  }
+  delay(1000);  // Sanity Delay
   for (int i = 0; i < NUM_LEDS; i++) {    //fill up the minimum LED value array for Fairy Light Mode
     minLEDvalue[i] = random(20,100);
   } 
@@ -319,12 +321,7 @@ void setup()
     for (int i = 0; i < NUM_LEDS; i++) {    //fill up the current value array for Fairy Light Mode
     currentValue[i] = random(101,254);
   }
-
-  FastLED.show();
-  delay(250);
-  turnoffLEDs();
-  FastLED.show();
-
+  flash(100, 0);
   // while (!Serial) {
   //   ; // wait for serial port to connect. Needed for native USB
   // }
@@ -372,16 +369,7 @@ void loop()
   //loopTime = millis();
 
   if      (remoteState == BUTTON_POWER){
-     if (flashCount == 1){
-     for (int led = 0; led < NUM_LEDS; led++) {
-        leds[led] = CHSV( 100, 0, 255);
-      }
-      FastLED.show();
-      delay(200);
-      turnoffLEDs();
-      FastLED.show();
-      flashCount = 0;
-  }
+     if (flashCount == 1){  flash(100,0);   }
     delay(3);
   }
   else if (remoteState == BUTTON_POWER_HELD){
@@ -389,18 +377,21 @@ void loop()
   }
   else if (remoteState == BUTTON_A){
     if      (butStateCounter == 1){    
+      if (flashCount == 1){ flash(130,250);  }
       fetchSoundData();
       soundLightening();     
       }
     else if (butStateCounter == 2){    
-      //demo of all lamp modes     
+      demo();    
       }
     else if (butStateCounter == 3){    
-      timedLightening(100);    
+     if (flashCount == 1){  flash(130,250);  }
+      timedLightening(30);    
     }
     else if (butStateCounter == 4){    
-      timedLightening(3000);    
-      }
+     if (flashCount == 1){  flash(130,250);  }
+     timedLightening(240);    
+     }
   }
   else if (remoteState == BUTTON_A_HELD){
     //fetchSoundData();
@@ -458,16 +449,37 @@ void loop()
 
 void timedLightening(int gap)
 {
-  EVERY_N_SECONDS(random(gap)){
-  strom();
+  EVERY_N_SECONDS(calm){
+    strom();
+    calm = random(gap);
   }
 }
 
 void soundLightening()
-{
-  if (soundLevel > 50){
+{ 
+   if (dot != soundLevel){
+   Serial.println(soundLevel);
+   dot = soundLevel;
+   }
+  if (soundLevel > 250){
   strom();
  }
+}
+
+void demo()
+{
+  if(demoCounter < 3000) { demoCounter++; }
+  else {demoCounter = 0 ; }
+
+  if(demoCounter > 0 && demoCounter < 1500){
+    lampMode1();
+  }
+  else if(demoCounter >= 1500 && demoCounter < 2990){
+    lampMode3();
+  }
+  else if(demoCounter >= 2990 && demoCounter < 3000){
+    timedLightening(2000);
+  }
 }
 
 //*******************************       Music Modes    ******************************************//
@@ -486,7 +498,7 @@ void analyzeLevel()
 {
   if (rms1.available()) {
     soundLevel = (rms1.read() - 0.0006) * scale[sensitivity];     // remove noise and scale
-    soundLevel = constrain(soundLevel, 0, NUM_LEDS);              // limit
+    soundLevel = constrain(soundLevel, 0, 255);              // limit
   }
 }
 
@@ -512,7 +524,7 @@ void FFTreading(int FFTchannel)
   reading[FFTchannel] =  fft1024.read(binStart[FFTchannel], binEnd[FFTchannel]);
   reading[FFTchannel] = reading[FFTchannel] - (noise[FFTchannel] * 0.0001);           // remove noise
   fftArray[FFTchannel] = (reading[FFTchannel] * scale[sensitivity]) * eq[FFTchannel]; // scale
-  fftArray[FFTchannel] = constrain(fftArray[FFTchannel], 0, NUM_LEDS);                // limit
+  fftArray[FFTchannel] = constrain(fftArray[FFTchannel], 0, 255);                // limit
 }
 
 void musicmode1()   // Falling Dot
@@ -544,6 +556,7 @@ void musicmode1()   // Falling Dot
 
 void musicmode2()   // Middle Out 
 { 
+  soundLevel = map(soundLevel, 0, 255,0, NUM_LEDS);              // limit
   turnoffLEDs();
   for (int led = (NUM_LEDS - soundLevel) / 2; led < (soundLevel / 2) + (NUM_LEDS / 2); led++)
   {
@@ -680,6 +693,18 @@ void turnoffLEDs()
   { //turn off LEDs
     leds[led] = CHSV( 100, 0, 0);
   }
+}
+
+void flash(int hue, int saturation)
+{
+     for (int led = 0; led < NUM_LEDS; led++) {
+        leds[led] = CHSV( hue, saturation, 200);
+      }
+      FastLED.show();
+      delay(200);
+      turnoffLEDs();
+      FastLED.show();
+      flashCount = 0;
 }
 
 void lampMode1()  // Neon
@@ -1577,12 +1602,14 @@ void remote()
           if (resultCode == BUTTON_ARRAY[i]) {
 
             // ACTUAL BUTTON
+            newButtonPress = 1;
 
             if (resultCode == BUTTON_POWER) {
               currentButton = 'P';
             }
             else if (resultCode == BUTTON_A) {
               currentButton = 'A';
+              flashCount = 1;
             }
             else if (resultCode == BUTTON_B) {
               currentButton = 'B';
@@ -1616,10 +1643,11 @@ void remote()
               //currentButton = 'O';
               strom();
               remoteState = previousRemoteState;
-              if(butStateCounter != 1){ butStateCounter--; }
+              //if(butStateCounter != 1){ butStateCounter--; }
+              newButtonPress = 0;
             }
 
-            newButtonPress = 1;
+            
             //Serial.println("Comparing Button Code");
 
           }
@@ -1661,6 +1689,10 @@ void remote()
               previousRemoteState = remoteState;
               remoteState = BUTTON_POWER;
               buttonPushCounter = 9;
+              flashCount = 1;
+              Serial.println("Off");
+              turnoffLEDs();
+              FastLED.show();
             }
             else if (currentButton == 'A') {
               previousRemoteState = remoteState;
@@ -1714,7 +1746,7 @@ void remote()
           }
         }
         //Serial.println("Preparing");
-        prepareModes();               // load in startup values for each mode and run preview
+        //prepareModes();               // load in startup values for each mode and run preview
         //Serial.println("Prepaired");
         buttonHeld = 0;
 
