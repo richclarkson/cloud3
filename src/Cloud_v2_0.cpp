@@ -209,7 +209,7 @@ static const int wheelS[] = {
   255, 255, 255, 255, 255, 255, 255, 255, 255, 200, 100,  50,   0
 };
 
-int wheelPosition = 0;
+int wheelPosition = 12;
 
 //Lamp Mode Variables
 int rainbowCounter = 0;
@@ -444,6 +444,74 @@ void loop()
   else if (remoteState == BUTTON_C_HELD){
     //lampMode3();
   }
+  else if (remoteState == BUTTON_UP)
+  {
+    if(millis() - variableMillis > 1000){
+        upDownLeftRightReturn();
+     }
+      if(variableState == 0){
+        if (previousRemoteState == BUTTON_A) {     // Global brightness
+          if (Bvariable < 8){        Bvariable++;   }
+          FastLED.setBrightness(map(Bvariable,0,8,50,255));
+          fill_solid( leds, NUM_LEDS, CHSV(60,150,(map(Bvariable,0,8,20,250))));
+          FastLED.show();
+          Serial.print("Bvariable = ");
+          Serial.println(Bvariable);
+          //EEPROM.update(3, Bvariable);
+        }
+        else if (previousRemoteState == BUTTON_B) {     // sensitivity
+          if (sensitivity < 8){     sensitivity++;  }
+          fill_solid( leds, NUM_LEDS, CHSV(180,150,(map(sensitivity,0,8,20,250))));
+          FastLED.show();
+          Serial.print("sensitivity = ");
+          Serial.println(sensitivity);
+          //EEPROM.update(4, sensitivity);
+        }
+        else if (previousRemoteState == BUTTON_C) {     // Speed of Animation
+          if (channel < 8){          channel++;     }
+          fill_solid( leds, NUM_LEDS, CHSV(110,150,(map(channel,0,8,20,250))));
+          FastLED.show();
+          Serial.print("channel = ");
+          Serial.println(channel);
+          //EEPROM.update(2, channel);
+        }
+        variableState = 1;
+    }    
+  }
+  else if (remoteState == BUTTON_DOWN)
+  {
+    if(millis() - variableMillis > 1000){
+        upDownLeftRightReturn();
+     }
+      if(variableState == 0){
+        if (previousRemoteState == BUTTON_A) {     // Global brightness
+          if (Bvariable > 0){        Bvariable--;   }
+          FastLED.setBrightness(map(Bvariable,0,8,50,255));
+          fill_solid( leds, NUM_LEDS, CHSV(60,150,(map(Bvariable,0,8,20,250))));
+          FastLED.show();
+          Serial.print("Bvariable = ");
+          Serial.println(Bvariable);
+          //EEPROM.update(3, Bvariable);
+        }
+        else if (previousRemoteState == BUTTON_B) {     // sensitivity
+          if (sensitivity > 0){     sensitivity--;  }
+          fill_solid( leds, NUM_LEDS, CHSV(180,150,(map(sensitivity,0,8,20,250))));
+          FastLED.show();
+          Serial.print("sensitivity = ");
+          Serial.println(sensitivity);
+          //EEPROM.update(4, sensitivity);
+        }
+        else if (previousRemoteState == BUTTON_C) {     // Speed of Animation
+          if (channel > 0){          channel--;     }
+          fill_solid( leds, NUM_LEDS, CHSV(110,150,(map(channel,0,8,20,250))));
+          FastLED.show();
+          Serial.print("channel = ");
+          Serial.println(channel);
+          //EEPROM.update(2, channel);
+        }
+        variableState = 1;
+    }    
+  }
 }
 
 
@@ -465,10 +533,10 @@ void timedLightening(int gap)
 
 void soundLightening()
 { 
-   if (dot != soundLevel){
-   Serial.println(soundLevel);
-   dot = soundLevel;
-   }
+  //  if (dot != soundLevel){
+  //  Serial.println(soundLevel);
+  //  dot = soundLevel;
+  //  }
   if (soundLevel > 250){
   strom();
  }
@@ -1545,22 +1613,12 @@ void remote()
 
 
         if (currentButton == 'L') {
-          //upDownLeftRightRemoteHeld();
-          //remoteState = BUTTON_LEFT;
-          //colourVariable = 20;
-          if (wheelPosition < 12){
-                wheelPosition++;
-                }
-          else { wheelPosition = 0; }
+          if (wheelPosition < 12){        wheelPosition++;    }
+          else {                          wheelPosition = 0;  }
         }
         else if (currentButton == 'R') {
-          //upDownLeftRightRemoteHeld();
-          //remoteState = BUTTON_RIGHT;
-          //colourVariable = 20;
-          if (wheelPosition > 0){
-                wheelPosition--;
-                }
-          else { wheelPosition = 12; }
+          if (wheelPosition > 0){         wheelPosition--;    }
+          else {                          wheelPosition = 12; }
         }
         else if (currentButton == 'U') {
           upDownLeftRightRemoteHeld();
@@ -1634,23 +1692,13 @@ void remote()
               }
             else if (resultCode == BUTTON_LEFT) {
               currentButton = 'L';
-                //upDownLeftRightRemote();
-                //remoteState = BUTTON_LEFT;
-                if (wheelPosition < 12){
-                wheelPosition++;
-                }
-                else { wheelPosition = 0; }
-                //colourVariable = 4;
+                if (wheelPosition < 12){       wheelPosition++;   }
+                else {                         wheelPosition = 0; }
               }
             else if (resultCode == BUTTON_RIGHT) {
               currentButton = 'R';
-                //upDownLeftRightRemote();
-                //remoteState = BUTTON_RIGHT;
-                if (wheelPosition > 0){
-                wheelPosition--;
-                }
-                else { wheelPosition = 12; }
-                //colourVariable = 4;
+                if (wheelPosition > 0){        wheelPosition--;   }
+                else {                         wheelPosition = 12; }
               }
             else if (resultCode == BUTTON_CIRCLE) {
               //currentButton = 'O';
@@ -1777,9 +1825,9 @@ void upDownLeftRightReturn()
   variableState = 1;
   remoteState = previousRemoteState;
   variableMillis = millis();
-  //flashoff (N_PIXELS, 0, 0, 0, 0);
+  turnoffLEDs();
+  FastLED.show();
 }
-
 
 void upDownLeftRightRemote() 
 {
@@ -1812,5 +1860,4 @@ void upDownLeftRightRemoteHeld()
   irrecv.resume(); // Receive the next value
   remote();
 }
-
 
