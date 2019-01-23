@@ -28,11 +28,9 @@
 #include <FastLED.h>
 #include <Audio.h>   
 #include <EEPROM.h>
-#include "TapPressButton.h"
 #include <IRremote.h>
 
 FASTLED_USING_NAMESPACE
-TapPressButton capSensor;
 
 //Global Varriables
 uint8_t buttonPushCounter;
@@ -220,11 +218,6 @@ int timeSpeed;
 int rainbowCounter = 0;
 
 uint8_t gHue = 180;           // rotating "base color" used by many of the patterns
-int COOLINGarray[] = {100, 90, 85, 80, 75, 90, 85, 100, 90}; // Fire Mode varriable
-int COOLING = 90;         // Fire Mode varriable
-#define SPARKING 100      // Fire Mode varriable
-//static byte heat[100];
-int capture[100];
 
 //LED Variables
 #define DATA_PIN 4 //MOSI  //7 Green
@@ -249,12 +242,6 @@ int ledSingle3;
 //TAP HOLD Varriables 
 //uint8_t buttonState;
 
-
-const int capPin = 19;
-int touchTime = 1000;
-unsigned long loopTime;
-bool isTouch;
-int holding = 0;
 uint8_t prevButtonPushCounter;
 int modeColor;
 int indcatorDots;
@@ -335,30 +322,7 @@ void setup()
     timeSpeed = 2;                          //
     Bvariable = 8;                          //
     sensitivity = 4;                        //
-
-  // aveCapReading = 0;
-  // for (unsigned int i = 0; i < baselinelenght; i++) {
-  //   baseLineReadings[i] = touchRead(capPin);
-  //   //Serial.println(baseLineReadings[i]);
-  //   aveCapReading = aveCapReading + baseLineReadings[i];
-  // }
-  // Serial.print("TotalCapReading");
-  // Serial.println(aveCapReading);
-  // aveCapReading = aveCapReading / baselinelenght;
-  // Serial.print("aveCapReading");
-  // Serial.println(aveCapReading);
-
-  // touchTime = aveCapReading + 100;
-  // Serial.print("Base line: ");
-  // Serial.println(touchTime);
-  pinMode(capPin, INPUT_PULLUP);
-  isTouch = false;
-  loopTime = 0;
-  capSensor = TapPressButton(1, 499, 500, 500);
-  remoteState = BUTTON_B;
-  for (int thisReading = 0; thisReading < numReadings; thisReading++) { readings[thisReading] = 0;  }  //for smothing readings fill array with 0s
-  for (int thisReading = 0; thisReading < numReadings; thisReading++) { readingsM[thisReading] = 0;  }  //for smothing readings fill array with 0s
-  for (int thisReading = 0; thisReading < numReadings; thisReading++) { readingsH[thisReading] = 0;  }  //for smothing readings fill array with 0s
+    remoteState = BUTTON_B;
 }
 
 
