@@ -33,7 +33,6 @@
 FASTLED_USING_NAMESPACE
 
 //Global Varriables
-uint8_t buttonPushCounter;
 int channel;
 int sensitivity;  // 0-8 where 8 = maximum sensitivity
 int Bvariable;  // brightness
@@ -242,14 +241,12 @@ int ledSingle3;
 //TAP HOLD Varriables 
 //uint8_t buttonState;
 
-uint8_t prevButtonPushCounter;
 int modeColor;
 int indcatorDots;
 uint8_t ledCimber = 8;
 int variableCounter = 9;  //global
 uint8_t normal = 1;  // 1 = normal modes, 0 = settings modes
 uint8_t pushAndHold = 0;
-uint8_t buttonPushCounterDemo;
 uint8_t dotBrightness = 250;
 uint8_t dotBrightnessDirection = 1;
 int newEpprom;
@@ -317,8 +314,7 @@ void setup()
   //EEPROM.update(0, 1);       // uncomment to load default EPROM values
   //eepromSet();
 
-    buttonPushCounter = 0;                  //
-    prevButtonPushCounter = buttonPushCounter;
+    butStateCounter = 1;                  //
     timeSpeed = 2;                          //
     Bvariable = 8;                          //
     sensitivity = 4;                        //
@@ -330,8 +326,6 @@ void setup()
 void loop()
 { 
   remote();
-  //isTouch = digitalRead(capPin);
-  //loopTime = millis();
 
   if      (remoteState == BUTTON_POWER){
      if (flashCount == 1){  flash(100,0);   }
@@ -901,8 +895,7 @@ void eepromSet()
     newEpprom = 73;
     remoteState = 1000;
     previousRemoteState = remoteState;
-    buttonPushCounter = 0;                  //
-    prevButtonPushCounter = buttonPushCounter;
+    butStateCounter = 1;                  //
     timeSpeed = 2;                            //
     Bvariable = 8;                          //
     sensitivity = 3;                        //
@@ -912,7 +905,7 @@ void eepromSet()
     //FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20); // set master brightness control
 
     EEPROM.update(0, newEpprom);
-    EEPROM.update(1, buttonPushCounter);
+    EEPROM.update(1, butStateCounter);
     EEPROM.update(2, timeSpeed);
     EEPROM.update(3, Bvariable);
     EEPROM.update(4, sensitivity);
@@ -922,7 +915,7 @@ void eepromSet()
 
   else { 
     Serial.println("Old EPROM!");                           //not new eeprom
-    buttonPushCounter =  (int)EEPROM.read(1);
+    butStateCounter =  (int)EEPROM.read(1);
     timeSpeed =          (int)EEPROM.read(2);
     Bvariable =          (int)EEPROM.read(3);
     sensitivity =        (int)EEPROM.read(4);
@@ -930,8 +923,8 @@ void eepromSet()
 
     Serial.print("remoteState :   ");
     Serial.println(remoteState);
-    Serial.print("buttonPushCounter :   ");
-    Serial.println(buttonPushCounter);
+    Serial.print("butStateCounter :   ");
+    Serial.println(butStateCounter);
     Serial.print("timeSpeed :   ");
     Serial.println(timeSpeed);
     Serial.print("sensitivity :   ");
@@ -939,17 +932,16 @@ void eepromSet()
     Serial.print("Bvariable :   ");
     Serial.println(Bvariable);
 
-    buttonPushCounter =  (int)EEPROM.read(1);
+    butStateCounter =  (int)EEPROM.read(1);
     timeSpeed =            (int)EEPROM.read(2);
     Bvariable =          (int)EEPROM.read(3);
     sensitivity =        (int)EEPROM.read(4);
     remoteState =        (int)EEPROM.read(5);
 
 
-    if (buttonPushCounter < 0 || buttonPushCounter > 9){    // safety in case bad eprom reading
-      buttonPushCounter = 0;
+    if (butStateCounter < 1 || butStateCounter > 4){    // safety in case bad eprom reading
+      butStateCounter = 1;
     }
-    prevButtonPushCounter = buttonPushCounter;
 
     if (sensitivity < 0 || sensitivity > 9){    // safety in case bad eprom reading
       sensitivity = 3;
@@ -1012,21 +1004,17 @@ void remote()
 
             if (currentButton == 'O') {
               remoteState = BUTTON_CIRCLE_HELD;
-              buttonPushCounter = 13;
             }
             else if (currentButton == 'A') {
               previousRemoteState = remoteState;
               remoteState = BUTTON_A_HELD;
-              buttonPushCounter = 0;
             }
             else if (currentButton == 'B') {
               previousRemoteState = remoteState;
               remoteState = BUTTON_B_HELD;
-              buttonPushCounter = 2;
             }
             else if (currentButton == 'P') {
               remoteState = BUTTON_POWER_HELD;
-              buttonPushCounter = 7;
             }
             else if (currentButton == 'C') {
               previousRemoteState = remoteState;
@@ -1125,7 +1113,6 @@ void remote()
             if (currentButton == 'P') {
               previousRemoteState = remoteState;
               remoteState = BUTTON_POWER;
-              buttonPushCounter = 9;
               flashCount = 1;
               Serial.println("Off");
               turnoffLEDs();
@@ -1141,10 +1128,6 @@ void remote()
               else {        butStateCounter = 1;     }
               Serial.print("butStateCounter:");
               Serial.println(butStateCounter);
-              if      (butStateCounter == 1){    buttonPushCounter = 1;     }
-              else if (butStateCounter == 2){    buttonPushCounter = 2;     }
-              else if (butStateCounter == 3){    buttonPushCounter = 3;     }
-              else if (butStateCounter == 4){    buttonPushCounter = 4;     }
             }
             else if (currentButton == 'B') {
               previousRemoteState = remoteState;
@@ -1156,10 +1139,6 @@ void remote()
               else {        butStateCounter = 1;     }
               Serial.print("butStateCounter:");
               Serial.println(butStateCounter);
-              if      (butStateCounter == 1){    buttonPushCounter = 3;     }
-              else if (butStateCounter == 2){    buttonPushCounter = 4;     }
-              else if (butStateCounter == 3){    buttonPushCounter = 1;     }
-              else if (butStateCounter == 4){    buttonPushCounter = 2;     }
             }
             else if (currentButton == 'C') {
               previousRemoteState = remoteState;
@@ -1171,10 +1150,6 @@ void remote()
               else {        butStateCounter = 1;     }
               Serial.print("butStateCounter:");
               Serial.println(butStateCounter);
-              if      (butStateCounter == 1){    buttonPushCounter = 5;     }
-              else if (butStateCounter == 2){    buttonPushCounter = 6;     }
-              else if (butStateCounter == 3){    buttonPushCounter = 7;     }
-              else if (butStateCounter == 4){    buttonPushCounter = 8;     }
             }
             else if (currentButton == 'O') {
             //previousRemoteState = remoteState;
