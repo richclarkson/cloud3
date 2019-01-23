@@ -44,7 +44,6 @@ int Bvariable;  // brightness
 int soundLevel;          // this is the output of the FFT after being EQ
 int dot = 100;           // this is a slowly falling value based on the peaks of soundLevel, used by musicMode1 and musicMode4
 int dotCount = 1;
-int lampMode2Count = 1;
 
 int Bass;
 int Mid;
@@ -202,6 +201,15 @@ static const int preview[] = {
 };
 int previewCounter = 0;
 
+static const int wheelH[] = {
+    0,  25,  50,  75, 100, 125, 150, 175, 200, 225, 250, 255, 255
+};
+
+static const int wheelS[] = {
+  255, 255, 255, 255, 255, 255, 255, 255, 255, 200, 100,  50,   0
+};
+
+int wheelPosition = 0;
 
 //Lamp Mode Variables
 int rainbowCounter = 0;
@@ -471,14 +479,14 @@ void demo()
   if(demoCounter < 3000) { demoCounter++; }
   else {demoCounter = 0 ; }
 
-  if(demoCounter > 0 && demoCounter < 1500){
+  if(demoCounter > 0 && demoCounter < 15000){
     lampMode1();
   }
-  else if(demoCounter >= 1500 && demoCounter < 2990){
+  else if(demoCounter >= 1500 && demoCounter < 29990){
     lampMode3();
   }
-  else if(demoCounter >= 2990 && demoCounter < 3000){
-    timedLightening(2000);
+  else if(demoCounter >= 29990 && demoCounter < 30000){
+    timedLightening(30);
   }
 }
 
@@ -709,9 +717,6 @@ void flash(int hue, int saturation)
 
 void lampMode1()  // Neon
 {
-  if (lampMode2Count == 0){
-    lampMode2Count = 1;
-  }
   rainbow(0, NUM_LEDS, 0.1);
   //rainbow(0, NUM_LEDS, 0.1);
   FastLED.show();
@@ -719,13 +724,6 @@ void lampMode1()  // Neon
 
 void lampMode2()  // Fairy Light
 {
-  if (lampMode2Count == 1){
-   for (int led = 0; led < NUM_LEDS; led++) {
-        leds[led] = CHSV( 100, 0, 255);
-      }
-      FastLED.show();
-      lampMode2Count = 0;
-  }
     EVERY_N_MILLISECONDS(30) {
     for (int x = 0; x < NUM_LEDS; x++) {
     if(goingUp[x] == 1){
@@ -736,7 +734,7 @@ void lampMode2()  // Fairy Light
       currentValue[x]--;
       if (currentValue[x] <= minLEDvalue[x]) {goingUp[x] = 1;}
     }
-    leds[x] = CHSV( 100, 0, currentValue[x]);
+    leds[x] = CHSV( wheelH[wheelPosition], wheelS[wheelPosition], currentValue[x]);
   }
   FastLED.show();
  }
@@ -1363,7 +1361,6 @@ void prepareModes()
       buttonPushCounter = 105;
       buttonPushCounterDemo = 105;
       Serial.println("White");
-      lampMode2Count = 1;
       pushAndHold = 4;
       ledCimber = 8;
       indcatorDots = 3;
@@ -1548,14 +1545,22 @@ void remote()
 
 
         if (currentButton == 'L') {
-          upDownLeftRightRemoteHeld();
-          remoteState = BUTTON_LEFT;
-          colourVariable = 20;
+          //upDownLeftRightRemoteHeld();
+          //remoteState = BUTTON_LEFT;
+          //colourVariable = 20;
+          if (wheelPosition < 12){
+                wheelPosition++;
+                }
+          else { wheelPosition = 0; }
         }
         else if (currentButton == 'R') {
-          upDownLeftRightRemoteHeld();
-          remoteState = BUTTON_RIGHT;
-          colourVariable = 20;
+          //upDownLeftRightRemoteHeld();
+          //remoteState = BUTTON_RIGHT;
+          //colourVariable = 20;
+          if (wheelPosition > 0){
+                wheelPosition--;
+                }
+          else { wheelPosition = 12; }
         }
         else if (currentButton == 'U') {
           upDownLeftRightRemoteHeld();
@@ -1629,15 +1634,23 @@ void remote()
               }
             else if (resultCode == BUTTON_LEFT) {
               currentButton = 'L';
-                upDownLeftRightRemote();
-                remoteState = BUTTON_LEFT;
-                colourVariable = 4;
+                //upDownLeftRightRemote();
+                //remoteState = BUTTON_LEFT;
+                if (wheelPosition < 12){
+                wheelPosition++;
+                }
+                else { wheelPosition = 0; }
+                //colourVariable = 4;
               }
             else if (resultCode == BUTTON_RIGHT) {
               currentButton = 'R';
-                upDownLeftRightRemote();
-                remoteState = BUTTON_RIGHT;
-                colourVariable = 4;
+                //upDownLeftRightRemote();
+                //remoteState = BUTTON_RIGHT;
+                if (wheelPosition > 0){
+                wheelPosition--;
+                }
+                else { wheelPosition = 12; }
+                //colourVariable = 4;
               }
             else if (resultCode == BUTTON_CIRCLE) {
               //currentButton = 'O';
