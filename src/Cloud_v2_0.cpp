@@ -213,7 +213,7 @@ int wheelPosition = 12;
 static const int speedOfAnimation[] = {
   100, 50, 30, 20, 10, 1
 };
-int timeSpeed = 2;
+int timeSpeed;
 
 
 //Lamp Mode Variables
@@ -344,7 +344,7 @@ void setup()
 
     buttonPushCounter = 0;                  //
     prevButtonPushCounter = buttonPushCounter;
-    channel = 8;                            //
+    timeSpeed = 2;                          //
     Bvariable = 8;                          //
     sensitivity = 4;                        //
 
@@ -1164,9 +1164,11 @@ void eepromSet()
     Serial.println("New EPROM!");
     // eeprom values:
     newEpprom = 73;
+    remoteState = 1000;
+    previousRemoteState = remoteState;
     buttonPushCounter = 0;                  //
     prevButtonPushCounter = buttonPushCounter;
-    channel = 8;                            //
+    timeSpeed = 2;                            //
     Bvariable = 8;                          //
     sensitivity = 3;                        //
 
@@ -1176,33 +1178,37 @@ void eepromSet()
 
     EEPROM.update(0, newEpprom);
     EEPROM.update(1, buttonPushCounter);
-    EEPROM.update(2, channel);
+    EEPROM.update(2, timeSpeed);
     EEPROM.update(3, Bvariable);
     EEPROM.update(4, sensitivity);
+    EEPROM.update(5, remoteState);
 
   }
 
   else { 
     Serial.println("Old EPROM!");                           //not new eeprom
     buttonPushCounter =  (int)EEPROM.read(1);
-    channel =            (int)EEPROM.read(2);
+    timeSpeed =          (int)EEPROM.read(2);
     Bvariable =          (int)EEPROM.read(3);
     sensitivity =        (int)EEPROM.read(4);
+    remoteState =        (int)EEPROM.read(5);
 
-
+    Serial.print("remoteState :   ");
+    Serial.println(remoteState);
     Serial.print("buttonPushCounter :   ");
     Serial.println(buttonPushCounter);
-    Serial.print("channel :   ");
-    Serial.println(channel);
+    Serial.print("timeSpeed :   ");
+    Serial.println(timeSpeed);
     Serial.print("sensitivity :   ");
     Serial.println(sensitivity);
     Serial.print("Bvariable :   ");
     Serial.println(Bvariable);
 
     buttonPushCounter =  (int)EEPROM.read(1);
-    channel =            (int)EEPROM.read(2);
+    timeSpeed =            (int)EEPROM.read(2);
     Bvariable =          (int)EEPROM.read(3);
     sensitivity =        (int)EEPROM.read(4);
+    remoteState =        (int)EEPROM.read(5);
 
 
     if (buttonPushCounter < 0 || buttonPushCounter > 9){    // safety in case bad eprom reading
@@ -1217,7 +1223,7 @@ void eepromSet()
       Bvariable = 3;
     }
     if (channel < 0 || channel > 9){    // safety in case bad eprom reading
-      channel = 8;
+      timeSpeed = 2;
     }
     normal = 1;
     //FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20); // set master brightness control
