@@ -208,12 +208,17 @@ static const int wheelH[] = {
 static const int wheelS[] = {
   255, 255, 255, 255, 255, 255, 255, 255, 255, 200, 100,  50,   0
 };
-
 int wheelPosition = 12;
+
+static const int speedOfAnimation[] = {
+  100, 50, 30, 20, 10, 1
+};
+int timeSpeed = 2;
+
 
 //Lamp Mode Variables
 int rainbowCounter = 0;
-int timeSpeed = 100;
+
 uint8_t gHue = 180;           // rotating "base color" used by many of the patterns
 int COOLINGarray[] = {100, 90, 85, 80, 75, 90, 85, 100, 90}; // Fire Mode varriable
 int COOLING = 90;         // Fire Mode varriable
@@ -468,12 +473,12 @@ void loop()
           //EEPROM.update(4, sensitivity);
         }
         else if (previousRemoteState == BUTTON_C) {     // Speed of Animation
-          if (channel < 8){          channel++;     }
-          fill_solid( leds, NUM_LEDS, CHSV(110,150,(map(channel,0,8,20,250))));
+          if (timeSpeed < 5){          timeSpeed++;     }
+          fill_solid( leds, NUM_LEDS, CHSV(110,150,(map(timeSpeed,0,5,20,250))));
           FastLED.show();
-          Serial.print("channel = ");
-          Serial.println(channel);
-          //EEPROM.update(2, channel);
+          Serial.print("timeSpeed = ");
+          Serial.println(timeSpeed);
+          //EEPROM.update(2, timeSpeed);
         }
         variableState = 1;
     }    
@@ -502,12 +507,12 @@ void loop()
           //EEPROM.update(4, sensitivity);
         }
         else if (previousRemoteState == BUTTON_C) {     // Speed of Animation
-          if (channel > 0){          channel--;     }
-          fill_solid( leds, NUM_LEDS, CHSV(110,150,(map(channel,0,8,20,250))));
+          if (timeSpeed > 0){          timeSpeed--;     }
+          fill_solid( leds, NUM_LEDS, CHSV(110,150,(map(timeSpeed,0,5,20,250))));
           FastLED.show();
-          Serial.print("channel = ");
-          Serial.println(channel);
-          //EEPROM.update(2, channel);
+          Serial.print("timeSpeed = ");
+          Serial.println(timeSpeed);
+          //EEPROM.update(2, timeSpeed);
         }
         variableState = 1;
     }    
@@ -792,7 +797,7 @@ void lampMode1()  // Neon
 
 void lampMode2()  // Fairy Light
 {
-    EVERY_N_MILLISECONDS(30) {
+    EVERY_N_MILLISECONDS(speedOfAnimation[timeSpeed]) {
     for (int x = 0; x < NUM_LEDS; x++) {
     if(goingUp[x] == 1){
       currentValue[x]++;
@@ -817,7 +822,7 @@ void lampMode3()  // Ombre
 
 void lampMode4()  // Breathing Light
 {
-  EVERY_N_MILLISECONDS(30) {
+  EVERY_N_MILLISECONDS(speedOfAnimation[timeSpeed]) {
     if(goingUpFade == 1){
       currentValueFade++;
       if (currentValueFade >= 255) {goingUpFade = 0;}
@@ -835,7 +840,7 @@ void lampMode4()  // Breathing Light
 
 void rainbow(int startPos, int number, float deltaHue) 
 {
-    if (++rainbowCounter >= timeSpeed) {
+    if (++rainbowCounter >= speedOfAnimation[timeSpeed] * 3) {
       gHue++;
       rainbowCounter = 0;
     } // slowly cycle the "base color" through the rainbow
