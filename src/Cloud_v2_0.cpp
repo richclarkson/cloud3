@@ -120,7 +120,6 @@ const uint16_t BUTTON_B1 = 9;
 const uint16_t BUTTON_B2 = 25;
 const uint16_t BUTTON_B3 = 26;
 const uint16_t BUTTON_B4 = 27;
-const uint16_t BUTTON_B5 = 28;
 
 uint16_t BUTTON_ARRAY[9] = {BUTTON_POWER, BUTTON_A, BUTTON_B, BUTTON_C, BUTTON_UP, BUTTON_DOWN, BUTTON_LEFT, BUTTON_RIGHT, BUTTON_CIRCLE};
 
@@ -208,7 +207,7 @@ static const int wheelS[] = {
 int wheelPosition = 12;
 
 static const int speedOfAnimation[] = {
-  100, 50, 30, 20, 10, 1
+  10000, 5000, 3000, 1000, 100, 10
 };
 int timeSpeed;
 
@@ -343,11 +342,17 @@ void loop()
       demo();    
       }
     else if (butStateCounter == 3){    
-     if (flashCount == 1){  flash(130,250);  }
+     if (flashCount == 1){  
+       flash(130,250);
+       strom();  
+       }
       timedLightening(30);    
     }
     else if (butStateCounter == 4){    
-     if (flashCount == 1){  flash(130,250);  }
+     if (flashCount == 1){  
+       flash(130,250);
+       strom();    
+       }
      timedLightening(240);    
      }
   }
@@ -366,7 +371,7 @@ void loop()
       }
     else if (butStateCounter == 3){    
       fetchSoundData(); 
-      musicmode2();     
+      musicmode1();     
     }
     else if (butStateCounter == 4){    
       analyzeFFTall(); ;
@@ -555,26 +560,27 @@ void FFTreading(int FFTchannel)
 
 void musicmode1()   // Falling Dot
 { 
+  soundLevel = map(soundLevel,0,250,0,NUM_LEDS);
   if (soundLevel > dot)  dot = soundLevel; // Keep dot on top of soundLevel
   if (dot > NUM_LEDS)    dot = NUM_LEDS; // Keep dot from going out of frame
 
   turnoffLEDs();
   
-  for (int led = 0; led < soundLevel; led++)
+  for (int led = 0; led < dot; led++)
   { // Start by Filling LEDS up to the soundLevel with dim white
     leds[led].setRGB(80, 80, 80);
   }
-  leds[dot].setRGB(0, 0, 255);    // Fill in the 'peak' pixel with BLUE
+  //leds[dot].setRGB(0, 0, 255);    // Fill in the 'peak' pixel with BLUE
   
-  for (int led = dot + 1; led < NUM_LEDS; led++)
+  for (int led = dot; led < NUM_LEDS; led++)
   { //make everything above the dot black
     leds[led].setRGB(0, 0, 0);
   }
   FastLED.show(); // send data to LEDs to display
 
-  if (++dotCount >= 10) {                   // make the dot fall slowly
+  if (++dotCount >= 20) {                   // make the dot fall slowly
     dotCount = 0;
-    if (dot > 1) {
+    if (dot >= 1) {
       dot--;
     }
   }
@@ -614,17 +620,11 @@ void musicmode3()    // Ripple
     {
       topOfRipple = NUM_LEDS;
     }
-    int rippleBrightness = constrain(fftArray[y] * 20, 0, 254);
+    int rippleBrightness = constrain( fftArray[y], 0, 254 );    // fftArray[y]
     for (int led = bottomOfRipple; led < topOfRipple; led++)
     {
       leds[led] = CHSV(0, 0, rippleBrightness); // fill in LEDs according to the top and bottom of each section deffined above
     }
-    //blur1d(leds, NUM_LEDS, fftArray[y]);  // blur LEDs for smoother transitions
-    
-    // readSensor();
-    // if (aveCapReading > touchTime){      //EXIT TEST
-    //   break;                             
-    // }
   }
   FastLED.show();
 }
@@ -742,7 +742,7 @@ void lampMode1()  // Neon
 
 void lampMode2()  // Fairy Light
 {
-    EVERY_N_MILLISECONDS(speedOfAnimation[timeSpeed]) {
+    if (++rainbowCounter >= speedOfAnimation[timeSpeed]) {
     for (int x = 0; x < NUM_LEDS; x++) {
     if(goingUp[x] == 1){
       currentValue[x]++;
@@ -755,6 +755,7 @@ void lampMode2()  // Fairy Light
     leds[x] = CHSV( wheelH[wheelPosition], wheelS[wheelPosition], currentValue[x]);
   }
   FastLED.show();
+  rainbowCounter = 0;
  }
 }
 
@@ -767,7 +768,7 @@ void lampMode3()  // Ombre
 
 void lampMode4()  // Breathing Light
 {
-  EVERY_N_MILLISECONDS(speedOfAnimation[timeSpeed]) {
+  if (++rainbowCounter >= speedOfAnimation[timeSpeed]) {
     if(goingUpFade == 1){
       currentValueFade++;
       if (currentValueFade >= 255) {goingUpFade = 0;}
@@ -780,6 +781,7 @@ void lampMode4()  // Breathing Light
     leds[x] = CHSV(100, 0, currentValueFade);
   }
   FastLED.show();
+  rainbowCounter = 0;
  }
 }
 
@@ -878,7 +880,7 @@ void strom()
 
   for (int led = 0; led < NUM_LEDS; led++) {          leds[led] = CHSV( 100, 0, 0);      }
       FastLED.show();
-      
+      delay(random(10, 200));
 } 
 
 
