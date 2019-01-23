@@ -33,7 +33,7 @@
 FASTLED_USING_NAMESPACE
 
 //Global Varriables
-int channel;
+int channel = 8;
 int sensitivity;  // 0-8 where 8 = maximum sensitivity
 int Bvariable;  // brightness
 
@@ -251,7 +251,6 @@ uint8_t dotBrightness = 250;
 uint8_t dotBrightnessDirection = 1;
 int newEpprom;
 uint8_t automatedIndicator;
-uint8_t reset = 0;
 int numberLoops = 50;
 int capReading;
 int aveCapReading;
@@ -283,6 +282,7 @@ void demo();
 void soundLightening();
 void strom();
 void flash(int hue, int saturation);
+void reset();
 
 
 void setup()
@@ -312,13 +312,12 @@ void setup()
   // }
   Serial.println("Cloud v2.0");
   //EEPROM.update(0, 1);       // uncomment to load default EPROM values
-  //eepromSet();
-
-    butStateCounter = 1;                  //
-    timeSpeed = 2;                          //
-    Bvariable = 8;                          //
-    sensitivity = 4;                        //
-    remoteState = BUTTON_B;
+  eepromSet();
+    // butStateCounter = 1;                  //
+    // timeSpeed = 2;                          //
+    // Bvariable = 8;                          //
+    // sensitivity = 4;                        //
+    // remoteState = BUTTON_B;
 }
 
 
@@ -332,7 +331,7 @@ void loop()
     delay(3);
   }
   else if (remoteState == BUTTON_POWER_HELD){
-    //reset();
+      reset();
   }
   else if (remoteState == BUTTON_A){
     if      (butStateCounter == 1){    
@@ -408,7 +407,7 @@ void loop()
           FastLED.show();
           Serial.print("Bvariable = ");
           Serial.println(Bvariable);
-          //EEPROM.update(3, Bvariable);
+          EEPROM.update(3, Bvariable);
         }
         else if (previousRemoteState == BUTTON_B) {     // sensitivity
           if (sensitivity < 8){     sensitivity++;  }
@@ -416,7 +415,7 @@ void loop()
           FastLED.show();
           Serial.print("sensitivity = ");
           Serial.println(sensitivity);
-          //EEPROM.update(4, sensitivity);
+          EEPROM.update(4, sensitivity);
         }
         else if (previousRemoteState == BUTTON_C) {     // Speed of Animation
           if (timeSpeed < 5){          timeSpeed++;     }
@@ -424,7 +423,7 @@ void loop()
           FastLED.show();
           Serial.print("timeSpeed = ");
           Serial.println(timeSpeed);
-          //EEPROM.update(2, timeSpeed);
+          EEPROM.update(2, timeSpeed);
         }
         variableState = 1;
     }    
@@ -442,7 +441,7 @@ void loop()
           FastLED.show();
           Serial.print("Bvariable = ");
           Serial.println(Bvariable);
-          //EEPROM.update(3, Bvariable);
+          EEPROM.update(3, Bvariable);
         }
         else if (previousRemoteState == BUTTON_B) {     // sensitivity
           if (sensitivity > 0){     sensitivity--;  }
@@ -450,7 +449,7 @@ void loop()
           FastLED.show();
           Serial.print("sensitivity = ");
           Serial.println(sensitivity);
-          //EEPROM.update(4, sensitivity);
+          EEPROM.update(4, sensitivity);
         }
         else if (previousRemoteState == BUTTON_C) {     // Speed of Animation
           if (timeSpeed > 0){          timeSpeed--;     }
@@ -458,7 +457,7 @@ void loop()
           FastLED.show();
           Serial.print("timeSpeed = ");
           Serial.println(timeSpeed);
-          //EEPROM.update(2, timeSpeed);
+          EEPROM.update(2, timeSpeed);
         }
         variableState = 1;
     }    
@@ -915,7 +914,7 @@ void eepromSet()
 
   else { 
     Serial.println("Old EPROM!");                           //not new eeprom
-    butStateCounter =  (int)EEPROM.read(1);
+    butStateCounter =    (int)EEPROM.read(1);
     timeSpeed =          (int)EEPROM.read(2);
     Bvariable =          (int)EEPROM.read(3);
     sensitivity =        (int)EEPROM.read(4);
@@ -932,8 +931,8 @@ void eepromSet()
     Serial.print("Bvariable :   ");
     Serial.println(Bvariable);
 
-    butStateCounter =  (int)EEPROM.read(1);
-    timeSpeed =            (int)EEPROM.read(2);
+    butStateCounter =    (int)EEPROM.read(1);
+    timeSpeed =          (int)EEPROM.read(2);
     Bvariable =          (int)EEPROM.read(3);
     sensitivity =        (int)EEPROM.read(4);
     remoteState =        (int)EEPROM.read(5);
@@ -1128,6 +1127,7 @@ void remote()
               else {        butStateCounter = 1;     }
               Serial.print("butStateCounter:");
               Serial.println(butStateCounter);
+              EEPROM.update(1, butStateCounter);
             }
             else if (currentButton == 'B') {
               previousRemoteState = remoteState;
@@ -1139,6 +1139,7 @@ void remote()
               else {        butStateCounter = 1;     }
               Serial.print("butStateCounter:");
               Serial.println(butStateCounter);
+              EEPROM.update(1, butStateCounter);
             }
             else if (currentButton == 'C') {
               previousRemoteState = remoteState;
@@ -1150,6 +1151,7 @@ void remote()
               else {        butStateCounter = 1;     }
               Serial.print("butStateCounter:");
               Serial.println(butStateCounter);
+              EEPROM.update(1, butStateCounter);
             }
             else if (currentButton == 'O') {
             //previousRemoteState = remoteState;
@@ -1163,7 +1165,7 @@ void remote()
         buttonHeld = 0;
 
       }
-      //EEPROM.write(0, remoteState);             //fix this later
+      EEPROM.update(5, remoteState);
     }
     checking = millis();
   }
@@ -1210,5 +1212,24 @@ void upDownLeftRightRemoteHeld()
   variableMillis = millis();
   irrecv.resume(); // Receive the next value
   remote();
+}
+
+void reset()
+{
+  Serial.print("RESET!");
+  fill_solid( leds, NUM_LEDS, CHSV(255, 255, 200));
+  FastLED.show();
+  delay(200);
+  turnoffLEDs();
+  FastLED.show();
+  fill_solid( leds, NUM_LEDS, CHSV(255, 255, 200));
+  FastLED.show();
+  delay(200);
+  turnoffLEDs();
+  FastLED.show();
+  newEpprom = 1;
+  EEPROM.update(0, newEpprom);
+  eepromSet();
+      
 }
 
