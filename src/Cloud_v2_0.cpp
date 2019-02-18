@@ -206,11 +206,11 @@ static const int wheelS[] = {
 };
 int wheelPosition = 12;
 
-static const int speedOfAnimation[] = {
-  10000, 5000, 3000, 1000, 100, 10
+int speedOfAnimation[] = {
+  30, 20, 17, 12, 5, 1
 };
 int timeSpeed;
-
+//int thistimer;
 
 //Lamp Mode Variables
 int rainbowCounter = 0;
@@ -427,7 +427,7 @@ void loop()
           fill_solid( leds, NUM_LEDS, CHSV(110,150,(map(timeSpeed,0,5,20,250))));
           FastLED.show();
           Serial.print("timeSpeed = ");
-          Serial.println(timeSpeed);
+          Serial.println(speedOfAnimation[timeSpeed]);
           EEPROM.update(2, timeSpeed);
         }
         variableState = 1;
@@ -461,7 +461,7 @@ void loop()
           fill_solid( leds, NUM_LEDS, CHSV(110,150,(map(timeSpeed,0,5,20,250))));
           FastLED.show();
           Serial.print("timeSpeed = ");
-          Serial.println(timeSpeed);
+          Serial.println(speedOfAnimation[timeSpeed]);
           EEPROM.update(2, timeSpeed);
         }
         variableState = 1;
@@ -742,7 +742,8 @@ void lampMode1()  // Neon
 
 void lampMode2()  // Fairy Light
 {
-    if (++rainbowCounter >= speedOfAnimation[timeSpeed]) {
+    EVERY_N_MILLISECONDS_I(thistimer,10) {
+    thistimer.setPeriod(speedOfAnimation[timeSpeed]);
     for (int x = 0; x < NUM_LEDS; x++) {
     if(goingUp[x] == 1){
       currentValue[x]++;
@@ -754,9 +755,9 @@ void lampMode2()  // Fairy Light
     }
     leds[x] = CHSV( wheelH[wheelPosition], wheelS[wheelPosition], currentValue[x]);
   }
-  FastLED.show();
   rainbowCounter = 0;
  }
+ FastLED.show();
 }
 
 void lampMode3()  // Ombre
@@ -768,7 +769,8 @@ void lampMode3()  // Ombre
 
 void lampMode4()  // Breathing Light
 {
-  if (++rainbowCounter >= speedOfAnimation[timeSpeed]) {
+  EVERY_N_MILLISECONDS_I(thistimer,10) {
+    thistimer.setPeriod(speedOfAnimation[timeSpeed]);
     if(goingUpFade == 1){
       currentValueFade++;
       if (currentValueFade >= 255) {goingUpFade = 0;}
@@ -778,11 +780,11 @@ void lampMode4()  // Breathing Light
       if (currentValueFade <= 10) {goingUpFade = 1;}
     }
     for (int x = 0; x < NUM_LEDS; x++) {
-    leds[x] = CHSV(100, 0, currentValueFade);
+      leds[x] = CHSV(100, 0, currentValueFade);
+    }
+    rainbowCounter = 0;
   }
   FastLED.show();
-  rainbowCounter = 0;
- }
 }
 
 void rainbow(int startPos, int number, float deltaHue) 
