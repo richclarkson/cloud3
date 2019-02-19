@@ -140,6 +140,8 @@ uint16_t resultCode;
 int buttonHeld = 0;
 int remoteState;
 int stateCounter = 0;
+int remotEeprom;
+int prevRemotEeprom = 0;
 
 int previousRemoteState;
 
@@ -222,7 +224,7 @@ uint8_t gHue = 180;           // rotating "base color" used by many of the patte
 #define CLK_PIN 3  //SCK  //14 Blue
 #define LED_TYPE WS2801 //APA102
 #define COLOR_ORDER RGB
-#define NUM_LEDS 25 //115 for normal Saber, 48 for half saber
+#define NUM_LEDS 25 //                            NUM_LEDS Setting!
 CRGB leds[NUM_LEDS];
 //#define FRAMES_PER_SECOND 120
 
@@ -244,7 +246,6 @@ int modeColor;
 int indcatorDots;
 uint8_t ledCimber = 8;
 int variableCounter = 9;  //global
-uint8_t normal = 1;  // 1 = normal modes, 0 = settings modes
 uint8_t pushAndHold = 0;
 uint8_t dotBrightness = 250;
 uint8_t dotBrightnessDirection = 1;
@@ -897,14 +898,13 @@ void eepromSet()
     // eeprom values:
     newEpprom = 73;
     remoteState = 1000;
+    remotEeprom = 0;
     previousRemoteState = remoteState;
     butStateCounter = 1;                  //
     timeSpeed = 2;                            //
     Bvariable = 8;                          //
     sensitivity = 3;                        //
 
-
-    normal = 1;
     //FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20); // set master brightness control
 
     EEPROM.update(0, newEpprom);
@@ -912,7 +912,7 @@ void eepromSet()
     EEPROM.update(2, timeSpeed);
     EEPROM.update(3, Bvariable);
     EEPROM.update(4, sensitivity);
-    EEPROM.update(5, remoteState);
+    EEPROM.update(5, remotEeprom);
 
   }
 
@@ -922,8 +922,12 @@ void eepromSet()
     timeSpeed =          (int)EEPROM.read(2);
     Bvariable =          (int)EEPROM.read(3);
     sensitivity =        (int)EEPROM.read(4);
-    remoteState =        (int)EEPROM.read(5);
+    remotEeprom =        (int)EEPROM.read(5);
 
+    remoteState = BUTTON_ARRAY[remotEeprom];  // 0 = BUTTON_POWER, 1 = BUTTON_A, 2 = BUTTON_B, 3 = BUTTON_C
+
+    Serial.print("remotEeprom :   ");
+    Serial.println(remotEeprom);
     Serial.print("remoteState :   ");
     Serial.println(remoteState);
     Serial.print("butStateCounter :   ");
@@ -935,27 +939,25 @@ void eepromSet()
     Serial.print("Bvariable :   ");
     Serial.println(Bvariable);
 
-    butStateCounter =    (int)EEPROM.read(1);
-    timeSpeed =          (int)EEPROM.read(2);
-    Bvariable =          (int)EEPROM.read(3);
-    sensitivity =        (int)EEPROM.read(4);
-    remoteState =        (int)EEPROM.read(5);
+    // butStateCounter =    (int)EEPROM.read(1);
+    // timeSpeed =          (int)EEPROM.read(2);
+    // Bvariable =          (int)EEPROM.read(3);
+    // sensitivity =        (int)EEPROM.read(4);
+    // remotEeprom =        (int)EEPROM.read(5);
 
 
     if (butStateCounter < 1 || butStateCounter > 4){    // safety in case bad eprom reading
       butStateCounter = 1;
     }
-
     if (sensitivity < 0 || sensitivity > 9){    // safety in case bad eprom reading
       sensitivity = 3;
     }
     if (Bvariable < 0 || Bvariable > 9){    // safety in case bad eprom reading
       Bvariable = 3;
     }
-    if (channel < 0 || channel > 9){    // safety in case bad eprom reading
-      timeSpeed = 2;
+    if (remotEeprom < 0 || remotEeprom > 9){    // safety in case bad eprom reading
+      remotEeprom = 0;
     }
-    normal = 1;
     //FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20); // set master brightness control
   }
 }
@@ -1114,6 +1116,7 @@ void remote()
             Serial.println(currentButton);
 
             if (currentButton == 'P') {
+              EEPROM.update(5, 0);  // EEPROM Save 0 = BUTTON_POWER
               previousRemoteState = remoteState;
               remoteState = BUTTON_POWER;
               flashCount = 1;
@@ -1122,6 +1125,7 @@ void remote()
               FastLED.show();
             }
             else if (currentButton == 'A') {
+              EEPROM.update(5, 1);  // EEPROM Save 1 = BUTTON_A
               previousRemoteState = remoteState;
               remoteState = BUTTON_A;
               if (previousRemoteState == remoteState){ 
@@ -1134,6 +1138,7 @@ void remote()
               EEPROM.update(1, butStateCounter);
             }
             else if (currentButton == 'B') {
+              EEPROM.update(5, 2);  // EEPROM Save 2 = BUTTON_B
               previousRemoteState = remoteState;
               remoteState = BUTTON_B;
               if (previousRemoteState == remoteState){ 
@@ -1146,6 +1151,7 @@ void remote()
               EEPROM.update(1, butStateCounter);
             }
             else if (currentButton == 'C') {
+              EEPROM.update(5, 3);  // EEPROM Save 3 = BUTTON_C
               previousRemoteState = remoteState;
               remoteState = BUTTON_C;
               if (previousRemoteState == remoteState){ 
@@ -1169,7 +1175,19 @@ void remote()
         buttonHeld = 0;
 
       }
-      EEPROM.update(5, remoteState);
+
+      //find the relevant remoteState value within BUTTON_ARRAY - save to eeprom as remotEeprom
+      // for (int x = 0; x < 3; x++){
+      //     if(remoteState == BUTTON_ARRAY[x]){
+      //       remotEeprom = x;
+      //  }
+      //  if (remotEeprom != prevRemotEeprom){
+      //     EEPROM.update(5, remotEeprom);
+      //     prevRemotEeprom = remotEeprom;
+      //  }
+      // }
+      
+
     }
     checking = millis();
   }
