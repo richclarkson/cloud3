@@ -141,7 +141,6 @@ int buttonHeld = 0;
 int remoteState;
 int stateCounter = 0;
 int remotEeprom;
-int prevRemotEeprom = 0;
 
 int previousRemoteState;
 
@@ -206,7 +205,7 @@ static const int wheelH[] = {
 static const int wheelS[] = {
   255, 255, 255, 255, 255, 255, 255, 255, 255, 200, 100,  50,   0
 };
-int wheelPosition = 12;
+int wheelPosition;
 
 int speedOfAnimation[] = {
   30, 20, 17, 12, 5, 1
@@ -624,7 +623,7 @@ void musicmode3()    // Ripple
     int rippleBrightness = constrain( fftArray[y], 0, 254 );    // fftArray[y]
     for (int led = bottomOfRipple; led < topOfRipple; led++)
     {
-      leds[led] = CHSV(0, 0, rippleBrightness); // fill in LEDs according to the top and bottom of each section deffined above
+      leds[led] = CHSV(wheelH[wheelPosition], wheelS[wheelPosition], rippleBrightness); // fill in LEDs according to the top and bottom of each section deffined above
     }
   }
   FastLED.show();
@@ -637,7 +636,7 @@ void musicmode4()   // Fade
 
   for (int led = 0; led < NUM_LEDS; led++)
   {
-    leds[led] = CHSV( 200, 0, dot);
+    leds[led] = CHSV( wheelH[wheelPosition], wheelS[wheelPosition], dot);
   }
   FastLED.show();
   if (++dotCount >= 5) {                   // make the dot fall slowly
@@ -781,7 +780,7 @@ void lampMode4()  // Breathing Light
       if (currentValueFade <= 10) {goingUpFade = 1;}
     }
     for (int x = 0; x < NUM_LEDS; x++) {
-      leds[x] = CHSV(100, 0, currentValueFade);
+      leds[x] = CHSV(wheelH[wheelPosition], wheelS[wheelPosition], currentValueFade);
     }
     rainbowCounter = 0;
   }
@@ -904,6 +903,7 @@ void eepromSet()
     timeSpeed = 2;                            //
     Bvariable = 8;                          //
     sensitivity = 3;                        //
+    wheelPosition = 12;
 
     //FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20); // set master brightness control
 
@@ -913,6 +913,7 @@ void eepromSet()
     EEPROM.update(3, Bvariable);
     EEPROM.update(4, sensitivity);
     EEPROM.update(5, remotEeprom);
+    EEPROM.update(6, wheelPosition);
 
   }
 
@@ -923,8 +924,8 @@ void eepromSet()
     Bvariable =          (int)EEPROM.read(3);
     sensitivity =        (int)EEPROM.read(4);
     remotEeprom =        (int)EEPROM.read(5);
-
     remoteState = BUTTON_ARRAY[remotEeprom];  // 0 = BUTTON_POWER, 1 = BUTTON_A, 2 = BUTTON_B, 3 = BUTTON_C
+    wheelPosition =      (int)EEPROM.read(6);
 
     Serial.print("remotEeprom :   ");
     Serial.println(remotEeprom);
@@ -938,13 +939,8 @@ void eepromSet()
     Serial.println(sensitivity);
     Serial.print("Bvariable :   ");
     Serial.println(Bvariable);
-
-    // butStateCounter =    (int)EEPROM.read(1);
-    // timeSpeed =          (int)EEPROM.read(2);
-    // Bvariable =          (int)EEPROM.read(3);
-    // sensitivity =        (int)EEPROM.read(4);
-    // remotEeprom =        (int)EEPROM.read(5);
-
+    Serial.print("wheelPosition :   ");
+    Serial.println(wheelPosition);
 
     if (butStateCounter < 1 || butStateCounter > 4){    // safety in case bad eprom reading
       butStateCounter = 1;
@@ -957,6 +953,9 @@ void eepromSet()
     }
     if (remotEeprom < 0 || remotEeprom > 9){    // safety in case bad eprom reading
       remotEeprom = 0;
+    }
+    if (wheelPosition < 0 || wheelPosition > 12){    // safety in case bad eprom reading
+      wheelPosition = 12;
     }
     //FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20); // set master brightness control
   }
@@ -986,12 +985,24 @@ void remote()
 
 
         if (currentButton == 'L') {
-          if (wheelPosition < 12){        wheelPosition++;    }
-          else {                          wheelPosition = 0;  }
+          if (wheelPosition < 12){        
+            wheelPosition++;    
+            EEPROM.update(6, wheelPosition);  // EEPROM Save
+            }
+          else {                          
+            wheelPosition = 0;
+            EEPROM.update(6, wheelPosition);  // EEPROM Save  
+            }
         }
         else if (currentButton == 'R') {
-          if (wheelPosition > 0){         wheelPosition--;    }
-          else {                          wheelPosition = 12; }
+          if (wheelPosition > 0){         
+            wheelPosition--;
+            EEPROM.update(6, wheelPosition);  // EEPROM Save    
+            }
+          else {                          
+            wheelPosition = 12; 
+            EEPROM.update(6, wheelPosition);  // EEPROM Save
+            }
         }
         else if (currentButton == 'U') {
           upDownLeftRightRemoteHeld();
@@ -1061,13 +1072,25 @@ void remote()
               }
             else if (resultCode == BUTTON_LEFT) {
               currentButton = 'L';
-                if (wheelPosition < 12){       wheelPosition++;   }
-                else {                         wheelPosition = 0; }
+                if (wheelPosition < 12){       
+                  wheelPosition++;  
+                  EEPROM.update(6, wheelPosition);  // EEPROM Save 
+                }
+                else {                         
+                  wheelPosition = 0; 
+                  EEPROM.update(6, wheelPosition);  // EEPROM Save
+                  }
               }
             else if (resultCode == BUTTON_RIGHT) {
               currentButton = 'R';
-                if (wheelPosition > 0){        wheelPosition--;   }
-                else {                         wheelPosition = 12; }
+                if (wheelPosition > 0){        
+                  wheelPosition--;   
+                  EEPROM.update(6, wheelPosition);  // EEPROM Save
+                  }
+                else {                        
+                  wheelPosition = 12; 
+                  EEPROM.update(6, wheelPosition);  // EEPROM Save
+                  }
               }
             else if (resultCode == BUTTON_CIRCLE) {
               //currentButton = 'O';
