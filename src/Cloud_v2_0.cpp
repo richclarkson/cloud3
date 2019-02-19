@@ -560,27 +560,30 @@ void FFTreading(int FFTchannel)
 
 void musicmode1()   // Falling Dot
 { 
-  soundLevel = map(soundLevel,0,250,0,NUM_LEDS);
+  fadeToBlackBy( leds, NUM_LEDS, 3);
+
+  soundLevel = (map(soundLevel,0,150,0,NUM_LEDS+1))-1;    //250
   if (soundLevel > dot)  dot = soundLevel; // Keep dot on top of soundLevel
   if (dot > NUM_LEDS)    dot = NUM_LEDS; // Keep dot from going out of frame
 
-  turnoffLEDs();
-  
+  //turnoffLEDs();
+  if (soundLevel > 1){
   for (int led = 0; led < dot; led++)
   { // Start by Filling LEDS up to the soundLevel with dim white
-    leds[led].setRGB(80, 80, 80);
+    leds[led] = CHSV( 100, 0, 255);
+   } 
   }
-  //leds[dot].setRGB(0, 0, 255);    // Fill in the 'peak' pixel with BLUE
+  //leds[dot] = CHSV( 100, 150, 255);
   
-  for (int led = dot; led < NUM_LEDS; led++)
-  { //make everything above the dot black
-    leds[led].setRGB(0, 0, 0);
-  }
+  // for (int led = dot; led < NUM_LEDS; led++)
+  // { //make everything above the dot black
+  //   leds[led].setRGB(0, 0, 0);
+  // }
   FastLED.show(); // send data to LEDs to display
 
-  if (++dotCount >= 20) {                   // make the dot fall slowly
+  if (++dotCount >= 40) {                   // make the dot fall slowly
     dotCount = 0;
-    if (dot >= 1) {
+    if (dot > 0) {
       dot--;
     }
   }
@@ -606,7 +609,7 @@ void musicmode2()   // Middle Out
 
 void musicmode3()    // Ripple
 { 
-  fadeToBlackBy( leds, NUM_LEDS, 1);
+  //fadeToBlackBy( leds, NUM_LEDS, 1);
   //turnoffLEDs();
   for (int y = 0; y < 8; y++) // create 8 different LED sections of saber each based on the 8 FFT channels
   {
@@ -620,7 +623,9 @@ void musicmode3()    // Ripple
     {
       topOfRipple = NUM_LEDS;
     }
-    int rippleBrightness = constrain( fftArray[y], 0, 254 );    // fftArray[y]
+    int rippleBrightness = fftArray[y] * 5;    // fftArray[y]
+    //ippleBrightness = map( rippleBrightness, 0, 50, 0, 255 );    // fftArray[y]
+    rippleBrightness = constrain( rippleBrightness, 0, 255 );    // fftArray[y]
     for (int led = bottomOfRipple; led < topOfRipple; led++)
     {
       leds[led] = CHSV(wheelH[wheelPosition], wheelS[wheelPosition], rippleBrightness); // fill in LEDs according to the top and bottom of each section deffined above
@@ -902,10 +907,9 @@ void eepromSet()
     butStateCounter = 1;                  //
     timeSpeed = 2;                            //
     Bvariable = 8;                          //
+    FastLED.setBrightness(map(Bvariable,0,8,50,255)); // set master brightness control
     sensitivity = 3;                        //
     wheelPosition = 12;
-
-    //FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20); // set master brightness control
 
     EEPROM.update(0, newEpprom);
     EEPROM.update(1, butStateCounter);
@@ -957,7 +961,7 @@ void eepromSet()
     if (wheelPosition < 0 || wheelPosition > 12){    // safety in case bad eprom reading
       wheelPosition = 12;
     }
-    //FastLED.setBrightness(((Bvariable * Bvariable) * 3) + 20); // set master brightness control
+    FastLED.setBrightness(map(Bvariable,0,8,50,255)); // set master brightness control
   }
 }
 
