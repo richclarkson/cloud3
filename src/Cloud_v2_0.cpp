@@ -1023,7 +1023,7 @@ void remote()
              Serial.println(currentButton);
 
             if (currentButton == 'O') {
-              remoteState = BUTTON_CIRCLE_HELD;
+              //remoteState = BUTTON_CIRCLE_HELD;
             }
             else if (currentButton == 'A') {
               previousRemoteState = remoteState;
@@ -1099,7 +1099,9 @@ void remote()
             else if (resultCode == BUTTON_CIRCLE) {
               //currentButton = 'O';
               strom();
-              remoteState = previousRemoteState;
+              strom();
+              strom();
+              //remoteState = previousRemoteState;
               //if(butStateCounter != 1){ butStateCounter--; }
               newButtonPress = 0;
             }
