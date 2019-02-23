@@ -296,14 +296,22 @@ void setup()
   FastLED.show();
   Serial.begin(9600);
   delay(1000);  // Sanity Delay
-  for (int i = 0; i < NUM_LEDS; i++) {    //fill up the minimum LED value array for Fairy Light Mode
-    minLEDvalue[i] = random(20,100);
-  } 
-  for (int i = 0; i < NUM_LEDS; i++) {    //fill up the going up value array for Fairy Light Mode
-    goingUp[i] = random(0,1);
+  for (int i = 0; i < NUM_LEDS; i++) {    
+    minLEDvalue[i] = random(1,150);       //fill up the minimum LED value array for Fairy Light Mode
+    currentValue[i] = random(1,254);      //fill up the current value array for Fairy Light Mode
+    goingUp[i] = random(0,1);             //fill up the going up value array for Fairy Light Mode
   }
-    for (int i = 0; i < NUM_LEDS; i++) {    //fill up the current value array for Fairy Light Mode
-    currentValue[i] = random(101,254);
+  for (int i = 0; i < 1000; i++) {
+    for (int x = 0; x < NUM_LEDS; x++) {
+      if(goingUp[x] == 1){
+        currentValue[x]++;
+        if (currentValue[x] >= 255) {goingUp[x] = 0;}
+      }
+      else{
+        currentValue[x]--;
+        if (currentValue[x] <= minLEDvalue[x]) {goingUp[x] = 1;}
+      }
+    }
   }
   flash(100, 0);
   // while (!Serial) {
@@ -330,7 +338,7 @@ void loop()
     delay(3);
   }
   else if (remoteState == BUTTON_POWER_HELD){
-      reset();
+      //reset();
   }
   else if (remoteState == BUTTON_A){
     if      (butStateCounter == 1){    
@@ -407,7 +415,7 @@ void loop()
       if(variableState == 0){
         if (previousRemoteState == BUTTON_A) {     // Global brightness
           if (Bvariable < 8){        Bvariable++;   }
-          FastLED.setBrightness(map(Bvariable,0,8,50,255));
+          FastLED.setBrightness(map(Bvariable,0,8,20,255));
           fill_solid( leds, NUM_LEDS, CHSV(60,150,(map(Bvariable,0,8,20,250))));
           FastLED.show();
           Serial.print("Bvariable = ");
@@ -440,8 +448,8 @@ void loop()
      }
       if(variableState == 0){
         if (previousRemoteState == BUTTON_A) {     // Global brightness
-          if (Bvariable > 0){        Bvariable--;   }
-          FastLED.setBrightness(map(Bvariable,0,8,50,255));
+          if (Bvariable > 0){     Bvariable--;   }
+          FastLED.setBrightness(map(Bvariable,0,8,20,255));
           fill_solid( leds, NUM_LEDS, CHSV(60,150,(map(Bvariable,0,8,20,250))));
           FastLED.show();
           Serial.print("Bvariable = ");
@@ -466,6 +474,17 @@ void loop()
         }
         variableState = 1;
     }    
+  }
+  else if ((remoteState == BUTTON_RIGHT) || (remoteState == BUTTON_LEFT))
+  {
+    for (int x = 0; x < NUM_LEDS; x++) {
+      leds[x] = CHSV(wheelH[wheelPosition], wheelS[wheelPosition], 200);
+     }
+    FastLED.show();
+
+    if(millis() - variableMillis > 1000){
+        upDownLeftRightReturn();
+     }
   }
 }
 
@@ -1008,14 +1027,14 @@ void remote()
             EEPROM.update(6, wheelPosition);  // EEPROM Save
             }
         }
-        else if (currentButton == 'U') {
-          upDownLeftRightRemoteHeld();
-          remoteState = BUTTON_UP;
-        }
-        else if (currentButton == 'D') {
-          upDownLeftRightRemoteHeld();
-          remoteState = BUTTON_DOWN;
-        }
+        // else if (currentButton == 'U') {
+        //   upDownLeftRightRemoteHeld();
+        //   remoteState = BUTTON_UP;
+        // }
+        // else if (currentButton == 'D') {
+        //   upDownLeftRightRemoteHeld();
+        //   remoteState = BUTTON_DOWN;
+        // }
 
         else {
           if (buttonHeld >= 4) {                                   // Button Holds
@@ -1023,22 +1042,23 @@ void remote()
              Serial.println(currentButton);
 
             if (currentButton == 'O') {
-              //remoteState = BUTTON_CIRCLE_HELD;
+              remoteState = BUTTON_CIRCLE_HELD;
             }
             else if (currentButton == 'A') {
-              previousRemoteState = remoteState;
-              remoteState = BUTTON_A_HELD;
+              //previousRemoteState = remoteState;
+              //remoteState = BUTTON_A_HELD;
             }
             else if (currentButton == 'B') {
-              previousRemoteState = remoteState;
-              remoteState = BUTTON_B_HELD;
+              //previousRemoteState = remoteState;
+              //remoteState = BUTTON_B_HELD;
             }
             else if (currentButton == 'P') {
-              remoteState = BUTTON_POWER_HELD;
+              //remoteState = BUTTON_POWER_HELD;
+              reset();
             }
             else if (currentButton == 'C') {
-              previousRemoteState = remoteState;
-              remoteState = BUTTON_C_HELD;
+              //previousRemoteState = remoteState;
+              //remoteState = BUTTON_C_HELD;
             }
           }
         }
@@ -1084,9 +1104,11 @@ void remote()
                   wheelPosition = 0; 
                   EEPROM.update(6, wheelPosition);  // EEPROM Save
                   }
+              upDownLeftRightRemote();
+              remoteState = BUTTON_LEFT;
               }
             else if (resultCode == BUTTON_RIGHT) {
-              currentButton = 'R';
+                currentButton = 'R';
                 if (wheelPosition > 0){        
                   wheelPosition--;   
                   EEPROM.update(6, wheelPosition);  // EEPROM Save
@@ -1095,6 +1117,9 @@ void remote()
                   wheelPosition = 12; 
                   EEPROM.update(6, wheelPosition);  // EEPROM Save
                   }
+                upDownLeftRightRemote();
+                remoteState = BUTTON_RIGHT;
+                
               }
             else if (resultCode == BUTTON_CIRCLE) {
               //currentButton = 'O';
@@ -1268,15 +1293,19 @@ void upDownLeftRightRemoteHeld()
 void reset()
 {
   Serial.print("RESET!");
+  fill_solid( leds, NUM_LEDS, CHSV(0, 0, 0));
+  FastLED.show();
+  delay(100);
   fill_solid( leds, NUM_LEDS, CHSV(255, 255, 200));
   FastLED.show();
-  delay(200);
-  turnoffLEDs();
+  delay(1000);
+  fill_solid( leds, NUM_LEDS, CHSV(0, 0, 0));
   FastLED.show();
+  delay(300);
   fill_solid( leds, NUM_LEDS, CHSV(255, 255, 200));
   FastLED.show();
-  delay(200);
-  turnoffLEDs();
+  delay(1000);
+  fill_solid( leds, NUM_LEDS, CHSV(0, 0, 0));
   FastLED.show();
   newEpprom = 1;
   EEPROM.update(0, newEpprom);
