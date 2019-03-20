@@ -579,7 +579,8 @@ void FFTreading(int FFTchannel)
 
 void musicmode1()   // Falling Dot
 { 
-  fadeToBlackBy( leds, NUM_LEDS, 3);
+  //fadeToBlackBy( leds, NUM_LEDS, 3);
+  turnoffLEDs();
 
   soundLevel = (map(soundLevel,0,150,0,NUM_LEDS+1))-1;    //250
   if (soundLevel > dot)  dot = soundLevel; // Keep dot on top of soundLevel
