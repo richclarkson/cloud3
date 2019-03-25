@@ -231,7 +231,7 @@ uint8_t gHue = 180;           // rotating "base color" used by many of the patte
 #define CLK_PIN 3  //SCK  //14 Blue
 #define LED_TYPE WS2801 //APA102
 #define COLOR_ORDER RGB
-#define NUM_LEDS 25 //                            NUM_LEDS Setting!
+#define NUM_LEDS 50 //     S=10 M=17 L=25 H=50            NUM_LEDS Setting!
 CRGB leds[NUM_LEDS];
 //#define FRAMES_PER_SECOND 120
 
