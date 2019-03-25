@@ -90,22 +90,11 @@ const uint16_t BUTTON_POWER_HELD = 23;
 const uint16_t BUTTON_A = 0xF807;
 const uint16_t BUTTON_A_HELD = 20;
 
-const uint16_t BUTTON_A1 = 13;
-const uint16_t BUTTON_A2 = 14;
-const uint16_t BUTTON_A3 = 15;
-const uint16_t BUTTON_A4 = 19;
-
 const uint16_t BUTTON_B = 0x7887;
 const uint16_t BUTTON_B_HELD = 21;
 
 const uint16_t BUTTON_C = 0x58A7;
 const uint16_t BUTTON_C_HELD = 22;
-
-const uint16_t BUTTON_C1 = 16;
-const uint16_t BUTTON_C2 = 17;
-const uint16_t BUTTON_C3 = 29;
-const uint16_t BUTTON_C4 = 30;
-
 
 const uint16_t BUTTON_UP = 0xA05F;
 const uint16_t BUTTON_DOWN = 0x00FF;
@@ -116,10 +105,29 @@ const uint16_t BUTTON_CIRCLE = 0x20DF;  // hex = 4815
 const uint16_t BUTTON_CIRCLE_HELD = 24;
 
 const uint16_t BUTTON_HELD = 0xFFFF;
-const uint16_t BUTTON_B1 = 9;
-const uint16_t BUTTON_B2 = 25;
-const uint16_t BUTTON_B3 = 26;
-const uint16_t BUTTON_B4 = 27;
+
+
+// const uint16_t BUTTON_POWER = 0xE01F; //0xD827; // i.e. 0x10EFD827  //55335
+// const uint16_t BUTTON_POWER_HELD = 23;
+
+// const uint16_t BUTTON_A = 0x00FF; //0xF807;
+// const uint16_t BUTTON_A_HELD = 20;
+
+// const uint16_t BUTTON_B = 0xC03F; //0x7887;
+// const uint16_t BUTTON_B_HELD = 21;
+
+// const uint16_t BUTTON_C = 0x807F; //0x58A7;
+// const uint16_t BUTTON_C_HELD = 22;
+
+// const uint16_t BUTTON_UP = 0x10EF; //0xA05F;
+// const uint16_t BUTTON_DOWN = 0x30CF; //0x00FF;
+// const uint16_t BUTTON_LEFT = 0x9867; //0x10EF;
+// const uint16_t BUTTON_RIGHT = 0x708F; //0x807F;
+
+// const uint16_t BUTTON_CIRCLE = 0xA05F; //0x20DF;  // hex = 4815
+// const uint16_t BUTTON_CIRCLE_HELD = 24;
+
+// const uint16_t BUTTON_HELD = 0xFFFF;
 
 uint16_t BUTTON_ARRAY[9] = {BUTTON_POWER, BUTTON_A, BUTTON_B, BUTTON_C, BUTTON_UP, BUTTON_DOWN, BUTTON_LEFT, BUTTON_RIGHT, BUTTON_CIRCLE};
 
