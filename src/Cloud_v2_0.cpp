@@ -1,28 +1,9 @@
 
 /*
-
   Cloud 2.0
   2018 Richard Clarkson Studio
-
-  Muisc Modes:
-    1 - Falling Dot: White bar filled to soundpoint with floating blue dot at top.
-    2 - Middle Out: White bar starting at middle filled in both directions to soundpoints
-    3 - Ripple: 8 small Middle out type visualisations stacked from lowest to highest channel.
-    4 - Fade: Whole saber filled to brightness level scaled with soundpoint. Has a minimum brightness point.
-    5 - Rainbow: Rainbow colored bar filled to soundpoint. *Color can be changed by a push and hold.
-
-  Lamp Modes:
-    1 - Neon: Rainbow - similar to musicmode1 but with color and no dot
-    2 - White: Solid white light across whole Saber
-    3 - Ombre: Rainbow color gradient with linear cycle
-    4 - Fire: Visualization of linear fire
-
-    Layout:
-    LED DATA_PIN 3 //MOSI  // Green
-    LED CLK_PIN 4  //SCK  // Blue
-    Button: pin 19
-
 */
+
 //#define FASTLED_FORCE_SOFTWARE_SPI 1
 #include <Arduino.h>
 #include <FastLED.h>
@@ -31,6 +12,13 @@
 #include <IRremote.h>
 
 FASTLED_USING_NAMESPACE
+
+
+
+#define NUM_LEDS 25        //     S=10 M=17 L=25 H=50
+
+
+
 
 //Global Varriables
 int channel = 8;
@@ -231,7 +219,6 @@ uint8_t gHue = 180;           // rotating "base color" used by many of the patte
 #define CLK_PIN 3  //SCK  //14 Blue
 #define LED_TYPE WS2801 //APA102
 #define COLOR_ORDER RGB
-#define NUM_LEDS 50 //     S=10 M=17 L=25 H=50            NUM_LEDS Setting!
 CRGB leds[NUM_LEDS];
 //#define FRAMES_PER_SECOND 120
 
