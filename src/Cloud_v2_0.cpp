@@ -15,7 +15,7 @@ FASTLED_USING_NAMESPACE
 
 
 
-#define NUM_LEDS 25        //     S=10 M=17 L=25 H=50
+#define NUM_LEDS 17        //     S=10 M=17 L=25 H=50
 
 
 
@@ -289,8 +289,12 @@ void setup()
   FastLED.setBrightness(255);
   turnoffLEDs();
   FastLED.show();
+  turnoffLEDs();
+  FastLED.show();
   Serial.begin(9600);
   delay(1000);  // Sanity Delay
+  turnoffLEDs();
+  FastLED.show();
   for (int i = 0; i < NUM_LEDS; i++) {    
     minLEDvalue[i] = random(1,150);       //fill up the minimum LED value array for Fairy Light Mode
     currentValue[i] = random(1,254);      //fill up the current value array for Fairy Light Mode
@@ -329,8 +333,12 @@ void loop()
   remote();
 
   if      (remoteState == BUTTON_POWER){
-     if (flashCount == 1){  flash(100,0);   }
-    delay(3);
+     if (flashCount == 1){  
+       flash(100,0); 
+       turnoffLEDs();
+       FastLED.show();  
+       }
+    //delay(3);
   }
   else if (remoteState == BUTTON_POWER_HELD){
       //reset();
