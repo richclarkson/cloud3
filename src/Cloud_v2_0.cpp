@@ -5,6 +5,7 @@
 */
 
 //#define FASTLED_FORCE_SOFTWARE_SPI 1
+//#define FASTLED_ALLOW_INTERRUPTS 0
 #include <Arduino.h>
 #include <FastLED.h>
 #include <Audio.h>   
@@ -15,7 +16,7 @@ FASTLED_USING_NAMESPACE
 
 
 
-#define NUM_LEDS 17        //     S=10 M=17 L=25 H=50
+#define NUM_LEDS 25        //     S=10 M=17 L=25 H=50
 
 
 
@@ -287,6 +288,7 @@ void setup()
   //FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   //FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER, DATA_RATE_MHZ(2)>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   FastLED.setBrightness(255);
+  //FastLED.setDither( 0 );
   turnoffLEDs();
   FastLED.show();
   turnoffLEDs();
