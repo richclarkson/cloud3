@@ -73,52 +73,43 @@ void upDownLeftRightRemoteHeld();
 
 //*******************************       BUTTON CONSTANTS    ******************************************//
 
-const uint16_t BUTTON_POWER = 0xD827; // i.e. 0x10EFD827  //55335
+const uint16_t BUTTON_POWER = 0x00FF; // i.e. 0x10EFD827  //55335
 const uint16_t BUTTON_POWER_HELD = 23;
 
-const uint16_t BUTTON_A = 0xF807;
+const uint16_t BUTTON_A1 = 0x30CF;
+const uint16_t BUTTON_A2 = 0x08F7;
+const uint16_t BUTTON_A3 = 0x28D7;
+const uint16_t BUTTON_A4 = 0x18E7;
 const uint16_t BUTTON_A_HELD = 20;
 
-const uint16_t BUTTON_B = 0x7887;
+const uint16_t BUTTON_B1 = 0xB04F;
+const uint16_t BUTTON_B2 = 0x8877;
+const uint16_t BUTTON_B3 = 0xA857;
+const uint16_t BUTTON_B4 = 0x9867;
 const uint16_t BUTTON_B_HELD = 21;
 
-const uint16_t BUTTON_C = 0x58A7;
+const uint16_t BUTTON_C1 = 0x708F;
+const uint16_t BUTTON_C2 = 0x48B7;
+const uint16_t BUTTON_C3 = 0x6897;
+const uint16_t BUTTON_C4 = 0x58A7;
 const uint16_t BUTTON_C_HELD = 22;
 
-const uint16_t BUTTON_UP = 0xA05F;
-const uint16_t BUTTON_DOWN = 0x00FF;
-const uint16_t BUTTON_LEFT = 0x10EF;
-const uint16_t BUTTON_RIGHT = 0x807F;
+const uint16_t BUTTON_UP = 0x807F;
+const uint16_t BUTTON_DOWN = 0x906F;
+const uint16_t BUTTON_LEFT = 0x20DF;
+const uint16_t BUTTON_RIGHT = 0x609F;
 
-const uint16_t BUTTON_CIRCLE = 0x20DF;  // hex = 4815
+const uint16_t BUTTON_CIRCLE = 0xA05F;  // hex = 4815
 const uint16_t BUTTON_CIRCLE_HELD = 24;
+
+const uint16_t BUTTON_R = 0x40BF;
+const uint16_t BUTTON_PLUS = 0x10EF;
+const uint16_t BUTTON_MINUS = 0x50AF;
 
 const uint16_t BUTTON_HELD = 0xFFFF;
 
 
-// const uint16_t BUTTON_POWER = 0xE01F; //0xD827; // i.e. 0x10EFD827  //55335
-// const uint16_t BUTTON_POWER_HELD = 23;
-
-// const uint16_t BUTTON_A = 0x00FF; //0xF807;
-// const uint16_t BUTTON_A_HELD = 20;
-
-// const uint16_t BUTTON_B = 0xC03F; //0x7887;
-// const uint16_t BUTTON_B_HELD = 21;
-
-// const uint16_t BUTTON_C = 0x807F; //0x58A7;
-// const uint16_t BUTTON_C_HELD = 22;
-
-// const uint16_t BUTTON_UP = 0x10EF; //0xA05F;
-// const uint16_t BUTTON_DOWN = 0x30CF; //0x00FF;
-// const uint16_t BUTTON_LEFT = 0x9867; //0x10EF;
-// const uint16_t BUTTON_RIGHT = 0x708F; //0x807F;
-
-// const uint16_t BUTTON_CIRCLE = 0xA05F; //0x20DF;  // hex = 4815
-// const uint16_t BUTTON_CIRCLE_HELD = 24;
-
-// const uint16_t BUTTON_HELD = 0xFFFF;
-
-uint16_t BUTTON_ARRAY[9] = {BUTTON_POWER, BUTTON_A, BUTTON_B, BUTTON_C, BUTTON_UP, BUTTON_DOWN, BUTTON_LEFT, BUTTON_RIGHT, BUTTON_CIRCLE};
+uint16_t BUTTON_ARRAY[21] = {BUTTON_POWER, BUTTON_A1, BUTTON_A2, BUTTON_A3, BUTTON_A4, BUTTON_B1, BUTTON_B2, BUTTON_B3, BUTTON_B4, BUTTON_C1, BUTTON_C2, BUTTON_C3, BUTTON_C4, BUTTON_UP, BUTTON_DOWN, BUTTON_LEFT, BUTTON_RIGHT, BUTTON_CIRCLE, BUTTON_R, BUTTON_PLUS, BUTTON_MINUS};
 
 
 //*******************************       IR CONSTANTS    ******************************************//
@@ -345,69 +336,65 @@ void loop()
   else if (remoteState == BUTTON_POWER_HELD){
       //reset();
   }
-  else if (remoteState == BUTTON_A){
-    if      (butStateCounter == 1){    
+  else if (remoteState == BUTTON_A1){
       if (flashCount == 1){ flash(130,250);  }
       fetchSoundData();
       soundLightening();     
-      }
-    else if (butStateCounter == 2){    
-      demo();    
-      }
-    else if (butStateCounter == 3){    
-     if (flashCount == 1){  
+  }
+
+  else if (remoteState == BUTTON_A2){
+    demo();    
+  }
+  else if (remoteState == BUTTON_A3){
+    if (flashCount == 1){  
        flash(130,250);
        strom();  
        }
-      timedLightening(30);    
-    }
-    else if (butStateCounter == 4){    
-     if (flashCount == 1){  
+      timedLightening(30);        
+  }
+  else if (remoteState == BUTTON_A4){
+    if (flashCount == 1){  
        flash(130,250);
        strom();    
        }
-     timedLightening(240);    
-     }
+     timedLightening(240);       
   }
+
   else if (remoteState == BUTTON_A_HELD){
     //fetchSoundData();
     //musicmode1();
   }
-  else if (remoteState == BUTTON_B){
-    if      (butStateCounter == 1){    
+  else if (remoteState == BUTTON_B1){
       fetchSoundData();
       musicmode4();     
-      }
-    else if (butStateCounter == 2){    
+  }
+  else if (remoteState == BUTTON_B2){
       analyzeFFTall(); 
       musicmode5();     
-      }
-    else if (butStateCounter == 3){    
+  }
+  else if (remoteState == BUTTON_B3){
       fetchSoundData(); 
       musicmode1();     
-    }
-    else if (butStateCounter == 4){    
+  }
+  else if (remoteState == BUTTON_B4){ 
       analyzeFFTall(); ;
       musicmode3();     
-      }
   }
   else if (remoteState == BUTTON_B_HELD){
     //analyzeFFTall(); 
     //musicmode3();
   }
-  else if (remoteState == BUTTON_C){
-    if      (butStateCounter == 1){    
+  else if (remoteState == BUTTON_C1){
       lampMode2();    
-      }
-    else if (butStateCounter == 2){    
+  }
+  else if (remoteState == BUTTON_C2){
       lampMode1();    
-      }
-    else if (butStateCounter == 3){    
+  }
+  else if (remoteState == BUTTON_C3){
       lampMode3();   
-    }
-    else if (butStateCounter == 4){    
+  }
+  else if (remoteState == BUTTON_C4){
       lampMode4();     
-      }
   }
   else if (remoteState == BUTTON_C_HELD){
     //lampMode3();
@@ -418,7 +405,7 @@ void loop()
         upDownLeftRightReturn();
      }
       if(variableState == 0){
-        if (previousRemoteState == BUTTON_A) {     // Global brightness
+        if (previousRemoteState == BUTTON_A1) {     // Global brightness
           if (Bvariable < 8){        Bvariable++;   }
           FastLED.setBrightness(map(Bvariable,0,8,20,255));
           fill_solid( leds, NUM_LEDS, CHSV(60,150,(map(Bvariable,0,8,20,250))));
@@ -427,7 +414,7 @@ void loop()
           Serial.println(Bvariable);
           EEPROM.update(3, Bvariable);
         }
-        else if (previousRemoteState == BUTTON_B) {     // sensitivity
+        else if (previousRemoteState == BUTTON_B1) {     // sensitivity
           if (sensitivity < 8){     sensitivity++;  }
           fill_solid( leds, NUM_LEDS, CHSV(180,150,(map(sensitivity,0,8,20,250))));
           FastLED.show();
@@ -435,7 +422,7 @@ void loop()
           Serial.println(sensitivity);
           EEPROM.update(4, sensitivity);
         }
-        else if (previousRemoteState == BUTTON_C) {     // Speed of Animation
+        else if (previousRemoteState == BUTTON_C1) {     // Speed of Animation
           if (timeSpeed < 5){          timeSpeed++;     }
           fill_solid( leds, NUM_LEDS, CHSV(110,150,(map(timeSpeed,0,5,20,250))));
           FastLED.show();
@@ -452,7 +439,7 @@ void loop()
         upDownLeftRightReturn();
      }
       if(variableState == 0){
-        if (previousRemoteState == BUTTON_A) {     // Global brightness
+        if (previousRemoteState == BUTTON_A1 || previousRemoteState == BUTTON_A2 || previousRemoteState == BUTTON_A3 || previousRemoteState == BUTTON_A4 ) {     // Global brightness
           if (Bvariable > 0){     Bvariable--;   }
           FastLED.setBrightness(map(Bvariable,0,8,20,255));
           fill_solid( leds, NUM_LEDS, CHSV(60,150,(map(Bvariable,0,8,20,250))));
@@ -461,7 +448,7 @@ void loop()
           Serial.println(Bvariable);
           EEPROM.update(3, Bvariable);
         }
-        else if (previousRemoteState == BUTTON_B) {     // sensitivity
+        else if (previousRemoteState == BUTTON_B1) {     // sensitivity
           if (sensitivity > 0){     sensitivity--;  }
           fill_solid( leds, NUM_LEDS, CHSV(180,150,(map(sensitivity,0,8,20,250))));
           FastLED.show();
@@ -469,7 +456,7 @@ void loop()
           Serial.println(sensitivity);
           EEPROM.update(4, sensitivity);
         }
-        else if (previousRemoteState == BUTTON_C) {     // Speed of Animation
+        else if (previousRemoteState == BUTTON_C1) {     // Speed of Animation
           if (timeSpeed > 0){          timeSpeed--;     }
           fill_solid( leds, NUM_LEDS, CHSV(110,150,(map(timeSpeed,0,5,20,250))));
           FastLED.show();
@@ -1070,7 +1057,7 @@ void remote()
         }
       }
       else {
-        for (int i = 0; i < 9; i++) 
+        for (int i = 0; i < 21; i++) 
         {              //compare against each of the button codes
           if (resultCode == BUTTON_ARRAY[i]) {
 
@@ -1080,15 +1067,45 @@ void remote()
             if (resultCode == BUTTON_POWER) {
               currentButton = 'P';
             }
-            else if (resultCode == BUTTON_A) {
+            else if (resultCode == BUTTON_A1) {
               currentButton = 'A';
               flashCount = 1;
             }
-            else if (resultCode == BUTTON_B) {
+            else if (resultCode == BUTTON_A2) {
+              currentButton = '2';
+              flashCount = 1;
+            }
+            else if (resultCode == BUTTON_A3) {
+              currentButton = '3';
+              flashCount = 1;
+            }
+            else if (resultCode == BUTTON_A4) {
+              currentButton = '4';
+              flashCount = 1;
+            }
+            else if (resultCode == BUTTON_B1) {
               currentButton = 'B';
             }
-            else if (resultCode == BUTTON_C) {
+            else if (resultCode == BUTTON_B2) {
+              currentButton = '5';
+            }
+            else if (resultCode == BUTTON_B3) {
+              currentButton = '6';
+            }
+            else if (resultCode == BUTTON_B4) {
+              currentButton = '7';
+            }
+            else if (resultCode == BUTTON_C1) {
               currentButton = 'C';
+            }
+            else if (resultCode == BUTTON_C2) {
+              currentButton = '8';
+            }
+            else if (resultCode == BUTTON_C3) {
+              currentButton = '9';
+            }
+            else if (resultCode == BUTTON_C4) {
+              currentButton = 'Z';
             }
             else if (resultCode == BUTTON_UP) {
               currentButton = 'U';
@@ -1187,41 +1204,62 @@ void remote()
             else if (currentButton == 'A') {
               EEPROM.update(5, 1);  // EEPROM Save 1 = BUTTON_A
               previousRemoteState = remoteState;
-              remoteState = BUTTON_A;
-              if (previousRemoteState == remoteState){ 
-                if (butStateCounter < 4){     butStateCounter++;    }
-                else {      butStateCounter = 1;     }
-              }
-              else {        butStateCounter = 1;     }
-              Serial.print("butStateCounter:");
-              Serial.println(butStateCounter);
-              EEPROM.update(1, butStateCounter);
+              remoteState = BUTTON_A1;
+            }
+            else if (currentButton == '2') {
+              EEPROM.update(5, 1);  // EEPROM Save 1 = BUTTON_A
+              previousRemoteState = remoteState;
+              remoteState = BUTTON_A2;
+            }
+            else if (currentButton == '3') {
+              EEPROM.update(5, 1);  // EEPROM Save 1 = BUTTON_A
+              previousRemoteState = remoteState;
+              remoteState = BUTTON_A3;
+            }
+            else if (currentButton == '4') {
+              EEPROM.update(5, 1);  // EEPROM Save 1 = BUTTON_A
+              previousRemoteState = remoteState;
+              remoteState = BUTTON_A4;
             }
             else if (currentButton == 'B') {
               EEPROM.update(5, 2);  // EEPROM Save 2 = BUTTON_B
               previousRemoteState = remoteState;
-              remoteState = BUTTON_B;
-              if (previousRemoteState == remoteState){ 
-                if (butStateCounter < 4){     butStateCounter++;    }
-                else {      butStateCounter = 1;     }
-              }
-              else {        butStateCounter = 1;     }
-              Serial.print("butStateCounter:");
-              Serial.println(butStateCounter);
-              EEPROM.update(1, butStateCounter);
+              remoteState = BUTTON_B1;
+            }
+            else if (currentButton == '5') {
+              EEPROM.update(5, 2);  // EEPROM Save 2 = BUTTON_B
+              previousRemoteState = remoteState;
+              remoteState = BUTTON_B2;
+            }
+            else if (currentButton == '6') {
+              EEPROM.update(5, 2);  // EEPROM Save 2 = BUTTON_B
+              previousRemoteState = remoteState;
+              remoteState = BUTTON_B3;
+            }
+            else if (currentButton == '7') {
+              EEPROM.update(5, 2);  // EEPROM Save 2 = BUTTON_B
+              previousRemoteState = remoteState;
+              remoteState = BUTTON_B4;
             }
             else if (currentButton == 'C') {
               EEPROM.update(5, 3);  // EEPROM Save 3 = BUTTON_C
               previousRemoteState = remoteState;
-              remoteState = BUTTON_C;
-              if (previousRemoteState == remoteState){ 
-                if (butStateCounter < 4){     butStateCounter++;    }
-                else {      butStateCounter = 1;     }
-              }
-              else {        butStateCounter = 1;     }
-              Serial.print("butStateCounter:");
-              Serial.println(butStateCounter);
-              EEPROM.update(1, butStateCounter);
+              remoteState = BUTTON_C1;
+            }
+            else if (currentButton == '8') {
+              EEPROM.update(5, 3);  // EEPROM Save 3 = BUTTON_C
+              previousRemoteState = remoteState;
+              remoteState = BUTTON_C2;
+            }
+            else if (currentButton == '9') {
+              EEPROM.update(5, 3);  // EEPROM Save 3 = BUTTON_C
+              previousRemoteState = remoteState;
+              remoteState = BUTTON_C3;
+            }
+            else if (currentButton == 'Z') {
+              EEPROM.update(5, 3);  // EEPROM Save 3 = BUTTON_C
+              previousRemoteState = remoteState;
+              remoteState = BUTTON_C4;
             }
             else if (currentButton == 'O') {
             //previousRemoteState = remoteState;
