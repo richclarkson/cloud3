@@ -336,6 +336,9 @@ void loop()
   else if (remoteState == BUTTON_POWER_HELD){
       //reset();
   }
+  else if (remoteState == BUTTON_R){
+      reset();
+  }
   else if (remoteState == BUTTON_A1){
       if (flashCount == 1){ flash(130,250);  }
       fetchSoundData();
@@ -405,16 +408,7 @@ void loop()
         upDownLeftRightReturn();
      }
       if(variableState == 0){
-        if (previousRemoteState == BUTTON_A1) {     // Global brightness
-          if (Bvariable < 8){        Bvariable++;   }
-          FastLED.setBrightness(map(Bvariable,0,8,20,255));
-          fill_solid( leds, NUM_LEDS, CHSV(60,150,(map(Bvariable,0,8,20,250))));
-          FastLED.show();
-          Serial.print("Bvariable = ");
-          Serial.println(Bvariable);
-          EEPROM.update(3, Bvariable);
-        }
-        else if (previousRemoteState == BUTTON_B1) {     // sensitivity
+        if ((previousRemoteState == BUTTON_B1) || (previousRemoteState == BUTTON_B2) || (previousRemoteState == BUTTON_B3) || (previousRemoteState == BUTTON_B4))  {     // sensitivity
           if (sensitivity < 8){     sensitivity++;  }
           fill_solid( leds, NUM_LEDS, CHSV(180,150,(map(sensitivity,0,8,20,250))));
           FastLED.show();
@@ -422,7 +416,7 @@ void loop()
           Serial.println(sensitivity);
           EEPROM.update(4, sensitivity);
         }
-        else if (previousRemoteState == BUTTON_C1) {     // Speed of Animation
+        else if ((previousRemoteState == BUTTON_C1) || (previousRemoteState == BUTTON_C2) || (previousRemoteState == BUTTON_C3) || (previousRemoteState == BUTTON_C4)) {     // Speed of Animation
           if (timeSpeed < 5){          timeSpeed++;     }
           fill_solid( leds, NUM_LEDS, CHSV(110,150,(map(timeSpeed,0,5,20,250))));
           FastLED.show();
@@ -433,13 +427,29 @@ void loop()
         variableState = 1;
     }    
   }
-  else if (remoteState == BUTTON_DOWN)
+  else if (remoteState == BUTTON_PLUS)
   {
     if(millis() - variableMillis > 1000){
         upDownLeftRightReturn();
      }
       if(variableState == 0){
-        if (previousRemoteState == BUTTON_A1 || previousRemoteState == BUTTON_A2 || previousRemoteState == BUTTON_A3 || previousRemoteState == BUTTON_A4 ) {     // Global brightness
+          if (Bvariable < 8){        Bvariable++;   }
+          FastLED.setBrightness(map(Bvariable,0,8,20,255));
+          fill_solid( leds, NUM_LEDS, CHSV(60,150,(map(Bvariable,0,8,20,250))));
+          FastLED.show();
+          Serial.print("Bvariable = ");
+          Serial.println(Bvariable);
+          EEPROM.update(3, Bvariable);
+        variableState = 1;
+    }   
+  }
+
+  else if (remoteState == BUTTON_MINUS)
+  {
+    if(millis() - variableMillis > 1000){
+        upDownLeftRightReturn();
+     }
+      if(variableState == 0){
           if (Bvariable > 0){     Bvariable--;   }
           FastLED.setBrightness(map(Bvariable,0,8,20,255));
           fill_solid( leds, NUM_LEDS, CHSV(60,150,(map(Bvariable,0,8,20,250))));
@@ -447,8 +457,17 @@ void loop()
           Serial.print("Bvariable = ");
           Serial.println(Bvariable);
           EEPROM.update(3, Bvariable);
-        }
-        else if (previousRemoteState == BUTTON_B1) {     // sensitivity
+        variableState = 1;
+    } 
+  }
+
+  else if (remoteState == BUTTON_DOWN)
+  {
+    if(millis() - variableMillis > 1000){
+        upDownLeftRightReturn();
+     }
+      if(variableState == 0){
+        if ((previousRemoteState == BUTTON_B1) || (previousRemoteState == BUTTON_B2) || (previousRemoteState == BUTTON_B3) || (previousRemoteState == BUTTON_B4))  {     // sensitivity
           if (sensitivity > 0){     sensitivity--;  }
           fill_solid( leds, NUM_LEDS, CHSV(180,150,(map(sensitivity,0,8,20,250))));
           FastLED.show();
@@ -456,7 +475,7 @@ void loop()
           Serial.println(sensitivity);
           EEPROM.update(4, sensitivity);
         }
-        else if (previousRemoteState == BUTTON_C1) {     // Speed of Animation
+        else if ((previousRemoteState == BUTTON_C1) || (previousRemoteState == BUTTON_C2) || (previousRemoteState == BUTTON_C3) || (previousRemoteState == BUTTON_C4)) {     // Speed of Animation
           if (timeSpeed > 0){          timeSpeed--;     }
           fill_solid( leds, NUM_LEDS, CHSV(110,150,(map(timeSpeed,0,5,20,250))));
           FastLED.show();
@@ -1067,6 +1086,9 @@ void remote()
             if (resultCode == BUTTON_POWER) {
               currentButton = 'P';
             }
+            else if (resultCode == BUTTON_R) {
+              currentButton = 'Q';
+            }
             else if (resultCode == BUTTON_A1) {
               currentButton = 'A';
               flashCount = 1;
@@ -1117,6 +1139,18 @@ void remote()
                 upDownLeftRightRemote();
                 remoteState = BUTTON_DOWN;
               }
+
+              else if (resultCode == BUTTON_PLUS) {
+              currentButton = 'X';
+                upDownLeftRightRemote();
+                remoteState = BUTTON_PLUS;
+              }
+            else if (resultCode == BUTTON_MINUS) {
+              currentButton = 'Y';
+                upDownLeftRightRemote();
+                remoteState = BUTTON_MINUS;
+              }
+
             else if (resultCode == BUTTON_LEFT) {
               currentButton = 'L';
                 if (wheelPosition < 12){       
@@ -1200,6 +1234,9 @@ void remote()
               Serial.println("Off");
               turnoffLEDs();
               FastLED.show();
+            }
+            if (currentButton == 'Q') {
+              remoteState = BUTTON_R;
             }
             else if (currentButton == 'A') {
               EEPROM.update(5, 1);  // EEPROM Save 1 = BUTTON_A
@@ -1308,7 +1345,7 @@ void upDownLeftRightRemote()
   variableState = 0;
   //stateCounter = 0;
 
-  if ((remoteState != BUTTON_RIGHT) && (remoteState != BUTTON_LEFT) && (remoteState != BUTTON_UP) && (remoteState != BUTTON_DOWN))
+  if ((remoteState != BUTTON_RIGHT) && (remoteState != BUTTON_LEFT) && (remoteState != BUTTON_UP) && (remoteState != BUTTON_DOWN) && (remoteState != BUTTON_PLUS) && (remoteState != BUTTON_MINUS))
   {
     if (remoteState == 1000)
     {
