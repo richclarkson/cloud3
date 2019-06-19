@@ -99,29 +99,6 @@ const uint16_t BUTTON_CIRCLE_HELD = 24;
 
 const uint16_t BUTTON_HELD = 0xFFFF;
 
-
-// const uint16_t BUTTON_POWER = 0xE01F; //0xD827; // i.e. 0x10EFD827  //55335
-// const uint16_t BUTTON_POWER_HELD = 23;
-
-// const uint16_t BUTTON_A = 0x00FF; //0xF807;
-// const uint16_t BUTTON_A_HELD = 20;
-
-// const uint16_t BUTTON_B = 0xC03F; //0x7887;
-// const uint16_t BUTTON_B_HELD = 21;
-
-// const uint16_t BUTTON_C = 0x807F; //0x58A7;
-// const uint16_t BUTTON_C_HELD = 22;
-
-// const uint16_t BUTTON_UP = 0x10EF; //0xA05F;
-// const uint16_t BUTTON_DOWN = 0x30CF; //0x00FF;
-// const uint16_t BUTTON_CUP = 0x9867; //0x10EF;
-// const uint16_t BUTTON_CDOWN = 0x708F; //0x807F;
-
-// const uint16_t BUTTON_CIRCLE = 0xA05F; //0x20DF;  // hex = 4815
-// const uint16_t BUTTON_CIRCLE_HELD = 24;
-
-// const uint16_t BUTTON_HELD = 0xFFFF;
-
 uint16_t BUTTON_ARRAY[11] = {BUTTON_POWER, BUTTON_A, BUTTON_B, BUTTON_C, BUTTON_AUP, BUTTON_ADOWN, BUTTON_BUP, BUTTON_BDOWN, BUTTON_CUP, BUTTON_CDOWN, BUTTON_CIRCLE};
 
 
@@ -350,71 +327,88 @@ void loop()
       //reset();
   }
   else if (remoteState == BUTTON_A){
-    if      (butStateCounter == 1){    
-      if (flashCount == 1){ flash(130,250);  }
-      fetchSoundData();
-      soundLightening();     
-      }
-    else if (butStateCounter == 2){    
-      demo();    
-      }
-    else if (butStateCounter == 3){    
-     if (flashCount == 1){  
-       flash(130,250);
-       strom();  
-       }
-      timedLightening(30);    
-    }
-    else if (butStateCounter == 4){    
-     if (flashCount == 1){  
-       flash(130,250);
-       strom();    
-       }
-     timedLightening(240);    
-     }
+    analyzeFFTall(); 
+    musicmode3(); 
+    
+    // if      (butStateCounter == 1){    
+    //   if (flashCount == 1){ flash(130,250);  }
+    //   fetchSoundData();
+    //   soundLightening();     
+    //   }
+    // else if (butStateCounter == 2){    
+    //   demo();    
+    //   }
+    // else if (butStateCounter == 3){    
+    //  if (flashCount == 1){  
+    //    flash(130,250);
+    //    strom();  
+    //    }
+    //   timedLightening(30);    
+    // }
+    // else if (butStateCounter == 4){    
+    //  if (flashCount == 1){  
+    //    flash(130,250);
+    //    strom();    
+    //    }
+    //  timedLightening(240);    
+    //  }
   }
   else if (remoteState == BUTTON_A_HELD){
-    //fetchSoundData();
-    //musicmode1();
+    lampMode4();  
   }
   else if (remoteState == BUTTON_B){
-    if      (butStateCounter == 1){    
-      fetchSoundData();
-      musicmode4();     
-      }
-    else if (butStateCounter == 2){    
-      analyzeFFTall(); 
-      musicmode5();     
-      }
-    else if (butStateCounter == 3){    
-      fetchSoundData(); 
-      musicmode1();     
-    }
-    else if (butStateCounter == 4){    
-      analyzeFFTall(); ;
-      musicmode3();     
-      }
+    fetchSoundData();
+    musicmode4();  
+    
+    // if      (butStateCounter == 1){    
+    //   fetchSoundData();
+    //   musicmode4();     
+    //   }
+    // else if (butStateCounter == 2){    
+    //   analyzeFFTall(); 
+    //   musicmode5();     
+    //   }
+    // else if (butStateCounter == 3){    
+    //   fetchSoundData(); 
+    //   musicmode1();     
+    // }
+    // else if (butStateCounter == 4){    
+    //   analyzeFFTall(); 
+    //   musicmode3();     
+    //   }
   }
   else if (remoteState == BUTTON_B_HELD){
-    //analyzeFFTall(); 
-    //musicmode3();
+    analyzeFFTall(); 
+    musicmode5();  
   }
   else if (remoteState == BUTTON_C){
-    if      (butStateCounter == 1){    
-      lampMode2();    
-      }
-    else if (butStateCounter == 2){    
-      lampMode1();    
-      }
-    else if (butStateCounter == 3){    
-      lampMode3();   
-    }
-    else if (butStateCounter == 4){    
-      lampMode4();     
-      }
+    lampMode2(); 
+
+    // if      (butStateCounter == 1){    
+    //   lampMode2();    
+    //   }
+    // else if (butStateCounter == 2){    
+    //   lampMode1();    
+    //   }
+    // else if (butStateCounter == 3){    
+    //   lampMode3();   
+    // }
+    // else if (butStateCounter == 4){    
+    //   lampMode4();     
+    //   }
   }
   else if (remoteState == BUTTON_C_HELD){
-    //lampMode3();
+    lampMode3();
+  }
+  else if (remoteState == BUTTON_CIRCLE_HELD){
+    fetchSoundData();
+    soundLightening();     
+
+    if (flashCount == 1){  
+      flash(130,250);
+      strom();  
+    }
+    timedLightening(30);  
   }
   else if (remoteState == BUTTON_AUP)            // Global brightness
   {
