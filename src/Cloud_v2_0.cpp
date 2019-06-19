@@ -122,7 +122,7 @@ const uint16_t BUTTON_HELD = 0xFFFF;
 
 // const uint16_t BUTTON_HELD = 0xFFFF;
 
-uint16_t BUTTON_ARRAY[9] = {BUTTON_POWER, BUTTON_A, BUTTON_B, BUTTON_C, BUTTON_UP, BUTTON_DOWN, BUTTON_CUP, BUTTON_CDOWN, BUTTON_CIRCLE};
+uint16_t BUTTON_ARRAY[11] = {BUTTON_POWER, BUTTON_A, BUTTON_B, BUTTON_C, BUTTON_AUP, BUTTON_ADOWN, BUTTON_BUP, BUTTON_BDOWN, BUTTON_CUP, BUTTON_CDOWN, BUTTON_CIRCLE};
 
 
 //*******************************       IR CONSTANTS    ******************************************//
@@ -1105,7 +1105,7 @@ void remote()
         }
       }
       else {
-        for (int i = 0; i < 9; i++) 
+        for (int i = 0; i < 11; i++) 
         {              //compare against each of the button codes
           if (resultCode == BUTTON_ARRAY[i]) {
 
