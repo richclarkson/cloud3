@@ -1054,25 +1054,25 @@ void remote()
         buttonHeld++;
 
 
-        if (currentButton == 'L') {
-          if (wheelPosition < 12){        
-            wheelPosition++;    
-            EEPROM.update(6, wheelPosition);  // EEPROM Save
-            }
-          else {                          
-            wheelPosition = 0;
-            EEPROM.update(6, wheelPosition);  // EEPROM Save  
-            }
-        }
-        else if (currentButton == 'R') {
-          if (wheelPosition > 0){         
-            wheelPosition--;
-            EEPROM.update(6, wheelPosition);  // EEPROM Save    
-            }
-          else {                          
-            wheelPosition = 12; 
-            EEPROM.update(6, wheelPosition);  // EEPROM Save
-            }
+        // if (currentButton == 'L') {
+        //   if (wheelPosition < 12){        
+        //     wheelPosition++;    
+        //     EEPROM.update(6, wheelPosition);  // EEPROM Save
+        //     }
+        //   else {                          
+        //     wheelPosition = 0;
+        //     EEPROM.update(6, wheelPosition);  // EEPROM Save  
+        //     }
+        // }
+        // else if (currentButton == 'R') {
+        //   if (wheelPosition > 0){         
+        //     wheelPosition--;
+        //     EEPROM.update(6, wheelPosition);  // EEPROM Save    
+        //     }
+        //   else {                          
+        //     wheelPosition = 12; 
+        //     EEPROM.update(6, wheelPosition);  // EEPROM Save
+        //     }
         }
         // else if (currentButton == 'U') {
         //   upDownLeftRightRemoteHeld();
