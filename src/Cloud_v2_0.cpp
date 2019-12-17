@@ -1,16 +1,22 @@
 
 /*
-  Cloud 2.0
-  2018 Richard Clarkson Studio
+  SMART Cloud 3.0
+  2019 Richard Clarkson Studio
 */
 
 //#define FASTLED_FORCE_SOFTWARE_SPI 1
 //#define FASTLED_ALLOW_INTERRUPTS 0
 #include <Arduino.h>
-#include <FastLED.h>
-#include <Audio.h>   
+#include <FastLED.h> 
 #include <EEPROM.h>
 #include <IRremote.h>
+#include <Audio.h>
+#include <Wire.h>
+#include <SPI.h>
+#include <SD.h>
+#include <SerialFlash.h>
+
+
 
 FASTLED_USING_NAMESPACE
 
@@ -138,18 +144,26 @@ uint16_t lastCode = 0; // This keeps track of the last code RX'd
 
 
 
-
-
-
-
-
 // GUItool: begin automatically generated code
-AudioInputI2S            i2s1;           //xy=139,91
-AudioAnalyzeFFT1024      fft1024;        //xy=467,147
-AudioAnalyzeRMS          rms1;           //xy=411,381
-AudioConnection          patchCord1(i2s1, 0, fft1024, 0);
-AudioConnection          patchCord2(i2s1, 0, rms1, 0);
+AudioPlaySdWav           playWav1;       //xy=192,106
+AudioOutputI2S           i2s2;           //xy=339,403
+AudioInputI2S            i2s1;           //xy=343,168
+AudioAnalyzeFFT1024      fft1024;        //xy=484,86
+AudioAnalyzeRMS          rms1;           //xy=484,123
+AudioConnection          patchCord1(playWav1, 0, i2s2, 0);
+AudioConnection          patchCord2(playWav1, 1, i2s2, 1);
+AudioConnection          patchCord5(i2s1, 0, rms1, 0);
+AudioConnection          patchCord6(i2s1, 0, fft1024, 0);
+AudioControlSGTL5000     audioShield;    //xy=192,106
 // GUItool: end automatically generated code
+
+//*************************************      TEENSY AUDIO SHIELD   **********************************************//
+
+
+float thunderVolume = 0.8;
+float oldThunderVolume;
+int pStateVariable = 6;
+
 
 // An array to hold the 8 frequency bands
 float reading[8];
@@ -238,6 +252,9 @@ int flashCountA = 1;
 int calm = 10;
 
 
+
+
+
 // Prototype Functions:
 void musicmode1();
 void musicmode2();
@@ -267,7 +284,23 @@ void reset();
 void setup()
 { 
   irrecv.enableIRIn(); // Start the receiver
-  AudioMemory(12);
+  // AUDIO SHIELD SETUP
+  AudioMemory(30); // FOR SAFETY
+  audioShield.enable();
+  audioShield.volume(thunderVolume);
+  //audioShield.inputSelect(AUDIO_INPUT_MIC);
+  //audioShield.micGain(10);      //17
+
+  // SD CARD SETUP
+  SPI.setMOSI(7);
+  SPI.setSCK(14);
+  if (!(SD.begin(10))) {
+    // stop here, but print a message repetitively
+    while (1) {
+      Serial.println("Unable to access the SD card");
+      delay(500);
+    }
+  }
   FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS);
   //FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   //FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER, DATA_RATE_MHZ(2)>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
@@ -412,7 +445,11 @@ void loop()
     lampMode3();
   }
   else if (remoteState == BUTTON_CIRCLE){    
-    if (flashCount == 1){  
+    if (flashCount == 1){ 
+       
+       playWav1.play("1.WAV");
+       delay(5);    // A brief delay for the library read WAV info
+
        strom();
        flashCount = 0;  
       }
@@ -1240,6 +1277,7 @@ void remote()
       // THIS IS WHERE BUTTONS ARE SET GIVEN A NEW BUTTON PRESS
 
       if (newButtonPress == 1) {
+        playWav1.stop();
         newButtonPress = 0;
 
         if (buttonHeld > 4) { // number of seconds/ 4-1       // Button Holds
