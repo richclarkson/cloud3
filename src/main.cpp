@@ -2,10 +2,14 @@
 /*
   Cloud 3.0
   2020 Richard Clarkson Studio
+
+  TODO fix LED flickering: For some reason any LED quantity over 25 results in LED flickering, symptoms also result when the Speed of animation setting is active.
+   - temporary workaround limit LEDs to 25 and remove Speed of Animation setting.
+  
+  TODO optimize IR reciver code to be more efficent - sometimes units miss button signals - may require hardware improvements
 */
 
-//#define FASTLED_FORCE_SOFTWARE_SPI 1
-//#define FASTLED_ALLOW_INTERRUPTS 0
+
 #include <Arduino.h>
 #include <FastLED.h>
 #include <Audio.h>   
@@ -13,12 +17,7 @@
 #include <IRremote.h>
 
 FASTLED_USING_NAMESPACE
-
-
-
 #define NUM_LEDS 25        //     T=10 S=17 M=25 L=50* L= 2 sets of 25
-
-
 
 
 //Global Varriables
@@ -54,8 +53,6 @@ int readingsH[numReadings];      // the readings from the analog input
 int readIndexH = 0;              // the index of the current reading
 int totalH = 0;                  // the running total
 int averageH = 0;                // the average
-
-
 
 
 //IR Varriables
