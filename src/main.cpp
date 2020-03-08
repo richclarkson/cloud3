@@ -1,7 +1,7 @@
 
 /*
-  Cloud 2.0
-  2018 Richard Clarkson Studio
+  Cloud 3.0
+  2020 Richard Clarkson Studio
 */
 
 //#define FASTLED_FORCE_SOFTWARE_SPI 1
@@ -16,7 +16,7 @@ FASTLED_USING_NAMESPACE
 
 
 
-#define NUM_LEDS 25        //     S=10 M=17 L=25 H=50
+#define NUM_LEDS 25        //     T=10 S=17 M=25 L=50* L= 2 sets of 25
 
 
 
@@ -34,7 +34,6 @@ int dotCount = 1;
 int Bass;
 int Mid;
 int High;
-
 int prevBass;
 int prevMid;
 int prevHigh;
@@ -191,7 +190,6 @@ int speedOfAnimation[] = {
   30, 20, 17, 12, 5, 1
 };
 int timeSpeed;
-//int thistimer;
 
 //Lamp Mode Variables
 int rainbowCounter = 0;
@@ -199,12 +197,11 @@ int rainbowCounter = 0;
 uint8_t gHue = 180;           // rotating "base color" used by many of the patterns
 
 //LED Variables
-#define DATA_PIN 4 //MOSI  //7 Green
-#define CLK_PIN 3  //SCK  //14 Blue
+#define DATA_PIN 4 //MOSI  // Green
+#define CLK_PIN 3  //SCK  // Blue
 #define LED_TYPE WS2801 //APA102
 #define COLOR_ORDER RGB
 CRGB leds[NUM_LEDS];
-//#define FRAMES_PER_SECOND 120
 
 int minLEDvalue[NUM_LEDS];
 int goingUp[NUM_LEDS];
@@ -216,9 +213,6 @@ int goingUpFade = 1;
 int ledSingle1;
 int ledSingle2;
 int ledSingle3;
-
-//TAP HOLD Varriables 
-//uint8_t buttonState;
 
 int modeColor;
 int indcatorDots;
@@ -266,13 +260,10 @@ void reset();
 
 void setup()
 { 
-  irrecv.enableIRIn(); // Start the receiver
+  irrecv.enableIRIn(); // Start the IR receiver
   AudioMemory(12);
   FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS);
-  //FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
-  //FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER, DATA_RATE_MHZ(2)>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   FastLED.setBrightness(255);
-  //FastLED.setDither( 0 );
   turnoffLEDs();
   FastLED.show();
   turnoffLEDs();
@@ -299,10 +290,7 @@ void setup()
     }
   }
   flash(100, 0);
-  // while (!Serial) {
-  //   ; // wait for serial port to connect. Needed for native USB
-  // }
-  Serial.println("Cloud v2.0");
+  Serial.println("Cloud v3.0");
   //EEPROM.update(0, 1);       // uncomment to load default EPROM values
   eepromSet();
     // butStateCounter = 1;                  //
@@ -326,7 +314,6 @@ void loop()
        FastLED.show(); 
        flashCount = 0; 
        }
-    //delay(3);
   }
   else if (remoteState == BUTTON_POWER_HELD){
       //reset();
@@ -340,29 +327,6 @@ void loop()
 
     analyzeFFTall(); 
     musicmode3(); 
-    
-    // if      (butStateCounter == 1){    
-    //   if (flashCount == 1){ flash(130,250);  }
-    //   fetchSoundData();
-    //   soundLightening();     
-    //   }
-    // else if (butStateCounter == 2){    
-    //   demo();    
-    //   }
-    // else if (butStateCounter == 3){    
-    //  if (flashCount == 1){  
-    //    flash(130,250);
-    //    strom();  
-    //    }
-    //   timedLightening(30);    
-    // }
-    // else if (butStateCounter == 4){    
-    //  if (flashCount == 1){  
-    //    flash(130,250);
-    //    strom();    
-    //    }
-    //  timedLightening(240);    
-    //  }
   }
   else if (remoteState == BUTTON_A_HELD){
     lampMode4();  
@@ -370,23 +334,6 @@ void loop()
   else if (remoteState == BUTTON_B){
     fetchSoundData();
     musicmode4();  
-    
-    // if      (butStateCounter == 1){    
-    //   fetchSoundData();
-    //   musicmode4();     
-    //   }
-    // else if (butStateCounter == 2){    
-    //   analyzeFFTall(); 
-    //   musicmode5();     
-    //   }
-    // else if (butStateCounter == 3){    
-    //   fetchSoundData(); 
-    //   musicmode1();     
-    // }
-    // else if (butStateCounter == 4){    
-    //   analyzeFFTall(); 
-    //   musicmode3();     
-    //   }
   }
   else if (remoteState == BUTTON_B_HELD){
     analyzeFFTall(); 
@@ -394,19 +341,6 @@ void loop()
   }
   else if (remoteState == BUTTON_C){
     lampMode2(); 
-
-    // if      (butStateCounter == 1){    
-    //   lampMode2();    
-    //   }
-    // else if (butStateCounter == 2){    
-    //   lampMode1();    
-    //   }
-    // else if (butStateCounter == 3){    
-    //   lampMode3();   
-    // }
-    // else if (butStateCounter == 4){    
-    //   lampMode4();     
-    //   }
   }
   else if (remoteState == BUTTON_C_HELD){
     lampMode3();
@@ -421,8 +355,6 @@ void loop()
 
   else if (remoteState == BUTTON_CIRCLE_HELD){
     if (flashCount == 1){  
-       //strom();
-       //flash(130,250);
        for (int led = 0; led < NUM_LEDS; led++) {
         leds[led] = CHSV( 130, 250, 200);
       }
@@ -680,8 +612,6 @@ void musicmode2()   // Middle Out
   }
   if (soundLevel <= 0)  // NO SOUND
   {                                    // If no sound (dot = 0)
-    //turnoffLEDs();
-    //fadeToBlackBy( leds, NUM_LEDS, 1);
     leds[NUM_LEDS / 2].setRGB(80, 80, 80); // keep center dot illuminated
   }
   FastLED.show(); // send data to LEDs to display
@@ -690,8 +620,6 @@ void musicmode2()   // Middle Out
 
 void musicmode3()    // Ripple
 { 
-  //fadeToBlackBy( leds, NUM_LEDS, 1);
-  //turnoffLEDs();
   for (int y = 0; y < 8; y++) // create 8 different LED sections of saber each based on the 8 FFT channels
   {
     int bottomOfRipple = ((NUM_LEDS / 8) * y);
@@ -705,7 +633,6 @@ void musicmode3()    // Ripple
       topOfRipple = NUM_LEDS;
     }
     int rippleBrightness = fftArray[y] * 5;    // fftArray[y]
-    //ippleBrightness = map( rippleBrightness, 0, 50, 0, 255 );    // fftArray[y]
     rippleBrightness = constrain( rippleBrightness, 0, 255 );    // fftArray[y]
     for (int led = bottomOfRipple; led < topOfRipple; led++)
     {
@@ -756,45 +683,10 @@ void musicmode5()     // Colorful
   if (readIndexH >= numReadings) { readIndexH = 0; }     // if we're at the end of the array wrap around to the beginning:
   averageH = totalH / numReadings;   // calculate the average:
 
-    //Bass = constrain((fftArray[0] + fftArray[1])*2,2,255);
-    //Mid = constrain((fftArray[2] + fftArray[3])*2,2,255);
-    //High = constrain((fftArray[4] + fftArray[5] + fftArray[6] + fftArray[7])*2,2,255);
-
-    // if (Bass < prevBass){ 
-    //   Bass = prevBass - 1;
-    //   if(prevBass > 3){
-    //     prevBass--;
-    //   }
-    //  }
-    // else {
-    //   prevBass = Bass;
-    // }
-
-    // if (Mid < prevMid){ 
-    //   Mid = prevMid - 1;
-    //   if(prevMid > 3){
-    //     prevMid--;
-    //   }
-    //  } 
-    // else {
-    //   prevMid = Mid;
-    // }
-
-    // if (High < prevHigh){ 
-    //   High = prevHigh - 1;
-    //   if(prevHigh > 3){
-    //     prevHigh--;
-    //   }
-    //  }
-    // else {
-    //   prevHigh = High;
-    // }
-
     for (int x = 0; x < NUM_LEDS; x++) {
     leds[x].setRGB(averageH, averageM, average);
   }
   FastLED.show();
-  //delay(10);
 }
 
 //*******************************      Lamp Modes    ******************************************//
@@ -822,7 +714,6 @@ void flash(int hue, int saturation)
 void lampMode1()  // Neon
 {
   rainbow(0, NUM_LEDS, 0.1);
-  //rainbow(0, NUM_LEDS, 0.1);
   FastLED.show();
 }
 
@@ -849,7 +740,6 @@ void lampMode2()  // Fairy Light
 void lampMode3()  // Ombre
 {
   rainbow(0, NUM_LEDS, 5);
-  //rainbow(0, NUM_LEDS, 1);
   FastLED.show();
 }
 
@@ -880,7 +770,6 @@ void rainbow(int startPos, int number, float deltaHue)
       rainbowCounter = 0;
     } // slowly cycle the "base color" through the rainbow
     fill_rainbow( &(leds[startPos]), number, gHue, deltaHue);
-    //FastLED.show();
 }
 
 void strom()
@@ -1068,36 +957,6 @@ void remote()
       if (resultCode == 0xFFFF) {     //button held check
         buttonHeld++;
 
-
-        // if (currentButton == 'L') {
-        //   if (wheelPosition < 12){        
-        //     wheelPosition++;    
-        //     EEPROM.update(6, wheelPosition);  // EEPROM Save
-        //     }
-        //   else {                          
-        //     wheelPosition = 0;
-        //     EEPROM.update(6, wheelPosition);  // EEPROM Save  
-        //     }
-        // }
-        // else if (currentButton == 'R') {
-        //   if (wheelPosition > 0){         
-        //     wheelPosition--;
-        //     EEPROM.update(6, wheelPosition);  // EEPROM Save    
-        //     }
-        //   else {                          
-        //     wheelPosition = 12; 
-        //     EEPROM.update(6, wheelPosition);  // EEPROM Save
-        //     }
-        // }
-        // else if (currentButton == 'U') {
-        //   upDownLeftRightRemoteHeld();
-        //   remoteState = BUTTON_UP;
-        // }
-        // else if (currentButton == 'D') {
-        //   upDownLeftRightRemoteHeld();
-        //   remoteState = BUTTON_DOWN;
-        // }
-
         if (buttonHeld >= 4) {                                   // Button Holds
              Serial.print("buttonHeld :    ");
              Serial.println(currentButton);
@@ -1106,9 +965,6 @@ void remote()
               previousRemoteState = remoteState;
               remoteState = BUTTON_CIRCLE_HELD;
               EEPROM.update(5, 5);  // EEPROM Save 5 = BUTTON_CURCLE_HELD
-              // turnoffLEDs();
-              // flash(130,250);
-              // FastLED.show();
               turnoffLEDs();
               flashCount = 1;
             }
@@ -1207,12 +1063,6 @@ void remote()
               }
             else if (resultCode == BUTTON_CIRCLE) {
               currentButton = 'O';
-              // strom();
-              // strom();
-              // strom();
-              //remoteState = BUTTON_CIRCLE;
-              //if(butStateCounter != 1){ butStateCounter--; }
-              //newButtonPress = 0;
             }
 
             
@@ -1329,7 +1179,6 @@ void upDownLeftRightRemote()
 {
 
   variableState = 0;
-  //stateCounter = 0;
 
   if ((remoteState != BUTTON_CDOWN) && (remoteState != BUTTON_CUP) && (remoteState != BUTTON_AUP) && (remoteState != BUTTON_ADOWN) && (remoteState != BUTTON_BUP) && (remoteState != BUTTON_BDOWN))
   {
