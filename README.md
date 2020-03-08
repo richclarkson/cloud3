@@ -1,6 +1,6 @@
 # Cloud Ambient Lamp
 
-## Test Release v0.1
+## Release v3.0
 
 ### Hardware
 - Run this code on a Teensy 3.2.
