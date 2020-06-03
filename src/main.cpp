@@ -77,7 +77,7 @@ const uint16_t BUTTON_4 = 0x20DF;  // was button A
 const uint16_t BUTTON_5 = 0xA05F;   // was button B held
 const uint16_t BUTTON_6 = 0x609F;   // was button C held
 const uint16_t BUTTON_7 = 0x10EF; // hex = 4815   was button circle
-const uint16_t BUTTON_8 = 0x906F;   // was button circle held
+const uint16_t BUTTON_8 = 0x906F;   // was button circle held  
 const uint16_t BUTTON_9 = 0x50AF;   // was button A HELD
 
 const uint16_t BUTTON_AUP = 0x08F7;
@@ -314,13 +314,7 @@ void loop()
   else if (remoteState == BUTTON_1_HELD){
       //reset();
   }
-  else if (remoteState == BUTTON_4){
-     if (flashCountA == 1){  
-      flash(220,250);
-      Serial.print("flash pink");
-      flashCountA = 0;
-    }
-
+  else if (remoteState == BUTTON_8){
     analyzeFFTall(); 
     musicmode3(); 
   }
@@ -341,7 +335,7 @@ void loop()
   else if (remoteState == BUTTON_6){
     lampMode3();
   }
-  else if (remoteState == BUTTON_7){    
+  else if (remoteState == BUTTON_4){    
     if (flashCount == 1){  
        strom();
        flashCount = 0;  
@@ -349,7 +343,7 @@ void loop()
     timedLightening(30);
   }
 
-  else if (remoteState == BUTTON_8){
+  else if (remoteState == BUTTON_7){
     if (flashCount == 1){  
        for (int led = 0; led < NUM_LEDS; led++) {
         leds[led] = CHSV( 130, 250, 200);
@@ -1072,6 +1066,7 @@ void remote()
 
             else if (resultCode == BUTTON_7) {
               currentButton = 'G';
+              flashCountA = 1;
             }
 
             
@@ -1121,25 +1116,27 @@ void remote()
               FastLED.show();
             }
             else if (currentButton == 'D') {
-              EEPROM.update(5, 1);  // EEPROM Save 1 = BUTTON_4
+              EEPROM.update(5, 3);  // EEPROM Save 1 = BUTTON_4
               previousRemoteState = remoteState;
               remoteState = BUTTON_4;
+              flashCount = 1;
               turnoffLEDs();
             }
             else if (currentButton == 'B') {
-              EEPROM.update(5, 2);  // EEPROM Save 2 = BUTTON_2
+              EEPROM.update(5, 1);  // EEPROM Save 2 = BUTTON_2
               previousRemoteState = remoteState;
               remoteState = BUTTON_2;
+              //soundLevel = 255;
               turnoffLEDs();
             }
             else if (currentButton == 'C') {
-              EEPROM.update(5, 3);  // EEPROM Save 3 = BUTTON_3
+              EEPROM.update(5, 2);  // EEPROM Save 3 = BUTTON_3
               previousRemoteState = remoteState;
               remoteState = BUTTON_3;
               turnoffLEDs();
             }
             else if (currentButton == 'G') {
-              EEPROM.update(5, 4);  // EEPROM Save 4 = BUTTON_7
+              EEPROM.update(5, 6);  // EEPROM Save 4 = BUTTON_7
               previousRemoteState = remoteState;
               remoteState = BUTTON_7;
               flashCount = 1;
@@ -1148,26 +1145,26 @@ void remote()
             else if (currentButton == 'H') {
               previousRemoteState = remoteState;
               remoteState = BUTTON_8;
-              EEPROM.update(5, 5);  // EEPROM Save 5 = BUTTON_8
+              EEPROM.update(5, 7);  // EEPROM Save 5 = BUTTON_8
               turnoffLEDs();
               flashCount = 1;
             }
             else if (currentButton == 'I') {
               previousRemoteState = remoteState;
               remoteState = BUTTON_9;
-              EEPROM.update(5, 6);  // EEPROM Save 6 = BUTTON_9
+              EEPROM.update(5, 8);  // EEPROM Save 6 = BUTTON_9
               turnoffLEDs();
             }
             else if (currentButton == 'E') {
               previousRemoteState = remoteState;
               remoteState = BUTTON_5;
-              EEPROM.update(5, 7);  // EEPROM Save 7 = BUTTON_5
+              EEPROM.update(5, 4);  // EEPROM Save 7 = BUTTON_5
               turnoffLEDs();
             }
             else if (currentButton == 'F') {
               previousRemoteState = remoteState;
               remoteState = BUTTON_6;
-              EEPROM.update(5, 8);  // EEPROM Save 8 = BUTTON_6
+              EEPROM.update(5, 5);  // EEPROM Save 8 = BUTTON_6
               turnoffLEDs();
             }
         }
