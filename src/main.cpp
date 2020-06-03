@@ -94,9 +94,9 @@ const uint16_t BUTTON_CRESET = 0x00FF;   // change this
 
 const uint16_t BUTTON_HELD = 0xFFFF;
 
-uint16_t BUTTON_ARRAY[11] = {BUTTON_1, BUTTON_4, BUTTON_2, BUTTON_3, BUTTON_7, BUTTON_AUP, BUTTON_ADOWN, BUTTON_BUP, BUTTON_BDOWN, BUTTON_CUP, BUTTON_CDOWN};
+uint16_t BUTTON_ARRAY[18] = {BUTTON_1, BUTTON_2, BUTTON_3, BUTTON_4, BUTTON_5, BUTTON_6, BUTTON_7, BUTTON_8, BUTTON_9, BUTTON_AUP, BUTTON_ADOWN, BUTTON_BUP, BUTTON_BDOWN, BUTTON_CUP, BUTTON_CDOWN, BUTTON_ARESET, BUTTON_BRESET, BUTTON_CRESET};
 
-uint16_t BUTTON_ARRAY2[9] = {BUTTON_1, BUTTON_4, BUTTON_2, BUTTON_3, BUTTON_7, BUTTON_8, BUTTON_9, BUTTON_5, BUTTON_6,};
+uint16_t BUTTON_ARRAY2[9] = {BUTTON_1, BUTTON_2, BUTTON_3, BUTTON_4, BUTTON_5, BUTTON_6, BUTTON_7, BUTTON_8, BUTTON_9,};
 
 
 //*******************************       IR CONSTANTS    ******************************************//
@@ -1003,7 +1003,18 @@ void remote()
                 upDownLeftRightRemote();
                 remoteState = BUTTON_ADOWN;
               }
-              else if (resultCode == BUTTON_BUP) {
+            else if (resultCode == BUTTON_ARESET) {
+              //currentButton = 'M';
+              Bvariable = 8;  
+              EEPROM.update(3, Bvariable);
+              FastLED.setBrightness(map(Bvariable,0,8,50,255)); // set master brightness control
+              flash(255,0); 
+              Serial.print("flash blue?");
+              turnoffLEDs();
+              FastLED.show(); 
+              }
+
+            else if (resultCode == BUTTON_BUP) {
               currentButton = 'K';
                 upDownLeftRightRemote();
                 remoteState = BUTTON_BUP;
@@ -1013,6 +1024,16 @@ void remote()
                 upDownLeftRightRemote();
                 remoteState = BUTTON_BDOWN;
               }
+            else if (resultCode == BUTTON_BRESET) {
+              //currentButton = 'N';
+              sensitivity = 3;                        
+              EEPROM.update(4, sensitivity);
+              flash(255,0); 
+              Serial.print("flash Yellow?");
+              turnoffLEDs();
+              FastLED.show();
+              }
+
             else if (resultCode == BUTTON_CUP) {
               currentButton = 'L';
                 if (wheelPosition < 12){       
@@ -1038,8 +1059,17 @@ void remote()
                   }
                 upDownLeftRightRemote();
                 remoteState = BUTTON_CDOWN;
-                
               }
+            else if (resultCode == BUTTON_CRESET) {
+              //currentButton = 'N';
+              wheelPosition = 12;
+              EEPROM.update(6, wheelPosition);
+              flash(255,0); 
+              Serial.print("flash white?");
+              turnoffLEDs();
+              FastLED.show();
+              }
+
             else if (resultCode == BUTTON_7) {
               currentButton = 'G';
             }
