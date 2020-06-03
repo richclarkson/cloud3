@@ -1,12 +1,11 @@
 
 /*
-  Cloud 3.0
+  Cloud 3.1
   2020 Richard Clarkson Studio
 
   TODO fix LED flickering: For some reason any LED quantity over 25 results in LED flickering, symptoms also result when the Speed of animation setting is active.
    - temporary workaround limit LEDs to 25 and remove Speed of Animation setting.
   
-  TODO optimize IR reciver code to be more efficent - sometimes units miss button signals - may require hardware improvements
 */
 
 
@@ -56,7 +55,7 @@ int averageH = 0;                // the average
 
 
 //IR Varriables
-#define NUM_BUTTONS 9 // The remote has 9 buttons
+#define NUM_BUTTONS 18 // The remote has 9 buttons
 
 int RECV_PIN = 15;       //
 
@@ -69,35 +68,35 @@ void upDownLeftRightRemoteHeld();
 
 //*******************************       BUTTON CONSTANTS    ******************************************//
 
-const uint16_t BUTTON_POWER = 0xD827; // i.e. 0x10EFD827  //55335
-const uint16_t BUTTON_POWER_HELD = 23;
+const uint16_t BUTTON_1 = 0x00FF; // i.e. 0x10EFD827  //55335  - was Button Power
+const uint16_t BUTTON_1_HELD = 23;
 
-const uint16_t BUTTON_A = 0xF807;
-const uint16_t BUTTON_A_HELD = 20;
+const uint16_t BUTTON_2 = 0x807F;  // was button B
+const uint16_t BUTTON_3 = 0x40BF;  // was button C
+const uint16_t BUTTON_4 = 0x20DF;  // was button A
+const uint16_t BUTTON_5 = 0xA05F;   // was button B held
+const uint16_t BUTTON_6 = 0x609F;   // was button C held
+const uint16_t BUTTON_7 = 0x10EF; // hex = 4815   was button circle
+const uint16_t BUTTON_8 = 0x906F;   // was button circle held  
+const uint16_t BUTTON_9 = 0x50AF;   // was button A HELD
 
-const uint16_t BUTTON_B = 0x7887;
-const uint16_t BUTTON_B_HELD = 21;
+const uint16_t BUTTON_AUP = 0x08F7;
+const uint16_t BUTTON_ADOWN = 0x18E7;   
+const uint16_t BUTTON_ARESET = 0x28D7;   
 
-const uint16_t BUTTON_C = 0x58A7;
-const uint16_t BUTTON_C_HELD = 22;
+const uint16_t BUTTON_BUP = 0x8877;
+const uint16_t BUTTON_BDOWN = 0x9867;
+const uint16_t BUTTON_BRESET = 0xA857; 
 
-const uint16_t BUTTON_AUP = 0xA05F;
-const uint16_t BUTTON_ADOWN = 0x00FF;
-
-const uint16_t BUTTON_BUP = 0xC03F;
-const uint16_t BUTTON_BDOWN = 0x40BF;
-
-const uint16_t BUTTON_CUP = 0x10EF;
-const uint16_t BUTTON_CDOWN = 0x807F;
-
-const uint16_t BUTTON_CIRCLE = 0x20DF;  // hex = 4815
-const uint16_t BUTTON_CIRCLE_HELD = 24;
+const uint16_t BUTTON_CUP = 0x48B7;     
+const uint16_t BUTTON_CDOWN = 0x58A7;   
+const uint16_t BUTTON_CRESET = 0x6897;   
 
 const uint16_t BUTTON_HELD = 0xFFFF;
 
-uint16_t BUTTON_ARRAY[11] = {BUTTON_POWER, BUTTON_A, BUTTON_B, BUTTON_C, BUTTON_CIRCLE, BUTTON_AUP, BUTTON_ADOWN, BUTTON_BUP, BUTTON_BDOWN, BUTTON_CUP, BUTTON_CDOWN};
+uint16_t BUTTON_ARRAY[18] = {BUTTON_1, BUTTON_2, BUTTON_3, BUTTON_4, BUTTON_5, BUTTON_6, BUTTON_7, BUTTON_8, BUTTON_9, BUTTON_AUP, BUTTON_ADOWN, BUTTON_BUP, BUTTON_BDOWN, BUTTON_CUP, BUTTON_CDOWN, BUTTON_ARESET, BUTTON_BRESET, BUTTON_CRESET};
 
-uint16_t BUTTON_ARRAY2[9] = {BUTTON_POWER, BUTTON_A, BUTTON_B, BUTTON_C, BUTTON_CIRCLE, BUTTON_CIRCLE_HELD, BUTTON_A_HELD, BUTTON_B_HELD, BUTTON_C_HELD,};
+uint16_t BUTTON_ARRAY2[9] = {BUTTON_1, BUTTON_2, BUTTON_3, BUTTON_4, BUTTON_5, BUTTON_6, BUTTON_7, BUTTON_8, BUTTON_9,};
 
 
 //*******************************       IR CONSTANTS    ******************************************//
@@ -294,7 +293,7 @@ void setup()
     // timeSpeed = 2;                          //
     // Bvariable = 8;                          //
     // sensitivity = 4;                        //
-    // remoteState = BUTTON_B;
+    // remoteState = BUTTON_2;
 }
 
 
@@ -303,7 +302,7 @@ void loop()
 { 
   remote();
 
-  if      (remoteState == BUTTON_POWER){
+  if      (remoteState == BUTTON_1){
      if (flashCount == 1){  
        flash(100,0); 
        Serial.print("flash white");
@@ -312,37 +311,31 @@ void loop()
        flashCount = 0; 
        }
   }
-  else if (remoteState == BUTTON_POWER_HELD){
+  else if (remoteState == BUTTON_1_HELD){
       //reset();
   }
-  else if (remoteState == BUTTON_A){
-     if (flashCountA == 1){  
-      flash(220,250);
-      Serial.print("flash pink");
-      flashCountA = 0;
-    }
-
+  else if (remoteState == BUTTON_8){
     analyzeFFTall(); 
     musicmode3(); 
   }
-  else if (remoteState == BUTTON_A_HELD){
+  else if (remoteState == BUTTON_9){
     lampMode4();  
   }
-  else if (remoteState == BUTTON_B){
+  else if (remoteState == BUTTON_2){
     fetchSoundData();
     musicmode4();  
   }
-  else if (remoteState == BUTTON_B_HELD){
+  else if (remoteState == BUTTON_5){
     analyzeFFTall(); 
     musicmode5();  
   }
-  else if (remoteState == BUTTON_C){
+  else if (remoteState == BUTTON_3){
     lampMode2(); 
   }
-  else if (remoteState == BUTTON_C_HELD){
+  else if (remoteState == BUTTON_6){
     lampMode3();
   }
-  else if (remoteState == BUTTON_CIRCLE){    
+  else if (remoteState == BUTTON_4){    
     if (flashCount == 1){  
        strom();
        flashCount = 0;  
@@ -350,17 +343,7 @@ void loop()
     timedLightening(30);
   }
 
-  else if (remoteState == BUTTON_CIRCLE_HELD){
-    if (flashCount == 1){  
-       for (int led = 0; led < NUM_LEDS; led++) {
-        leds[led] = CHSV( 130, 250, 200);
-      }
-      FastLED.show();
-      delay(700);
-      turnoffLEDs();
-      FastLED.show();
-      flashCount = 0;    
-      }
+  else if (remoteState == BUTTON_7){
     fetchSoundData();
     soundLightening();
   }
@@ -891,7 +874,7 @@ void eepromSet()
     Bvariable =          (int)EEPROM.read(3);
     sensitivity =        (int)EEPROM.read(4);
     remotEeprom =        (int)EEPROM.read(5);
-    remoteState = BUTTON_ARRAY2[remotEeprom];  // 0 = BUTTON_POWER, 1 = BUTTON_A, 2 = BUTTON_B, 3 = BUTTON_C
+    remoteState = BUTTON_ARRAY2[remotEeprom];  // 0 = BUTTON_1, 1 = BUTTON_4, 2 = BUTTON_2, 3 = BUTTON_3
     wheelPosition =      (int)EEPROM.read(6);
 
     Serial.print("remotEeprom :   ");
@@ -950,83 +933,93 @@ void remote()
       if (resultCode == 0xFFFF) {     //button held check
         buttonHeld++;
 
-        if (buttonHeld >= 4) {                                   // Button Holds
+        if (buttonHeld >= 8) {                                   // Button Holds
              Serial.print("buttonHeld :    ");
              Serial.println(currentButton);
-
-            if (currentButton == 'O') {
-              previousRemoteState = remoteState;
-              remoteState = BUTTON_CIRCLE_HELD;
-              EEPROM.update(5, 5);  // EEPROM Save 5 = BUTTON_CURCLE_HELD
-              turnoffLEDs();
-              flashCount = 1;
-            }
-            else if (currentButton == 'A') {
-              previousRemoteState = remoteState;
-              remoteState = BUTTON_A_HELD;
-              EEPROM.update(5, 6);  // EEPROM Save 6 = BUTTON_A_HELD
-              turnoffLEDs();
-            }
-            else if (currentButton == 'B') {
-              previousRemoteState = remoteState;
-              remoteState = BUTTON_B_HELD;
-              EEPROM.update(5, 7);  // EEPROM Save 7 = BUTTON_B_HELD
-              turnoffLEDs();
-            }
-            else if (currentButton == 'P') {
-              //remoteState = BUTTON_POWER_HELD;
+            
+            if (currentButton == 'A') {
+              //remoteState = BUTTON_1_HELD;
               reset();
-            }
-            else if (currentButton == 'C') {
-              previousRemoteState = remoteState;
-              remoteState = BUTTON_C_HELD;
-              EEPROM.update(5, 8);  // EEPROM Save 8 = BUTTON_C_HELD
-              turnoffLEDs();
             }
           }
         
       }
       else {
-        for (int i = 0; i < 11; i++) 
+        for (int i = 0; i < 18; i++) 
         {              //compare against each of the button codes
           if (resultCode == BUTTON_ARRAY[i]) {
 
             // ACTUAL BUTTON
             newButtonPress = 1;
 
-            if (resultCode == BUTTON_POWER) {
-              currentButton = 'P';
-            }
-            else if (resultCode == BUTTON_A) {
+            if (resultCode == BUTTON_1) {
               currentButton = 'A';
+            }
+            else if (resultCode == BUTTON_4) {
+              currentButton = 'D';
               flashCountA = 1;
             }
-            else if (resultCode == BUTTON_B) {
+            else if (resultCode == BUTTON_2) {
               currentButton = 'B';
             }
-            else if (resultCode == BUTTON_C) {
+            else if (resultCode == BUTTON_3) {
               currentButton = 'C';
             }
+            else if (resultCode == BUTTON_5) {
+              currentButton = 'E';
+            }
+            else if (resultCode == BUTTON_6) {
+              currentButton = 'F';
+            }
+            else if (resultCode == BUTTON_8) {
+              currentButton = 'H';
+            }
+            else if (resultCode == BUTTON_9) {
+              currentButton = 'I';
+            }
             else if (resultCode == BUTTON_AUP) {
-              currentButton = 'U';
+              currentButton = 'J';
                 upDownLeftRightRemote();
                 remoteState = BUTTON_AUP;
               }
             else if (resultCode == BUTTON_ADOWN) {
-              currentButton = 'D';
+              currentButton = 'P';
                 upDownLeftRightRemote();
                 remoteState = BUTTON_ADOWN;
               }
-              else if (resultCode == BUTTON_BUP) {
-              currentButton = 'I';
+            else if (resultCode == BUTTON_ARESET) {
+              //currentButton = 'M';
+              remoteState = previousRemoteState;
+              Bvariable = 8;  
+              EEPROM.update(3, Bvariable);
+              FastLED.setBrightness(map(Bvariable,0,8,50,255)); // set master brightness control
+              flash(60,150); 
+              Serial.print("flash blue?");
+              turnoffLEDs();
+              FastLED.show(); 
+              }
+
+            else if (resultCode == BUTTON_BUP) {
+              currentButton = 'K';
                 upDownLeftRightRemote();
                 remoteState = BUTTON_BUP;
               }
             else if (resultCode == BUTTON_BDOWN) {
-              currentButton = 'Y';
+              currentButton = 'Q';
                 upDownLeftRightRemote();
                 remoteState = BUTTON_BDOWN;
               }
+            else if (resultCode == BUTTON_BRESET) {
+              //currentButton = 'N';
+              remoteState = previousRemoteState;
+              sensitivity = 3;                        
+              EEPROM.update(4, sensitivity);
+              flash(180,150); 
+              Serial.print("flash Yellow?");
+              turnoffLEDs();
+              FastLED.show();
+              }
+
             else if (resultCode == BUTTON_CUP) {
               currentButton = 'L';
                 if (wheelPosition < 12){       
@@ -1052,10 +1045,21 @@ void remote()
                   }
                 upDownLeftRightRemote();
                 remoteState = BUTTON_CDOWN;
-                
               }
-            else if (resultCode == BUTTON_CIRCLE) {
-              currentButton = 'O';
+            else if (resultCode == BUTTON_CRESET) {
+              //currentButton = 'N';
+              remoteState = previousRemoteState;
+              wheelPosition = 12;
+              EEPROM.update(6, wheelPosition);
+              flash(255,0); 
+              Serial.print("flash white?");
+              turnoffLEDs();
+              FastLED.show();
+              }
+
+            else if (resultCode == BUTTON_7) {
+              currentButton = 'G';
+              flashCountA = 1;
             }
 
             
@@ -1085,11 +1089,8 @@ void remote()
       if (newButtonPress == 1) {
         newButtonPress = 0;
 
-        if (buttonHeld > 4) { // number of seconds/ 4-1       // Button Holds
+        if (buttonHeld > 8) { // number of seconds/ 4-1       // Button Holds
           // Current Button Held
-
-
-
           
         }
 
@@ -1098,38 +1099,70 @@ void remote()
             // Current Button
             Serial.println(currentButton);
 
-            if (currentButton == 'P') {
-              EEPROM.update(5, 0);  // EEPROM Save 0 = BUTTON_POWER
+            if (currentButton == 'A') {
+              EEPROM.update(5, 0);  // EEPROM Save 0 = BUTTON_1
               previousRemoteState = remoteState;
-              remoteState = BUTTON_POWER;
+              remoteState = BUTTON_1;
               flashCount = 1;
               Serial.println("Off");
               turnoffLEDs();
               FastLED.show();
             }
-            else if (currentButton == 'A') {
-              EEPROM.update(5, 1);  // EEPROM Save 1 = BUTTON_A
+            else if (currentButton == 'D') {
+              EEPROM.update(5, 3);  // EEPROM Save 1 = BUTTON_4
               previousRemoteState = remoteState;
-              remoteState = BUTTON_A;
+              remoteState = BUTTON_4;
+              flashCount = 1;
               turnoffLEDs();
             }
             else if (currentButton == 'B') {
-              EEPROM.update(5, 2);  // EEPROM Save 2 = BUTTON_B
+              EEPROM.update(5, 1);  // EEPROM Save 2 = BUTTON_2
               previousRemoteState = remoteState;
-              remoteState = BUTTON_B;
+              remoteState = BUTTON_2;
+              flash(100,0); 
               turnoffLEDs();
+              FastLED.show(); 
             }
             else if (currentButton == 'C') {
-              EEPROM.update(5, 3);  // EEPROM Save 3 = BUTTON_C
+              EEPROM.update(5, 2);  // EEPROM Save 3 = BUTTON_3
               previousRemoteState = remoteState;
-              remoteState = BUTTON_C;
+              remoteState = BUTTON_3;
               turnoffLEDs();
             }
-            else if (currentButton == 'O') {
-              EEPROM.update(5, 4);  // EEPROM Save 4 = BUTTON_CURCLE
+            else if (currentButton == 'G') {
+              EEPROM.update(5, 6);  // EEPROM Save 4 = BUTTON_7
               previousRemoteState = remoteState;
-              remoteState = BUTTON_CIRCLE;
-              flashCount = 1;
+              remoteState = BUTTON_7;
+              flash(100,0); 
+              turnoffLEDs();
+              FastLED.show(); 
+            }
+            else if (currentButton == 'H') {
+              previousRemoteState = remoteState;
+              remoteState = BUTTON_8;
+              EEPROM.update(5, 7);  // EEPROM Save 5 = BUTTON_8
+              flash(100,0); 
+              turnoffLEDs();
+              FastLED.show(); 
+            }
+            else if (currentButton == 'I') {
+              previousRemoteState = remoteState;
+              remoteState = BUTTON_9;
+              EEPROM.update(5, 8);  // EEPROM Save 6 = BUTTON_9
+              turnoffLEDs();
+            }
+            else if (currentButton == 'E') {
+              previousRemoteState = remoteState;
+              remoteState = BUTTON_5;
+              EEPROM.update(5, 4);  // EEPROM Save 7 = BUTTON_5
+              flash(100,0); 
+              turnoffLEDs();
+              FastLED.show(); 
+            }
+            else if (currentButton == 'F') {
+              previousRemoteState = remoteState;
+              remoteState = BUTTON_6;
+              EEPROM.update(5, 5);  // EEPROM Save 8 = BUTTON_6
               turnoffLEDs();
             }
         }
@@ -1177,7 +1210,7 @@ void upDownLeftRightRemote()
   {
     if (remoteState == 1000)
     {
-      previousRemoteState = BUTTON_POWER;
+      previousRemoteState = BUTTON_1;
     }
     else {
       previousRemoteState = remoteState;
