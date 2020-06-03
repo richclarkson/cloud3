@@ -949,11 +949,11 @@ void remote()
       if (resultCode == 0xFFFF) {     //button held check
         buttonHeld++;
 
-        if (buttonHeld >= 4) {                                   // Button Holds
+        if (buttonHeld >= 8) {                                   // Button Holds
              Serial.print("buttonHeld :    ");
              Serial.println(currentButton);
             
-            if (currentButton == 'P') {
+            if (currentButton == 'A') {
               //remoteState = BUTTON_1_HELD;
               reset();
             }
@@ -961,7 +961,7 @@ void remote()
         
       }
       else {
-        for (int i = 0; i < 11; i++) 
+        for (int i = 0; i < 18; i++) 
         {              //compare against each of the button codes
           if (resultCode == BUTTON_ARRAY[i]) {
 
@@ -1008,7 +1008,7 @@ void remote()
               Bvariable = 8;  
               EEPROM.update(3, Bvariable);
               FastLED.setBrightness(map(Bvariable,0,8,50,255)); // set master brightness control
-              flash(255,0); 
+              flash(60,150); 
               Serial.print("flash blue?");
               turnoffLEDs();
               FastLED.show(); 
@@ -1028,7 +1028,7 @@ void remote()
               //currentButton = 'N';
               sensitivity = 3;                        
               EEPROM.update(4, sensitivity);
-              flash(255,0); 
+              flash(180,150); 
               Serial.print("flash Yellow?");
               turnoffLEDs();
               FastLED.show();
@@ -1101,11 +1101,8 @@ void remote()
       if (newButtonPress == 1) {
         newButtonPress = 0;
 
-        if (buttonHeld > 4) { // number of seconds/ 4-1       // Button Holds
+        if (buttonHeld > 8) { // number of seconds/ 4-1       // Button Holds
           // Current Button Held
-
-
-
           
         }
 
