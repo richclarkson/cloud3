@@ -18,6 +18,13 @@
 FASTLED_USING_NAMESPACE
 #define NUM_LEDS 25        //     T=10 S=17 M=25 L=50* L= 2 sets of 25
 
+int LED_ADJUSTED = 25;
+
+const int shunt1Pin = 5;
+const int shunt2Pin = 6;
+int shunt1;
+int shunt2;
+
 
 //Global Varriables
 int channel = 8;
@@ -258,7 +265,32 @@ void setup()
 { 
   irrecv.enableIRIn(); // Start the IR receiver
   AudioMemory(12);
-  FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS);
+
+  pinMode(shunt1Pin, INPUT);    
+  pinMode(shunt1Pin, INPUT);  
+
+  shunt1 = digitalRead(shunt1Pin);  
+  if(shunt1 == LOW)
+  { 
+    LED_ADJUSTED = 10; 
+    CRGB leds[LED_ADJUSTED];
+    minLEDvalue[LED_ADJUSTED];
+    goingUp[LED_ADJUSTED];
+    currentValue[LED_ADJUSTED];
+    }
+
+  shunt2 = digitalRead(shunt2Pin);  
+  if(shunt2 == LOW)
+  { 
+    LED_ADJUSTED = 17; 
+    CRGB leds[LED_ADJUSTED];
+    minLEDvalue[LED_ADJUSTED];
+    goingUp[LED_ADJUSTED];
+    currentValue[LED_ADJUSTED];
+    }
+
+
+  FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, LED_ADJUSTED);
   FastLED.setBrightness(255);
   turnoffLEDs();
   FastLED.show();
