@@ -270,27 +270,19 @@ void setup()
   pinMode(shunt1Pin, INPUT);  
 
   shunt1 = digitalRead(shunt1Pin);  
-  if(shunt1 == LOW)
+  if (shunt1 == LOW)
   { 
     LED_ADJUSTED = 10; 
-    CRGB leds[LED_ADJUSTED];
-    minLEDvalue[LED_ADJUSTED];
-    goingUp[LED_ADJUSTED];
-    currentValue[LED_ADJUSTED];
     }
 
   shunt2 = digitalRead(shunt2Pin);  
-  if(shunt2 == LOW)
+  if (shunt2 == LOW)
   { 
     LED_ADJUSTED = 17; 
-    CRGB leds[LED_ADJUSTED];
-    minLEDvalue[LED_ADJUSTED];
-    goingUp[LED_ADJUSTED];
-    currentValue[LED_ADJUSTED];
     }
 
 
-  FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, LED_ADJUSTED);
+  FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS);
   FastLED.setBrightness(255);
   turnoffLEDs();
   FastLED.show();
@@ -300,13 +292,13 @@ void setup()
   delay(1000);  // Sanity Delay
   turnoffLEDs();
   FastLED.show();
-  for (int i = 0; i < NUM_LEDS; i++) {    
+  for (int i = 0; i < LED_ADJUSTED; i++) {    
     minLEDvalue[i] = random(1,150);       //fill up the minimum LED value array for Fairy Light Mode
     currentValue[i] = random(1,254);      //fill up the current value array for Fairy Light Mode
     goingUp[i] = random(0,1);             //fill up the going up value array for Fairy Light Mode
   }
   for (int i = 0; i < 1000; i++) {
-    for (int x = 0; x < NUM_LEDS; x++) {
+    for (int x = 0; x < LED_ADJUSTED; x++) {
       if(goingUp[x] == 1){
         currentValue[x]++;
         if (currentValue[x] >= 255) {goingUp[x] = 0;}
@@ -389,7 +381,7 @@ void loop()
       if(variableState == 0){             
           if (Bvariable < 8){        Bvariable++;   }
           FastLED.setBrightness(map(Bvariable,0,8,20,255));
-          fill_solid( leds, NUM_LEDS, CHSV(60,150,(map(Bvariable,0,8,20,250))));
+          fill_solid( leds, LED_ADJUSTED, CHSV(60,150,(map(Bvariable,0,8,20,250))));
           FastLED.show();
           Serial.print("Bvariable = ");
           Serial.println(Bvariable);
@@ -405,7 +397,7 @@ void loop()
      }
       if(variableState == 0){
           if (sensitivity < 8){     sensitivity++;  }
-          fill_solid( leds, NUM_LEDS, CHSV(180,150,(map(sensitivity,0,8,20,250))));
+          fill_solid( leds, LED_ADJUSTED, CHSV(180,150,(map(sensitivity,0,8,20,250))));
           FastLED.show();
           Serial.print("sensitivity = ");
           Serial.println(sensitivity);
@@ -422,7 +414,7 @@ void loop()
   //     if(variableState == 0){
         
   //         if (timeSpeed < 5){          timeSpeed++;     }
-  //         fill_solid( leds, NUM_LEDS, CHSV(110,150,(map(timeSpeed,0,5,20,250))));
+  //         fill_solid( leds, LED_ADJUSTED, CHSV(110,150,(map(timeSpeed,0,5,20,250))));
   //         FastLED.show();
   //         Serial.print("timeSpeed = ");
   //         Serial.println(speedOfAnimation[timeSpeed]);
@@ -439,7 +431,7 @@ void loop()
       if(variableState == 0){
           if (Bvariable > 0){     Bvariable--;   }
           FastLED.setBrightness(map(Bvariable,0,8,20,255));
-          fill_solid( leds, NUM_LEDS, CHSV(60,150,(map(Bvariable,0,8,20,250))));
+          fill_solid( leds, LED_ADJUSTED, CHSV(60,150,(map(Bvariable,0,8,20,250))));
           FastLED.show();
           Serial.print("Bvariable = ");
           Serial.println(Bvariable);
@@ -455,7 +447,7 @@ void loop()
      }
       if(variableState == 0){
           if (sensitivity > 0){     sensitivity--;  }
-          fill_solid( leds, NUM_LEDS, CHSV(180,150,(map(sensitivity,0,8,20,250))));
+          fill_solid( leds, LED_ADJUSTED, CHSV(180,150,(map(sensitivity,0,8,20,250))));
           FastLED.show();
           Serial.print("sensitivity = ");
           Serial.println(sensitivity);
@@ -471,7 +463,7 @@ void loop()
   //    }
   //     if(variableState == 0){
   //         if (timeSpeed > 0){          timeSpeed--;     }
-  //         fill_solid( leds, NUM_LEDS, CHSV(110,150,(map(timeSpeed,0,5,20,250))));
+  //         fill_solid( leds, LED_ADJUSTED, CHSV(110,150,(map(timeSpeed,0,5,20,250))));
   //         FastLED.show();
   //         Serial.print("timeSpeed = ");
   //         Serial.println(speedOfAnimation[timeSpeed]);
@@ -482,7 +474,7 @@ void loop()
 
   else if ((remoteState == BUTTON_CDOWN) || (remoteState == BUTTON_CUP))
   {
-    for (int x = 0; x < NUM_LEDS; x++) {
+    for (int x = 0; x < LED_ADJUSTED; x++) {
       leds[x] = CHSV(wheelH[wheelPosition], wheelS[wheelPosition], 200);
      }
     FastLED.show();
@@ -584,12 +576,12 @@ void FFTreading(int FFTchannel)
 
 void musicmode1()   // Falling Dot
 { 
-  //fadeToBlackBy( leds, NUM_LEDS, 3);
+  //fadeToBlackBy( leds, LED_ADJUSTED, 3);
   turnoffLEDs();
 
-  soundLevel = (map(soundLevel,0,150,0,NUM_LEDS+1))-1;    //250
+  soundLevel = (map(soundLevel,0,150,0,LED_ADJUSTED+1))-1;    //250
   if (soundLevel > dot)  dot = soundLevel; // Keep dot on top of soundLevel
-  if (dot > NUM_LEDS)    dot = NUM_LEDS; // Keep dot from going out of frame
+  if (dot > LED_ADJUSTED)    dot = LED_ADJUSTED; // Keep dot from going out of frame
 
   //turnoffLEDs();
   if (soundLevel > 1){
@@ -600,7 +592,7 @@ void musicmode1()   // Falling Dot
   }
   //leds[dot] = CHSV( 100, 150, 255);
   
-  // for (int led = dot; led < NUM_LEDS; led++)
+  // for (int led = dot; led < LED_ADJUSTED; led++)
   // { //make everything above the dot black
   //   leds[led].setRGB(0, 0, 0);
   // }
@@ -616,15 +608,15 @@ void musicmode1()   // Falling Dot
 
 void musicmode2()   // Middle Out 
 { 
-  soundLevel = map(soundLevel, 0, 255,0, NUM_LEDS);              // limit
+  soundLevel = map(soundLevel, 0, 255,0, LED_ADJUSTED);              // limit
   turnoffLEDs();
-  for (int led = (NUM_LEDS - soundLevel) / 2; led < (soundLevel / 2) + (NUM_LEDS / 2); led++)
+  for (int led = (LED_ADJUSTED - soundLevel) / 2; led < (soundLevel / 2) + (LED_ADJUSTED / 2); led++)
   {
     leds[led].setRGB(50, 50, 50);
   }
   if (soundLevel <= 0)  // NO SOUND
   {                                    // If no sound (dot = 0)
-    leds[NUM_LEDS / 2].setRGB(80, 80, 80); // keep center dot illuminated
+    leds[LED_ADJUSTED / 2].setRGB(80, 80, 80); // keep center dot illuminated
   }
   FastLED.show(); // send data to LEDs to display
   delay(10);
@@ -634,11 +626,11 @@ void musicmode3()    // Ripple
 { 
   for (int y = 0; y < 8; y++) // create 8 different LED sections of the Cloud each based on the 8 FFT channels
   {
-    int bottomOfRipple = ((NUM_LEDS / 8) * y);                        //break the LEDs into groups of 8
+    int bottomOfRipple = ((LED_ADJUSTED / 8) * y);                        //break the LEDs into groups of 8
     if (bottomOfRipple <= 0){      bottomOfRipple = 0;    }           //lower limit
 
-    int topOfRipple = ((NUM_LEDS / 8) * y) + (NUM_LEDS/8);            //break the LEDs into groups of 8
-    if (topOfRipple >= NUM_LEDS){      topOfRipple = NUM_LEDS;  }     //upper limit
+    int topOfRipple = ((LED_ADJUSTED / 8) * y) + (LED_ADJUSTED/8);            //break the LEDs into groups of 8
+    if (topOfRipple >= LED_ADJUSTED){      topOfRipple = LED_ADJUSTED;  }     //upper limit
 
     int rippleBrightness = fftArray[y] * 5;                           //scale the brightness up
     rippleBrightness = constrain( rippleBrightness, 0, 255 );         //limit to floor and celling
@@ -655,7 +647,7 @@ void musicmode4()   // Fade
   if (soundLevel * 3 > dot){    dot = soundLevel * 3;  } // scale up by 3
   if (dot > 255){    dot = 255;  }                       // upper limit
 
-  for (int led = 0; led < NUM_LEDS; led++)
+  for (int led = 0; led < LED_ADJUSTED; led++)
   {
     leds[led] = CHSV( wheelH[wheelPosition], wheelS[wheelPosition], dot);    // prepare data for LEDs
   }
@@ -691,7 +683,7 @@ void musicmode5()     // Colorful Music Mode
   if (readIndexH >= numReadings) { readIndexH = 0; }   // if we're at the end of the array wrap around to the beginning
   averageH = totalH / numReadings;                     // calculate the average
 
-    for (int x = 0; x < NUM_LEDS; x++) {
+    for (int x = 0; x < LED_ADJUSTED; x++) {
     leds[x].setRGB(averageH, averageM, average);       //prepare data to send to LEDs
   }
   FastLED.show();                                      //send data to LEDs
@@ -701,7 +693,7 @@ void musicmode5()     // Colorful Music Mode
 
 void turnoffLEDs()
 {
-    for (int led = 0; led < NUM_LEDS; led++)        
+    for (int led = 0; led < LED_ADJUSTED; led++)        
   { //turn off LEDs
     leds[led] = CHSV( 100, 0, 0);
   }
@@ -709,7 +701,7 @@ void turnoffLEDs()
 
 void flash(int hue, int saturation)
 {
-     for (int led = 0; led < NUM_LEDS; led++) {
+     for (int led = 0; led < LED_ADJUSTED; led++) {
         leds[led] = CHSV( hue, saturation, 200);
       }
       FastLED.show();
@@ -721,7 +713,7 @@ void flash(int hue, int saturation)
 
 void lampMode1()  // Neon
 {
-  rainbow(0, NUM_LEDS, 0.1);
+  rainbow(0, LED_ADJUSTED, 0.1);
   FastLED.show();
 }
 
@@ -729,7 +721,7 @@ void lampMode2()  // Fairy Light
 {
     EVERY_N_MILLISECONDS_I(thistimer,10) {                //delay to slow down the animation to a calm breathing speed
     thistimer.setPeriod(speedOfAnimation[timeSpeed]);     //setting to adjust the speed of the delay
-    for (int x = 0; x < NUM_LEDS; x++) {                  //this mode controls each LED individually where each LED has a dynamic setting about its fade level, fade direction and minimum fade value
+    for (int x = 0; x < LED_ADJUSTED; x++) {                  //this mode controls each LED individually where each LED has a dynamic setting about its fade level, fade direction and minimum fade value
     if(goingUp[x] == 1){
       currentValue[x]++;                                  //if the fade direction for this LED is up then add one brightness to the LED
       if (currentValue[x] >= 255) {goingUp[x] = 0;}       //if the fade direction for this LED is reaches the maximum (255) change fade direction
@@ -747,7 +739,7 @@ void lampMode2()  // Fairy Light
 
 void lampMode3()  // Ombre
 {
-  rainbow(0, NUM_LEDS, 5);     //color fuction fill LEDs strip with color so that 50% of the colorwheel is visible     
+  rainbow(0, LED_ADJUSTED, 5);     //color fuction fill LEDs strip with color so that 50% of the colorwheel is visible     
   FastLED.show();              //send data to LEDs
 }
 
@@ -763,7 +755,7 @@ void lampMode4()  // Breathing Light
       currentValueFade--;                                 //if the animation is still fading out remove one from the brightness
       if (currentValueFade <= 10) {goingUpFade = 1;}      //if the animation reaches the bottom (10) start fading in
     }
-    for (int x = 0; x < NUM_LEDS; x++) {
+    for (int x = 0; x < LED_ADJUSTED; x++) {
       leds[x] = CHSV(wheelH[wheelPosition], wheelS[wheelPosition], currentValueFade);    //HSV data to send to LEDs
     }
     rainbowCounter = 0;                                   //indicator flag
@@ -782,31 +774,31 @@ void rainbow(int startPos, int number, float deltaHue)             //FASTLED fun
 
 void strom()
 {
-  for (int led = 0; led < int(random(NUM_LEDS)); led++) {          //turn on a random chain of LEDs white
+  for (int led = 0; led < int(random(LED_ADJUSTED)); led++) {          //turn on a random chain of LEDs white
         leds[led] = CHSV( 100, 0, 255);
         FastLED.show();
       }
 
-  for (int led = 0; led < int(random(NUM_LEDS)); led++) {  leds[led] = CHSV( 100, 0, 255);    }   //turn on another random chain of LEDs white
+  for (int led = 0; led < int(random(LED_ADJUSTED)); led++) {  leds[led] = CHSV( 100, 0, 255);    }   //turn on another random chain of LEDs white
       FastLED.show();
       delay(random(10, 40));                                                                      //random delay between 10-40
-  for (int led = 0; led < int(random(NUM_LEDS)); led++) {  leds[led] = CHSV( 100, 0, 0);      }   //turn off a random chain of LEDs
+  for (int led = 0; led < int(random(LED_ADJUSTED)); led++) {  leds[led] = CHSV( 100, 0, 0);      }   //turn off a random chain of LEDs
       FastLED.show();
       delay(random(10, 200));                                                                     //random delay between 10-200
-  for (int led = 0; led < NUM_LEDS; led++) {          leds[led] = CHSV( 100, 0, 0);      }        //turn off all LEDs
+  for (int led = 0; led < LED_ADJUSTED; led++) {          leds[led] = CHSV( 100, 0, 0);      }        //turn off all LEDs
       FastLED.show();
   
-  for (int led = 0; led < int(random(NUM_LEDS)); led++) {  leds[led] = CHSV( 100, 0, 255);    }   //turn on another random chain of LEDs white
+  for (int led = 0; led < int(random(LED_ADJUSTED)); led++) {  leds[led] = CHSV( 100, 0, 255);    }   //turn on another random chain of LEDs white
       FastLED.show();
       delay(random(10, 50));                                                                      //random delay between 10-50
-  for (int led = 0; led < int(random(NUM_LEDS)); led++) {  leds[led] = CHSV( 100, 0, 0);      }   //turn off a random chain of LEDs
+  for (int led = 0; led < int(random(LED_ADJUSTED)); led++) {  leds[led] = CHSV( 100, 0, 0);      }   //turn off a random chain of LEDs
       FastLED.show();
       delay(random(10, 100));                                                                     //random delay between 10-100
 
-  for (int led = 0; led < NUM_LEDS; led++) {          leds[led] = CHSV( 100, 0, 0);      }        //turn off all LEDs
+  for (int led = 0; led < LED_ADJUSTED; led++) {          leds[led] = CHSV( 100, 0, 0);      }        //turn off all LEDs
       FastLED.show();
 
-  ledSingle1 = random(NUM_LEDS);                                                  //choose a random LED
+  ledSingle1 = random(LED_ADJUSTED);                                                  //choose a random LED
   leds[ledSingle1] = CHSV( 100, 0, 255);                                          //turn it on for a random time between 10-100 then turn it off. Do this twice.
   FastLED.show();
   delay(random (10, 100));
@@ -819,51 +811,51 @@ void strom()
   FastLED.show();
 
   if (random(1, 3) == 2) {                                                        //every 1 out of 3 times flash another LED
-    ledSingle1 = random (NUM_LEDS);
+    ledSingle1 = random (LED_ADJUSTED);
     ledSingle2 = random (50);
     leds[ledSingle1] = CHSV( 100, 0, 255);
-    if(ledSingle2 < NUM_LEDS){   leds[ledSingle2] = CHSV( 100, 0, 255);  }
+    if(ledSingle2 < LED_ADJUSTED){   leds[ledSingle2] = CHSV( 100, 0, 255);  }
     FastLED.show();
   }
   else {
-    ledSingle1 = random (NUM_LEDS);                                               //every 2 out of 3 times flash a small group of LEDs on and off
+    ledSingle1 = random (LED_ADJUSTED);                                               //every 2 out of 3 times flash a small group of LEDs on and off
     ledSingle2 = ledSingle1 + 1;
     ledSingle3 = ledSingle2 + 2;
     leds[ledSingle1] = CHSV( 100, 0, 255);
     FastLED.show();
     delay(random (20));
-    if(ledSingle2 < NUM_LEDS){   leds[ledSingle2] = CHSV( 100, 0, 255); }
+    if(ledSingle2 < LED_ADJUSTED){   leds[ledSingle2] = CHSV( 100, 0, 255); }
     FastLED.show();
     delay(random (20));
-    if(ledSingle3 < NUM_LEDS){   leds[ledSingle3] = CHSV( 100, 0, 255); }
+    if(ledSingle3 < LED_ADJUSTED){   leds[ledSingle3] = CHSV( 100, 0, 255); }
     FastLED.show();
   }
 
-  for (int led = 0; led < NUM_LEDS; led++) {          leds[led] = CHSV( 100, 0, 0);      }    //turn off all LEDS
+  for (int led = 0; led < LED_ADJUSTED; led++) {          leds[led] = CHSV( 100, 0, 0);      }    //turn off all LEDS
       FastLED.show();
 
   if (random(1, 3) == 2) {                                                        //repeat previous small flashes
-    ledSingle1 = random (NUM_LEDS);
+    ledSingle1 = random (LED_ADJUSTED);
     ledSingle2 = random (50);
     leds[ledSingle1] = CHSV( 100, 0, 255);
-    if(ledSingle2 < NUM_LEDS){   leds[ledSingle2] = CHSV( 100, 0, 255);  }
+    if(ledSingle2 < LED_ADJUSTED){   leds[ledSingle2] = CHSV( 100, 0, 255);  }
     FastLED.show();
   }
   else {
-    ledSingle1 = random (NUM_LEDS);
+    ledSingle1 = random (LED_ADJUSTED);
     ledSingle2 = ledSingle1 + 1;
     ledSingle3 = ledSingle2 + 2;
     leds[ledSingle1] = CHSV( 100, 0, 255);
     FastLED.show();
     delay(random (20));
-    if(ledSingle2 < NUM_LEDS){   leds[ledSingle2] = CHSV( 100, 0, 255); }
+    if(ledSingle2 < LED_ADJUSTED){   leds[ledSingle2] = CHSV( 100, 0, 255); }
     FastLED.show();
     delay(random (20));
-    if(ledSingle3 < NUM_LEDS){   leds[ledSingle3] = CHSV( 100, 0, 255); }
+    if(ledSingle3 < LED_ADJUSTED){   leds[ledSingle3] = CHSV( 100, 0, 255); }
     FastLED.show();
   }
 
-  for (int led = 0; led < NUM_LEDS; led++) {          leds[led] = CHSV( 100, 0, 0);      }  //turn off all LEDS
+  for (int led = 0; led < LED_ADJUSTED; led++) {          leds[led] = CHSV( 100, 0, 0);      }  //turn off all LEDS
       FastLED.show();
       delay(random(10, 200));                                                               //random delay between 10-100
 } 
@@ -1267,19 +1259,19 @@ void upDownLeftRightRemoteHeld()
 void reset()
 {
   Serial.print("RESET!");
-  fill_solid( leds, NUM_LEDS, CHSV(0, 0, 0));
+  fill_solid( leds, LED_ADJUSTED, CHSV(0, 0, 0));
   FastLED.show();
   delay(100);
-  fill_solid( leds, NUM_LEDS, CHSV(255, 255, 200));
+  fill_solid( leds, LED_ADJUSTED, CHSV(255, 255, 200));
   FastLED.show();
   delay(1000);
-  fill_solid( leds, NUM_LEDS, CHSV(0, 0, 0));
+  fill_solid( leds, LED_ADJUSTED, CHSV(0, 0, 0));
   FastLED.show();
   delay(300);
-  fill_solid( leds, NUM_LEDS, CHSV(255, 255, 200));
+  fill_solid( leds, LED_ADJUSTED, CHSV(255, 255, 200));
   FastLED.show();
   delay(1000);
-  fill_solid( leds, NUM_LEDS, CHSV(0, 0, 0));
+  fill_solid( leds, LED_ADJUSTED, CHSV(0, 0, 0));
   FastLED.show();
   newEpprom = 1;
   EEPROM.update(0, newEpprom);
