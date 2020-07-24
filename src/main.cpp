@@ -16,11 +16,11 @@
 #include <IRremote.h>
 
 FASTLED_USING_NAMESPACE
-#define NUM_LEDS 25        //     T=10 S=17 M=25 L=50* L= 2 sets of 25
+#define NUM_LEDS 50        //     T=10 S=17 M=25 L=50* L= 2 sets of 25
 
-int LED_ADJUSTED = 25;
+int LED_ADJUSTED = 25;     
 
-const int shunt1Pin = 5;
+const int shunt1Pin = 5;     // We will use shunts to change quantity of LEDs on the fly
 const int shunt2Pin = 6;
 int shunt1;
 int shunt2;
@@ -265,20 +265,23 @@ void setup()
 { 
   irrecv.enableIRIn(); // Start the IR receiver
   AudioMemory(12);
+  Serial.println("Cloud v3.0");
 
-  pinMode(shunt1Pin, INPUT);    
-  pinMode(shunt1Pin, INPUT);  
+  pinMode(shunt1Pin, INPUT_PULLUP);    
+  pinMode(shunt2Pin, INPUT_PULLUP);  
 
   shunt1 = digitalRead(shunt1Pin);  
   if (shunt1 == LOW)
   { 
-    LED_ADJUSTED = 10; 
+    LED_ADJUSTED = 10; //used for RGBS Clouds that only have 10 LEDs
+    Serial.println("Pin 5");
     }
 
   shunt2 = digitalRead(shunt2Pin);  
   if (shunt2 == LOW)
   { 
-    LED_ADJUSTED = 17; 
+    LED_ADJUSTED = 17; //used for RGBM Clouds that only have 17 LEDs
+    Serial.println("Pin 6");
     }
 
 
@@ -310,7 +313,7 @@ void setup()
     }
   }
   flash(100, 0);
-  Serial.println("Cloud v3.0");
+  
   //EEPROM.update(0, 1);       // uncomment to load default EPROM values
   eepromSet();
     // butStateCounter = 1;                  //
@@ -325,6 +328,20 @@ void setup()
 void loop()
 { 
   remote();
+
+  //   shunt1 = digitalRead(shunt1Pin);  
+  // if (shunt1 == LOW)
+  // { 
+  //   //LED_ADJUSTED = 10; //used for RGBS Clouds that only have 10 LEDs
+  //   Serial.println("Pin 5");
+  //   }
+
+  //   shunt2 = digitalRead(shunt2Pin);  
+  // if (shunt2 == LOW)
+  // { 
+  //   //LED_ADJUSTED = 17; //used for RGBM Clouds that only have 17 LEDs
+  //   Serial.println("Pin 6");
+  //   }
 
   if      (remoteState == BUTTON_1){
      if (flashCount == 1){  
