@@ -271,17 +271,24 @@ void setup()
   pinMode(shunt2Pin, INPUT_PULLUP);  
 
   shunt1 = digitalRead(shunt1Pin);  
-  if (shunt1 == LOW)
+  shunt2 = digitalRead(shunt2Pin); 
+
+  if (shunt1 == LOW && shunt2 == HIGH)
   { 
-    LED_ADJUSTED = 10; //used for RGBS Clouds that only have 10 LEDs
+    LED_ADJUSTED = 50; //used for RGBH Clouds that have all 50 LEDs
     Serial.println("Pin 5");
     }
 
-  shunt2 = digitalRead(shunt2Pin);  
-  if (shunt2 == LOW)
+  else if (shunt1 == HIGH && shunt2 == LOW)
   { 
     LED_ADJUSTED = 17; //used for RGBM Clouds that only have 17 LEDs
     Serial.println("Pin 6");
+    }
+
+  else if (shunt1 == LOW && shunt2 == LOW)
+  { 
+    LED_ADJUSTED = 10; //used for RGBS Clouds that have only 10 LEDs
+    Serial.println("BOTH");
     }
 
 
