@@ -75,29 +75,29 @@ void upDownLeftRightRemoteHeld();
 
 //*******************************       BUTTON CONSTANTS    ******************************************//
 
-const uint16_t BUTTON_1 = 0x00FF; // i.e. 0x10EFD827  //55335  - was Button Power
+const uint16_t BUTTON_1 = 0xD827; // i.e. 0x10EFD827  //55335  - was Button Power
 const uint16_t BUTTON_1_HELD = 23;
 
-const uint16_t BUTTON_2 = 0x807F;  // was button B
-const uint16_t BUTTON_3 = 0x40BF;  // was button C
-const uint16_t BUTTON_4 = 0x20DF;  // was button A
-const uint16_t BUTTON_5 = 0xA05F;   // was button B held
-const uint16_t BUTTON_6 = 0x609F;   // was button C held
-const uint16_t BUTTON_7 = 0x10EF; // hex = 4815   was button circle
+const uint16_t BUTTON_2 = 0x7887;  // was button B
+const uint16_t BUTTON_3 = 0x58A7;  // was button C
+const uint16_t BUTTON_4 = 0xF807;  // was button A
+const uint16_t BUTTON_5 = 0x609F;   // was button B held
+const uint16_t BUTTON_6 = 0xE01F;   // was button C held
+const uint16_t BUTTON_7 = 0x20DF; // hex = 4815   was button circle
 const uint16_t BUTTON_8 = 0x906F;   // was button circle held  
-const uint16_t BUTTON_9 = 0x50AF;   // was button A HELD
+const uint16_t BUTTON_9 = 0x08F7;   // was button A HELD
 
-const uint16_t BUTTON_AUP = 0x08F7;
-const uint16_t BUTTON_ADOWN = 0x18E7;   
-const uint16_t BUTTON_ARESET = 0x28D7;   
+const uint16_t BUTTON_AUP = 0xA05F;
+const uint16_t BUTTON_ADOWN = 0x00FF;   
+const uint16_t BUTTON_ARESET = 0x28D7;  //na 
 
-const uint16_t BUTTON_BUP = 0x8877;
-const uint16_t BUTTON_BDOWN = 0x9867;
-const uint16_t BUTTON_BRESET = 0xA857; 
+const uint16_t BUTTON_BUP = 0xC03F;
+const uint16_t BUTTON_BDOWN = 0x40BF;
+const uint16_t BUTTON_BRESET = 0xA857; //na
 
-const uint16_t BUTTON_CUP = 0x48B7;     
-const uint16_t BUTTON_CDOWN = 0x58A7;   
-const uint16_t BUTTON_CRESET = 0x6897;   
+const uint16_t BUTTON_CUP = 0x10EF;     
+const uint16_t BUTTON_CDOWN = 0x807F;   
+const uint16_t BUTTON_CRESET = 0x6897;  //na 
 
 const uint16_t BUTTON_HELD = 0xFFFF;
 
