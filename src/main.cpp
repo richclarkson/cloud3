@@ -719,7 +719,7 @@ void musicmode5()     // Colorful Music Mode
 
 void turnoffLEDs()
 {
-    for (int led = 0; led < NUM_LEDS; led++)        
+    for (int led = 0; led < NUM_LEDS; led++)        // changed to NUM_LEDS just in case it misses any extra LEDS
   { //turn off LEDs
     leds[led] = CHSV( 100, 0, 0);
   }
