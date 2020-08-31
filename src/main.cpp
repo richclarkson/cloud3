@@ -320,6 +320,8 @@ void setup()
     }
   }
   flash(100, 0);
+  turnoffLEDs();
+  FastLED.show();
   
   //EEPROM.update(0, 1);       // uncomment to load default EPROM values
   eepromSet();
@@ -717,7 +719,7 @@ void musicmode5()     // Colorful Music Mode
 
 void turnoffLEDs()
 {
-    for (int led = 0; led < LED_ADJUSTED; led++)        
+    for (int led = 0; led < NUM_LEDS; led++)        
   { //turn off LEDs
     leds[led] = CHSV( 100, 0, 0);
   }
