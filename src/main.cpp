@@ -80,6 +80,7 @@ const uint16_t BUTTON_1_HELD = 23;
 
 const uint16_t BUTTON_2 = 0x7887;  // was button B
 const uint16_t BUTTON_3 = 0x58A7;  // was button C
+const uint16_t BUTTON_3_HELD = 24;
 const uint16_t BUTTON_4 = 0xF807;  // was button A
 const uint16_t BUTTON_5 = 0x609F;   // was button B held
 const uint16_t BUTTON_6 = 0xE01F;   // was button C held
@@ -103,7 +104,7 @@ const uint16_t BUTTON_HELD = 0xFFFF;
 
 uint16_t BUTTON_ARRAY[15] = {BUTTON_1, BUTTON_2, BUTTON_3, BUTTON_4, BUTTON_5, BUTTON_6, BUTTON_7, BUTTON_8, BUTTON_9, BUTTON_AUP, BUTTON_ADOWN, BUTTON_BUP, BUTTON_BDOWN, BUTTON_CUP, BUTTON_CDOWN};
 
-uint16_t BUTTON_ARRAY2[9] = {BUTTON_1, BUTTON_2, BUTTON_3, BUTTON_4, BUTTON_5, BUTTON_6, BUTTON_7, BUTTON_8, BUTTON_9,};
+uint16_t BUTTON_ARRAY2[10] = {BUTTON_1, BUTTON_2, BUTTON_3, BUTTON_4, BUTTON_5, BUTTON_6, BUTTON_7, BUTTON_8, BUTTON_9, BUTTON_1_HELD};
 
 
 //*******************************       IR CONSTANTS    ******************************************//
@@ -382,6 +383,10 @@ void loop()
   else if (remoteState == BUTTON_3){
     lampMode2(); 
   }
+  else if (remoteState == BUTTON_3_HELD){
+      //solid white mode
+  }
+
   else if (remoteState == BUTTON_6){
     lampMode3();
   }
@@ -951,7 +956,7 @@ void eepromSet()
     if (Bvariable < 0 || Bvariable > 9){    // safety in case bad eprom reading
       Bvariable = 3;
     }
-    if (remotEeprom < 0 || remotEeprom > 9){    // safety in case bad eprom reading
+    if (remotEeprom < 0 || remotEeprom > 10){    // safety in case bad eprom reading
       remotEeprom = 0;
     }
     if (wheelPosition < 0 || wheelPosition > 12){    // safety in case bad eprom reading
@@ -990,6 +995,17 @@ void remote()
             if (currentButton == 'A') {
               //remoteState = BUTTON_1_HELD;
               reset();
+            }
+            if (currentButton == 'C') {
+              //remoteState = BUTTON_C_HELD;
+              fill_solid( leds, LED_ADJUSTED, CHSV( wheelH[wheelPosition], wheelS[wheelPosition], 255));
+              FastLED.show();
+              delay(100);
+              fill_solid( leds, LED_ADJUSTED, CHSV( wheelH[wheelPosition], wheelS[wheelPosition], 255));
+              FastLED.show();
+              EEPROM.update(5, 2);  // EEPROM Save 3 = BUTTON_3
+              previousRemoteState = remoteState;
+              remoteState = BUTTON_3_HELD;
             }
           }
         
