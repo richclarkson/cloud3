@@ -182,11 +182,11 @@ static const int preview[] = {
 int previewCounter = 0;
 
 static const int wheelH[] = {
-    0,  25,  50,  75, 100, 125, 150, 175, 200, 225, 250, 255, 255
+    255,   30,  29,  29,  70, 90, 110, 125, 150, 175, 200, 225, 250, 0
 };
 
 static const int wheelS[] = {
-  255, 255, 255, 255, 255, 255, 255, 255, 255, 200, 100,  50,   0
+      0,  100, 200, 255, 255, 255, 255, 255, 255, 255, 255, 200, 255, 255
 };
 int wheelPosition;
 
@@ -910,7 +910,7 @@ void eepromSet()
     Bvariable = 8;                          //
     FastLED.setBrightness(map(Bvariable,0,8,50,255)); // set master brightness control
     sensitivity = 3;                        //
-    wheelPosition = 12;
+    wheelPosition = 0;
 
     EEPROM.update(0, newEpprom);
     EEPROM.update(1, butStateCounter);
@@ -959,8 +959,17 @@ void eepromSet()
     if (remotEeprom < 0 || remotEeprom > 10){    // safety in case bad eprom reading
       remotEeprom = 0;
     }
-    if (wheelPosition < 0 || wheelPosition > 12){    // safety in case bad eprom reading
-      wheelPosition = 12;
+    
+    if (remotEeprom == 9){
+      fill_solid( leds, LED_ADJUSTED, CHSV( wheelH[wheelPosition], wheelS[wheelPosition], 255));
+      FastLED.show();
+      delay(100);
+      fill_solid( leds, LED_ADJUSTED, CHSV( wheelH[wheelPosition], wheelS[wheelPosition], 255));
+      FastLED.show();
+    }
+
+    if (wheelPosition < 0 || wheelPosition > 13){    // safety in case bad eprom reading
+      wheelPosition = 0;
     }
     FastLED.setBrightness(map(Bvariable,0,8,50,255)); // set master brightness control
   }
@@ -1003,7 +1012,7 @@ void remote()
               delay(100);
               fill_solid( leds, LED_ADJUSTED, CHSV( wheelH[wheelPosition], wheelS[wheelPosition], 255));
               FastLED.show();
-              EEPROM.update(5, 2);  // EEPROM Save 3 = BUTTON_3
+              EEPROM.update(5, 9);  // EEPROM Save 3 = BUTTON_3
               previousRemoteState = remoteState;
               remoteState = BUTTON_3_HELD;
             }
@@ -1067,7 +1076,7 @@ void remote()
 
             else if (resultCode == BUTTON_CUP) {
               currentButton = 'L';
-                if (wheelPosition < 12){       
+                if (wheelPosition < 13){       
                   wheelPosition++;  
                   EEPROM.update(6, wheelPosition);  // EEPROM Save 
                 }
@@ -1085,7 +1094,7 @@ void remote()
                   EEPROM.update(6, wheelPosition);  // EEPROM Save
                   }
                 else {                        
-                  wheelPosition = 12; 
+                  wheelPosition = 13; 
                   EEPROM.update(6, wheelPosition);  // EEPROM Save
                   }
                 upDownLeftRightRemote();
