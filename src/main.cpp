@@ -5,6 +5,7 @@
 
   TODO fix LED flickering: For some reason any LED quantity over 25 results in LED flickering, symptoms also result when the Speed of animation setting is active.
    - temporary workaround limit LEDs to 25 and remove Speed of Animation setting.
+
   
 */
 
@@ -133,6 +134,8 @@ int demoCounter = 1;
 int mode;
 
 int prevButtonHeld;
+
+bool cflag = 1;
 
 /* Initialize the irrecv part of the IRremote  library */
 IRrecv irrecv(RECV_PIN);
@@ -385,6 +388,14 @@ void loop()
   }
   else if (remoteState == BUTTON_3_HELD){
       //solid white mode
+      if (cflag == 1){
+        fill_solid( leds, LED_ADJUSTED, CHSV( wheelH[wheelPosition], wheelS[wheelPosition], 255));
+        FastLED.show();
+        delay(100);
+        fill_solid( leds, LED_ADJUSTED, CHSV( wheelH[wheelPosition], wheelS[wheelPosition], 255));
+        FastLED.show();
+        cflag = 0;
+    }
   }
 
   else if (remoteState == BUTTON_6){
@@ -1007,11 +1018,7 @@ void remote()
             }
             if (currentButton == 'C') {
               //remoteState = BUTTON_C_HELD;
-              fill_solid( leds, LED_ADJUSTED, CHSV( wheelH[wheelPosition], wheelS[wheelPosition], 255));
-              FastLED.show();
-              delay(100);
-              fill_solid( leds, LED_ADJUSTED, CHSV( wheelH[wheelPosition], wheelS[wheelPosition], 255));
-              FastLED.show();
+              cflag = 1;
               EEPROM.update(5, 9);  // EEPROM Save 3 = BUTTON_3
               previousRemoteState = remoteState;
               remoteState = BUTTON_3_HELD;
@@ -1239,6 +1246,7 @@ void upDownLeftRightReturn()
 {      //go back into prev mode
 
   variableState = 1;
+  cflag = 1;
   remoteState = previousRemoteState;
   variableMillis = millis();
   turnoffLEDs();
@@ -1258,6 +1266,7 @@ void upDownLeftRightRemote()
     }
     else {
       previousRemoteState = remoteState;
+      cflag = 1;
     }
 
   }
