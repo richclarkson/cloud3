@@ -1,12 +1,13 @@
 
 /*
-  Cloud 3.1
+  Cloud 3.2
   2020 Richard Clarkson Studio
 
   TODO fix LED flickering: For some reason any LED quantity over 25 results in LED flickering, symptoms also result when the Speed of animation setting is active.
    - temporary workaround limit LEDs to 25 and remove Speed of Animation setting.
 
-  
+  TODO add one more white step in between blue yellow change over.
+
 */
 
 
