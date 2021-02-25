@@ -33,6 +33,14 @@ int channel = 8;
 int sensitivity;  // 0-8 where 8 = maximum sensitivity
 int Bvariable;  // brightness
 
+//xBee Varriables
+int xbeeValue;
+int modeValue = 0;
+int counter1 = 1;
+int led = 13;
+int received = 0;
+
+
 //Sound Variables
 int soundLevel;          // this is the output of the FFT after being EQ
 int dot = 100;           // this is a slowly falling value based on the peaks of soundLevel, used by musicMode1 and musicMode4
@@ -264,10 +272,13 @@ void soundLightening();
 void strom();
 void flash(int hue, int saturation);
 void reset();
-
+//void serialEvent1();
+//void loopa();
 
 void setup()
 { 
+  Serial.begin(19200);
+  Serial1.begin(9600); 
   irrecv.enableIRIn(); // Start the IR receiver
   AudioMemory(12);
   Serial.println("Cloud v3.0");
@@ -1309,3 +1320,39 @@ void reset()
       
 }
 
+
+
+
+void serialEvent1(){
+  while (Serial1.available()) {
+    xbeeValue = Serial1.read();
+    Serial.println(xbeeValue);
+    if (xbeeValue == '1'){           // 1 
+      flash(100,0); 
+      turnoffLEDs();
+      FastLED.show();
+    }
+    else if (xbeeValue == '2'){           // 2 
+      flash(200,200); 
+      turnoffLEDs();
+      FastLED.show();
+    }
+    else if (xbeeValue == 51){           // 3
+       flash(100,0); 
+      turnoffLEDs();
+      FastLED.show();
+    }
+
+    else if (xbeeValue == 'a'){
+      flash(100,0); 
+      turnoffLEDs();
+      FastLED.show();
+    }
+
+    else if (xbeeValue == 's'){
+      flash(200,100); 
+      turnoffLEDs();
+      FastLED.show();
+    }
+  }
+}
