@@ -931,6 +931,7 @@ void eepromSet()
     FastLED.setBrightness(map(Bvariable,0,8,50,255)); // set master brightness control
     sensitivity = 3;                        //
     wheelPosition = 0;
+    relayState = 0;       
 
     EEPROM.update(0, newEpprom);
     EEPROM.update(1, butStateCounter);
@@ -939,6 +940,7 @@ void eepromSet()
     EEPROM.update(4, sensitivity);
     EEPROM.update(5, remotEeprom);
     EEPROM.update(6, wheelPosition);
+    EEPROM.update(7, relayState);
 
   }
 
@@ -951,6 +953,7 @@ void eepromSet()
     remotEeprom =        (int)EEPROM.read(5);
     remoteState = BUTTON_ARRAY2[remotEeprom];  // 0 = BUTTON_1, 1 = BUTTON_4, 2 = BUTTON_2, 3 = BUTTON_3
     wheelPosition =      (int)EEPROM.read(6);
+    relayState =         (int)EEPROM.read(7);
 
     Serial.print("remotEeprom :   ");
     Serial.println(remotEeprom);
@@ -966,6 +969,8 @@ void eepromSet()
     Serial.println(Bvariable);
     Serial.print("wheelPosition :   ");
     Serial.println(wheelPosition);
+    Serial.print("RelayState :   ");
+    Serial.println(relayState);
 
     if (butStateCounter < 1 || butStateCounter > 4){    // safety in case bad eprom reading
       butStateCounter = 1;
@@ -976,6 +981,13 @@ void eepromSet()
     if (Bvariable < 0 || Bvariable > 9){    // safety in case bad eprom reading
       Bvariable = 3;
     }
+    if (relayState < 0 || relayState > 1){    // safety in case bad eprom reading
+      relayState = 0;
+    }
+    if (relayState == 1){
+      digitalWrite(relayPin, HIGH);
+    }
+
     if (remotEeprom < 0 || remotEeprom > 10){    // safety in case bad eprom reading
       remotEeprom = 0;
     }
@@ -1184,10 +1196,6 @@ void remote()
               FastLED.show(); 
             }
             else if (currentButton == 'C') {
-              //EEPROM.update(5, 2);  // EEPROM Save 3 = BUTTON_3
-              //previousRemoteState = remoteState;
-              //remoteState = BUTTON_3;
-              //turnoffLEDs();
               if (relayState == HIGH){
                   digitalWrite(relayPin, LOW);
                   relayState = LOW;
@@ -1196,6 +1204,7 @@ void remote()
                 digitalWrite(relayPin, HIGH);
                 relayState = HIGH;
               }
+              EEPROM.update(7, relayState);  // EEPROM Save
             }
             else if (currentButton == 'G') {
               EEPROM.update(5, 6);  // EEPROM Save 4 = BUTTON_7
