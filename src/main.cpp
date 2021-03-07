@@ -1381,8 +1381,59 @@ void serialEvent1(){
               FastLED.show(); 
     }
 
+    else if (xbeeValue == '6'){
+      previousRemoteState = remoteState;
+              remoteState = BUTTON_8;
+              EEPROM.update(5, 7);  // EEPROM Save 5 = BUTTON_8
+              flash(100,0); 
+              turnoffLEDs();
+              FastLED.show(); 
+    }
 
-    else if (xbeeValue == "c"){
+    else if (xbeeValue == '7'){
+      previousRemoteState = remoteState;
+              remoteState = BUTTON_9;
+              EEPROM.update(5, 8);  // EEPROM Save 6 = BUTTON_9
+              turnoffLEDs();
+    }
+
+    else if (xbeeValue == '8'){
+      previousRemoteState = remoteState;
+              remoteState = BUTTON_5;
+              EEPROM.update(5, 4);  // EEPROM Save 7 = BUTTON_5
+              flash(100,0); 
+              turnoffLEDs();
+              FastLED.show(); 
+    }
+
+    else if (xbeeValue == '9'){
+      previousRemoteState = remoteState;
+              remoteState = BUTTON_6;
+              EEPROM.update(5, 5);  // EEPROM Save 8 = BUTTON_6
+              turnoffLEDs();
+    }
+
+
+    else if (xbeeValue == '0'){      //reset
+      reset();
+    }
+    
+
+
+
+    else if (xbeeValue == "a"){      // BULB on / off
+      digitalWrite(relayPin, HIGH);
+      relayState = HIGH;
+      EEPROM.update(7, relayState);
+    }
+    else if (xbeeValue == "b"){
+      digitalWrite(relayPin, LOW);
+      relayState = LOW;
+      EEPROM.update(7, relayState);
+    }
+
+
+    else if (xbeeValue == "c"){        // settings
       Bvariable = 0;
       FastLED.setBrightness(map(Bvariable,0,8,20,255));
       EEPROM.update(3, Bvariable);
