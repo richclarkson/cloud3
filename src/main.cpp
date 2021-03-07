@@ -34,7 +34,7 @@ int sensitivity;  // 0-8 where 8 = maximum sensitivity
 int Bvariable;  // brightness
 
 //xBee Varriables
-int xbeeValue;
+String xbeeValue;
 int modeValue = 0;
 int counter1 = 1;
 
@@ -1330,11 +1330,10 @@ void reset()
   FastLED.show();
   newEpprom = 1;
   EEPROM.update(0, newEpprom);
-  eepromSet();
-      
+  eepromSet();   
 }
 
-
+ 
 
 
 void serialEvent1(){
@@ -1381,5 +1380,151 @@ void serialEvent1(){
               turnoffLEDs();
               FastLED.show(); 
     }
+
+
+    else if (xbeeValue == "c"){
+      Bvariable = 0;
+      FastLED.setBrightness(map(Bvariable,0,8,20,255));
+      EEPROM.update(3, Bvariable);
+    }
+    else if (xbeeValue == "d"){
+      Bvariable = 1;
+      FastLED.setBrightness(map(Bvariable,0,8,20,255));
+      EEPROM.update(3, Bvariable);
+    }
+    else if (xbeeValue == "e"){
+      Bvariable = 2;
+      FastLED.setBrightness(map(Bvariable,0,8,20,255));
+      EEPROM.update(3, Bvariable);
+    }
+    else if (xbeeValue == "f"){
+      Bvariable = 3;
+      FastLED.setBrightness(map(Bvariable,0,8,20,255));
+      EEPROM.update(3, Bvariable);
+    }
+    else if (xbeeValue == "g"){
+      Bvariable = 4;
+      FastLED.setBrightness(map(Bvariable,0,8,20,255));
+      EEPROM.update(3, Bvariable);
+    }
+    else if (xbeeValue == "h"){
+      Bvariable = 5;
+      FastLED.setBrightness(map(Bvariable,0,8,20,255));
+      EEPROM.update(3, Bvariable);
+    }
+    else if (xbeeValue == "i"){
+      Bvariable = 6;
+      FastLED.setBrightness(map(Bvariable,0,8,20,255));
+      EEPROM.update(3, Bvariable);
+    }
+    else if (xbeeValue == "j"){
+      Bvariable = 7;
+      FastLED.setBrightness(map(Bvariable,0,8,20,255));
+      EEPROM.update(3, Bvariable);
+    }
+    else if (xbeeValue == "k"){
+      Bvariable = 8;
+      FastLED.setBrightness(map(Bvariable,0,8,20,255));
+      EEPROM.update(3, Bvariable);
+    }
+
+
+    else if (xbeeValue == "l"){
+      sensitivity = 0;
+      EEPROM.update(4, sensitivity);
+    }
+    else if (xbeeValue == "m"){
+      sensitivity = 1;
+      EEPROM.update(4, sensitivity);
+    }
+    else if (xbeeValue == "n"){
+      sensitivity = 2;
+      EEPROM.update(4, sensitivity);
+    }
+    else if (xbeeValue == "o"){
+      sensitivity = 3;
+      EEPROM.update(4, sensitivity);
+    }
+    else if (xbeeValue == "p"){
+      sensitivity = 4;
+      EEPROM.update(4, sensitivity);
+    }
+    else if (xbeeValue == "q"){
+      sensitivity = 5;
+      EEPROM.update(4, sensitivity);
+    }
+    else if (xbeeValue == "r"){
+      sensitivity = 6;
+      EEPROM.update(4, sensitivity);
+    }
+    else if (xbeeValue == "s"){
+      sensitivity = 7;
+      EEPROM.update(4, sensitivity);
+    }
+    else if (xbeeValue == "t"){
+      sensitivity = 8;
+      EEPROM.update(4, sensitivity);
+    }
+
+
+    else if (xbeeValue == "A"){
+      wheelPosition = 0;  
+      EEPROM.update(6, wheelPosition);
+    }
+    else if (xbeeValue == "B"){
+      wheelPosition = 1;  
+      EEPROM.update(6, wheelPosition);
+    }
+    else if (xbeeValue == "C"){
+      wheelPosition = 2;  
+      EEPROM.update(6, wheelPosition);
+    }
+    else if (xbeeValue == "D"){
+      wheelPosition = 3;  
+      EEPROM.update(6, wheelPosition);
+    }
+    else if (xbeeValue == "E"){
+      wheelPosition = 4;  
+      EEPROM.update(6, wheelPosition);
+    }
+    else if (xbeeValue == "F"){
+      wheelPosition = 5;  
+      EEPROM.update(6, wheelPosition);
+    }
+    else if (xbeeValue == "G"){
+      wheelPosition = 6;  
+      EEPROM.update(6, wheelPosition);
+    }
+    else if (xbeeValue == "H"){
+      wheelPosition = 7;  
+      EEPROM.update(6, wheelPosition);
+    }
+    else if (xbeeValue == "I"){
+      wheelPosition = 8;  
+      EEPROM.update(6, wheelPosition);
+    }
+    else if (xbeeValue == "J"){
+      wheelPosition = 9;  
+      EEPROM.update(6, wheelPosition);
+    }
+    else if (xbeeValue == "K"){
+      wheelPosition = 10;  
+      EEPROM.update(6, wheelPosition);
+    }
+    else if (xbeeValue == "L"){
+      wheelPosition = 11;  
+      EEPROM.update(6, wheelPosition);
+    }
+    else if (xbeeValue == "M"){
+      wheelPosition = 12;  
+      EEPROM.update(6, wheelPosition);
+    }
+    else if (xbeeValue == "N"){
+      wheelPosition = 13;  
+      EEPROM.update(6, wheelPosition);
+    }
+
+  
+
   }
 }
