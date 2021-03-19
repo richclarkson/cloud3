@@ -696,7 +696,10 @@ void musicmode3()    // Ripple
 void musicmode4()   // Fade
 { 
   if (soundLevel * 3 > dot){    dot = soundLevel * 3;  } // scale up by 3
-  if (dot > 255){    dot = 255;  }                       // upper limit
+  if (dot > 255){    
+    dot = 255;
+    Serial.println("Mic Working!");  
+    }                       // upper limit
 
   for (int led = 0; led < LED_ADJUSTED; led++)
   {
