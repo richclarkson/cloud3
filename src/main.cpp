@@ -163,6 +163,7 @@ static const int binEnd[8] = {   //
 };
 static const int scale[9] = {
   300, 1000, 3000, 6000, 10000, 20000, 30000, 50000, 100000   // sensitivity setting (mulitplication factor)
+  //50 ,   90,  200,  500,  1000,  3000,  6000, 12000, 30000      // lower sensitivity for Speaker Cloud
 };
 float eq[8] = {
   1.0, 1.0, 0.7, 0.5, 1.0, 1.0, 1.5, 2.0   // individual channel scaling factor
