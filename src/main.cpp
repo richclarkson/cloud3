@@ -280,7 +280,7 @@ void setup()
 { 
   Serial.begin(19200);
   Serial1.begin(9600); 
-  irrecv.enableIRIn(); // Start the IR receiver
+  //irrecv.enableIRIn(); // Start the IR receiver
   AudioMemory(12);
   Serial.println("Cloud v3.0");
 
@@ -356,8 +356,8 @@ void setup()
 
 
 void loop()
-{ 
-  remote();
+{  
+  //remote();
 
   //   shunt1 = digitalRead(shunt1Pin);  
   // if (shunt1 == LOW)
@@ -401,7 +401,7 @@ void loop()
     musicmode5();  
   }
   else if (remoteState == BUTTON_3){
-   // do nothing, toggled bulb on/off
+      lampMode4();
   }
   else if (remoteState == BUTTON_9_HELD){
       lampMode4();
@@ -1359,7 +1359,7 @@ void serialEvent1(){
               flashCount = 1;
               turnoffLEDs();
     }
-    else if (xbeeValue == '3'){           // 3
+    else if (xbeeValue == '4'){      //was 3 should be 4          // 3
        EEPROM.update(5, 1);  // EEPROM Save 2 = BUTTON_2
               previousRemoteState = remoteState;
               remoteState = BUTTON_2;
@@ -1368,14 +1368,14 @@ void serialEvent1(){
               FastLED.show(); 
     }
 
-    else if (xbeeValue == '4'){
+    else if (xbeeValue == '9'){     //was 4 but is broken
       EEPROM.update(5, 2);  // EEPROM Save 3 = BUTTON_3
               previousRemoteState = remoteState;
               remoteState = BUTTON_3;
               turnoffLEDs();
     }
 
-    else if (xbeeValue == '5'){
+    else if (xbeeValue == '3'){     //was 5 should be 3
       EEPROM.update(5, 6);  // EEPROM Save 4 = BUTTON_7
               previousRemoteState = remoteState;
               remoteState = BUTTON_7;
@@ -1400,7 +1400,7 @@ void serialEvent1(){
               turnoffLEDs();
     }
 
-    else if (xbeeValue == '8'){
+    else if (xbeeValue == '5'){     //was 8 should be 5
       previousRemoteState = remoteState;
               remoteState = BUTTON_5;
               EEPROM.update(5, 4);  // EEPROM Save 7 = BUTTON_5
@@ -1409,7 +1409,7 @@ void serialEvent1(){
               FastLED.show(); 
     }
 
-    else if (xbeeValue == '9'){
+    else if (xbeeValue == '8'){       //was 9 should be 8
       previousRemoteState = remoteState;
               remoteState = BUTTON_6;
               EEPROM.update(5, 5);  // EEPROM Save 8 = BUTTON_6
