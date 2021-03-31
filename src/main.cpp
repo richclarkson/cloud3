@@ -1,13 +1,7 @@
 
 /*
-  Cloud 3.2
-  2020 Richard Clarkson Studio
-
-  TODO fix LED flickering: For some reason any LED quantity over 25 results in LED flickering, symptoms also result when the Speed of animation setting is active.
-   - temporary workaround limit LEDs to 25 and remove Speed of Animation setting.
-
-  TODO add one more white step in between blue yellow change over.
-
+  Cloud Xbee Remote 2.0
+  2021 Richard Clarkson Studio
 */
 
 
@@ -196,143 +190,6 @@ void setup()
 
 void loop()
 {  
-  remote();
-
-//   if      (remoteState == BUTTON_1){
-//      if (flashCount == 1){  
-//        flash(100,0); 
-//        Serial.print("flash white");
-//        turnoffLEDs();
-//        FastLED.show(); 
-//        flashCount = 0; 
-//        }
-//   }
-//   else if (remoteState == BUTTON_1_HELD){
-//       //reset();
-//   }
-//   else if (remoteState == BUTTON_8){
-//     analyzeFFTall(); 
-//     musicmode3(); 
-//   }
-//   else if (remoteState == BUTTON_9){
-//     lampMode2();  
-//   }
-//   else if (remoteState == BUTTON_2){
-//     fetchSoundData();
-//     musicmode4();  
-//   }
-//   else if (remoteState == BUTTON_5){
-//     analyzeFFTall(); 
-//     musicmode5();  
-//   }
-//   else if (remoteState == BUTTON_3){
-//       lampMode4();
-//   }
-//   else if (remoteState == BUTTON_9_HELD){
-//       lampMode4();
-//   }
-
-//   else if (remoteState == BUTTON_6){
-//     lampMode3();
-//   }
-//   else if (remoteState == BUTTON_4){    
-//     if (flashCount == 1){  
-//        strom();
-//        flashCount = 0;  
-//       }
-//     timedLightening(30);
-//   }
-
-//   else if (remoteState == BUTTON_7){
-//     fetchSoundData();
-//     soundLightening();
-//   }
-
-
-//   else if (remoteState == BUTTON_AUP)            // Global brightness
-//   {
-//     if(millis() - variableMillis > 1000){
-//         upDownLeftRightReturn();
-//      }
-//       if(variableState == 0){             
-//           if (Bvariable < 8){        Bvariable++;   }
-//           FastLED.setBrightness(map(Bvariable,0,8,20,255));
-//           fill_solid( leds, LED_ADJUSTED, CHSV(60,150,(map(Bvariable,0,8,20,250))));
-//           FastLED.show();
-//           Serial.print("Bvariable = ");
-//           Serial.println(Bvariable);
-//           EEPROM.update(3, Bvariable);
-//         variableState = 1;
-//     } 
-//   }
-
-//   else if (remoteState == BUTTON_BUP)            // sensitivity
-//   {
-//     if(millis() - variableMillis > 1000){
-//         upDownLeftRightReturn();
-//      }
-//       if(variableState == 0){
-//           if (sensitivity < 8){     sensitivity++;  }
-//           fill_solid( leds, LED_ADJUSTED, CHSV(180,150,(map(sensitivity,0,8,20,250))));
-//           FastLED.show();
-//           Serial.print("sensitivity = ");
-//           Serial.println(sensitivity);
-//           EEPROM.update(4, sensitivity);
-//         variableState = 1;
-//     }    
-//   }
-
-//   else if (remoteState == BUTTON_ADOWN)              // Global brightness
-//   {
-//     if(millis() - variableMillis > 1000){
-//         upDownLeftRightReturn();
-//      }
-//       if(variableState == 0){
-//           if (Bvariable > 0){     Bvariable--;   }
-//           FastLED.setBrightness(map(Bvariable,0,8,20,255));
-//           fill_solid( leds, LED_ADJUSTED, CHSV(60,150,(map(Bvariable,0,8,20,250))));
-//           FastLED.show();
-//           Serial.print("Bvariable = ");
-//           Serial.println(Bvariable);
-//           EEPROM.update(3, Bvariable);
-//         variableState = 1;
-//     }    
-//   }
-
-//   else if (remoteState == BUTTON_BDOWN)               // sensitivity
-//   {
-//     if(millis() - variableMillis > 1000){
-//         upDownLeftRightReturn();
-//      }
-//       if(variableState == 0){
-//           if (sensitivity > 0){     sensitivity--;  }
-//           fill_solid( leds, LED_ADJUSTED, CHSV(180,150,(map(sensitivity,0,8,20,250))));
-//           FastLED.show();
-//           Serial.print("sensitivity = ");
-//           Serial.println(sensitivity);
-//           EEPROM.update(4, sensitivity);
-//         variableState = 1;
-//     }
-//   }
-
-//   else if ((remoteState == BUTTON_CDOWN) || (remoteState == BUTTON_CUP))
-//   {
-//     for (int x = 0; x < LED_ADJUSTED; x++) {
-//       leds[x] = CHSV(wheelH[wheelPosition], wheelS[wheelPosition], 200);
-//      }
-//     FastLED.show();
-
-//     if(millis() - variableMillis > 1000){
-//         upDownLeftRightReturn();
-//      }
-//   }
- }
-
-
-
-void remote() 
-{
-
 
   if (millis() - checking > 250)
   {
@@ -348,30 +205,17 @@ void remote()
 
       if (resultCode == 0xFFFF) {     //button held check
         buttonHeld++;
-
         if (buttonHeld >= 8) {                                   // Button Holds
              Serial.print("buttonHeld :    ");
              Serial.println(currentButton);
             
             if (currentButton == 'A') {
-              //remoteState = BUTTON_1_HELD;
              // reset();
-            }
-            if (currentButton == 'I') {
-              //remoteState = BUTTON_C_HELD;
-              //cflag = 1;
-              previousRemoteState = remoteState;
-              remoteState = BUTTON_9_HELD;
+             Serial1.write("0");
             }
           }
-        
       }
       else {
-        for (int i = 0; i < 15; i++) 
-        {              //compare against each of the button codes
-          if (resultCode == BUTTON_ARRAY[i]) {
-
-            // ACTUAL BUTTON
             newButtonPress = 1;
 
             if (resultCode == BUTTON_1) {
@@ -379,7 +223,6 @@ void remote()
             }
             else if (resultCode == BUTTON_4) {
               currentButton = 'D';
-              flashCountA = 1;
             }
             else if (resultCode == BUTTON_2) {
               currentButton = 'B';
@@ -401,24 +244,20 @@ void remote()
             }
             else if (resultCode == BUTTON_AUP) {
               currentButton = 'J';
-                upDownLeftRightRemote();
-                remoteState = BUTTON_AUP;
+              Serial1.write("a");
               }
             else if (resultCode == BUTTON_ADOWN) {
               currentButton = 'P';
-                upDownLeftRightRemote();
-                remoteState = BUTTON_ADOWN;
+               Serial1.write("b");
               }
 
             else if (resultCode == BUTTON_BUP) {
               currentButton = 'K';
-                upDownLeftRightRemote();
-                remoteState = BUTTON_BUP;
+                Serial1.write("n");
               }
             else if (resultCode == BUTTON_BDOWN) {
               currentButton = 'Q';
-                upDownLeftRightRemote();
-                remoteState = BUTTON_BDOWN;
+                Serial1.write("r");
               }
 
             else if (resultCode == BUTTON_CUP) {
@@ -429,7 +268,6 @@ void remote()
                 else {                         
                   wheelPosition = 0; 
                   }
-              upDownLeftRightRemote();
               remoteState = BUTTON_CUP;
               }
             else if (resultCode == BUTTON_CDOWN) {
@@ -440,31 +278,14 @@ void remote()
                 else {                        
                   wheelPosition = 13; 
                   }
-                upDownLeftRightRemote();
                 remoteState = BUTTON_CDOWN;
               }
 
             else if (resultCode == BUTTON_7) {
               currentButton = 'G';
-              flashCountA = 1;
             }
 
-            
-            //Serial.println("Comparing Button Code");
-
-          }
-          else {
-
-            // NOT A REAL BUTTON
-            //       #if defined(DEVMODE)
-            //       if (newButtonPress == 0){
-            //         Serial.print("NOT A REAL BUTTON    ");
-            //         Serial.println(currentButton);
-            //         }
-            //       #endif
-          }
-
-        }
+        
         buttonHeld = 0;
       }
         irrecv.resume(); // Receive the next value
@@ -496,24 +317,16 @@ void remote()
                Serial1.write("4");
             }
             else if (currentButton == 'C') {
-              if (relayState == HIGH){
-                  Serial1.write("B");
-                  relayState = LOW;
-                }
-              else {
-                Serial1.write("A");
-                relayState = HIGH;
-              }
-
+               Serial1.write("3");
             }
             else if (currentButton == 'G') {
-               Serial1.write("3");
+                Serial1.write("7");
             }
             else if (currentButton == 'H') {
                Serial1.write("6");
             }
             else if (currentButton == 'I') {
-                Serial1.write("7");
+                Serial1.write("9");
             }
             else if (currentButton == 'E') {
                 Serial1.write("5");
@@ -522,73 +335,13 @@ void remote()
                 Serial1.write("8");
             }
         }
-        //Serial.println("Preparing");
-        //prepareModes();               // load in startup values for each mode and run preview
-        //Serial.println("Prepaired");
         buttonHeld = 0;
-
       }
-
-      //find the relevant remoteState value within BUTTON_ARRAY - save to eeprom as remotEeprom
-      // for (int x = 0; x < 3; x++){
-      //     if(remoteState == BUTTON_ARRAY[x]){
-      //       remotEeprom = x;
-      //  }
-      //  if (remotEeprom != prevRemotEeprom){
-      //     EEPROM.update(5, remotEeprom);
-      //     prevRemotEeprom = remotEeprom;
-      //  }
-      // }
-      
-
     }
     checking = millis();
   }
 }
 
-
-void upDownLeftRightReturn() 
-{      //go back into prev mode
-
-  variableState = 1;
-  cflag = 1;
-  remoteState = previousRemoteState;
-  variableMillis = millis();
-}
-
-void upDownLeftRightRemote() 
-{
-
-  variableState = 0;
-
-  if ((remoteState != BUTTON_CDOWN) && (remoteState != BUTTON_CUP) && (remoteState != BUTTON_AUP) && (remoteState != BUTTON_ADOWN) && (remoteState != BUTTON_BUP) && (remoteState != BUTTON_BDOWN))
-  {
-    if (remoteState == 1000)
-    {
-      previousRemoteState = BUTTON_1;
-    }
-    else {
-      previousRemoteState = remoteState;
-      cflag = 1;
-    }
-
-  }
-
-  variableMillis = millis();
-  irrecv.resume(); // Receive the next value
-  remote();
-}
-
-void upDownLeftRightRemoteHeld() 
-{
-
-  variableState = 0;
-  variableMillis = millis();
-  irrecv.resume(); // Receive the next value
-  remote();
-}
-
- 
 
 
 void serialEvent1(){
@@ -598,53 +351,38 @@ void serialEvent1(){
     if (xbeeValue == '1'){           // 1 
               previousRemoteState = remoteState;
               remoteState = BUTTON_1;
-
     }
     else if (xbeeValue == '2'){           // 2 
               previousRemoteState = remoteState;
               remoteState = BUTTON_4;
-  
     }
     else if (xbeeValue == '4'){      //was 3 should be 4          // 3
               previousRemoteState = remoteState;
               remoteState = BUTTON_2;
-
     }
-
     else if (xbeeValue == '9'){     //was 4 but is broken
               previousRemoteState = remoteState;
               remoteState = BUTTON_3;
-
     }
-
     else if (xbeeValue == '3'){     //was 5 should be 3
               previousRemoteState = remoteState;
               remoteState = BUTTON_7;
-
     }
-
     else if (xbeeValue == '6'){
       previousRemoteState = remoteState;
               remoteState = BUTTON_8;
-
     }
-
     else if (xbeeValue == '7'){
       previousRemoteState = remoteState;
               remoteState = BUTTON_9;
-
     }
-
     else if (xbeeValue == '5'){     //was 8 should be 5
       previousRemoteState = remoteState;
               remoteState = BUTTON_5;
-
     }
-
     else if (xbeeValue == '8'){       //was 9 should be 8
       previousRemoteState = remoteState;
               remoteState = BUTTON_6;
-
     }
 
 
