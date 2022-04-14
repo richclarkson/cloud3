@@ -28,8 +28,11 @@ const int motion_1 = 6;     // motion sensor input
 // int shunt2;
 int strikeCounter = 0;
 unsigned long intervalSensor = 1501;
-unsigned long previousMillisSensor = 0;
-int randomstriketrigger;   //5
+int randomstriketrigger = 5;
+static const int randomstriketriggerrange[6] = {   //
+  1, 3, 5, 10, 25, 50          //
+};
+
 int oldRandomstrikeTrigger;
 int sensor_1 = 0;
 int sensorReading = 0;
@@ -91,6 +94,11 @@ const uint16_t BUTTON_1_HELD = 23;
 const uint16_t BUTTON_2 = 0x7887;  // was button B
 const uint16_t BUTTON_3 = 0x58A7;  // was button C
 const uint16_t BUTTON_3_HELD = 24;
+const uint16_t BUTTON_4_HELD = 25;
+const uint16_t BUTTON_5_HELD = 26;
+const uint16_t BUTTON_6_HELD = 27;
+const uint16_t BUTTON_7_HELD = 28;
+const uint16_t BUTTON_8_HELD = 29;
 const uint16_t BUTTON_4 = 0xF807;  // was button A
 const uint16_t BUTTON_5 = 0x609F;   // was button B held
 const uint16_t BUTTON_6 = 0xE01F;   // was button C held
@@ -889,6 +897,7 @@ void rainbow(int startPos, int number, float deltaHue)             //FASTLED fun
 void strom()
 {
   digitalWrite(shunt1Pin,HIGH);
+  Serial.println("Sending trigger to MP3 player");
   for (int led = 0; led < int(random(LED_ADJUSTED)); led++) {          //turn on a random chain of LEDs white
         leds[led] = CHSV( 100, 0, 255);
         FastLED.show();
@@ -996,6 +1005,7 @@ void eepromSet()
     FastLED.setBrightness(map(Bvariable,0,8,50,255)); // set master brightness control
     sensitivity = 3;                        //
     wheelPosition = 0;
+    randomstriketrigger = 5;
 
     EEPROM.update(0, newEpprom);
     EEPROM.update(1, butStateCounter);
@@ -1004,6 +1014,7 @@ void eepromSet()
     EEPROM.update(4, sensitivity);
     EEPROM.update(5, remotEeprom);
     EEPROM.update(6, wheelPosition);
+    EEPROM.update(7, randomstriketrigger);
 
   }
 
@@ -1016,6 +1027,7 @@ void eepromSet()
     remotEeprom =        (int)EEPROM.read(5);
     remoteState = BUTTON_ARRAY2[remotEeprom];  // 0 = BUTTON_1, 1 = BUTTON_4, 2 = BUTTON_2, 3 = BUTTON_3
     wheelPosition =      (int)EEPROM.read(6);
+    randomstriketrigger =(int)EEPROM.read(7);
 
     Serial.print("remotEeprom :   ");
     Serial.println(remotEeprom);
@@ -1031,6 +1043,8 @@ void eepromSet()
     Serial.println(Bvariable);
     Serial.print("wheelPosition :   ");
     Serial.println(wheelPosition);
+    Serial.print("randomstriketrigger :   ");
+    Serial.println(randomstriketrigger);
 
     if (butStateCounter < 1 || butStateCounter > 4){    // safety in case bad eprom reading
       butStateCounter = 1;
@@ -1096,6 +1110,72 @@ void remote()
               EEPROM.update(5, 9);  // EEPROM Save 3 = BUTTON_3
               previousRemoteState = remoteState;
               remoteState = BUTTON_3_HELD;
+            }
+            if (currentButton == 'D') {     // 1, 3, 5, 10, 25, 50 
+              randomstriketrigger = 1;
+              Serial.print("randomstriketrigger = ");
+              Serial.println(randomstriketrigger);
+              EEPROM.update(7, randomstriketrigger);
+              for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 50, 255, 255);  }
+              FastLED.show();
+              delay(2000);
+              turnoffLEDs();
+              FastLED.show();
+            }
+            if (currentButton == 'E') {
+              randomstriketrigger = 3;
+              Serial.print("randomstriketrigger = ");
+              Serial.println(randomstriketrigger);
+              EEPROM.update(7, randomstriketrigger);
+              for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 50, 255, 190);  }
+              FastLED.show();
+              delay(2000);
+              turnoffLEDs();
+              FastLED.show();
+            }
+            if (currentButton == 'F') {
+              randomstriketrigger = 5;
+              Serial.print("randomstriketrigger = ");
+              Serial.println(randomstriketrigger);
+              EEPROM.update(7, randomstriketrigger);
+              for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 50, 255, 90);  }
+              FastLED.show();
+              delay(2000);
+              turnoffLEDs();
+              FastLED.show();
+            }
+            if (currentButton == 'G') {
+              randomstriketrigger = 10;
+              Serial.print("randomstriketrigger = ");
+              Serial.println(randomstriketrigger);
+              EEPROM.update(7, randomstriketrigger);
+              for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 50, 255, 50);  }
+              FastLED.show();
+              delay(2000);
+              turnoffLEDs();
+              FastLED.show();
+            }
+            if (currentButton == 'H') {
+              randomstriketrigger = 25;
+              Serial.print("randomstriketrigger = ");
+              Serial.println(randomstriketrigger);
+              EEPROM.update(7, randomstriketrigger);
+              for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 50, 255, 25);  }
+              FastLED.show();
+              delay(2000);
+              turnoffLEDs();
+              FastLED.show();
+            }
+            if (currentButton == 'I') {
+              randomstriketrigger = 50;
+              Serial.print("randomstriketrigger = ");
+              Serial.println(randomstriketrigger);
+              EEPROM.update(7, randomstriketrigger);
+              for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 50, 255, 5);  }
+              FastLED.show();
+              delay(2000);
+              turnoffLEDs();
+              FastLED.show();
             }
           }
         
