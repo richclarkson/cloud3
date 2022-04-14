@@ -567,7 +567,7 @@ void timedLightening(int gap)
 void soundLightening()
 { 
   unsigned long currentMillis = millis();
-  intervalSensor = (1001);
+  intervalSensor = (2001);
   if (currentMillis - previousMillisSensor > intervalSensor) {
     previousMillisSensor = currentMillis;
     sensor_1 = digitalRead(motion_1);
