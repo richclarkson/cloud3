@@ -22,10 +22,10 @@ FASTLED_USING_NAMESPACE
 
 int LED_ADJUSTED = 25;     
 
-const int shunt1Pin = 5;     // We will use shunts to change quantity of LEDs on the fly
-const int shunt2Pin = 6;
-int shunt1;
-int shunt2;
+const int shunt1Pin = 5;     // relay for triggering MP3 Player
+const int shunt2Pin = 6;     // motion sensor input
+// int shunt1;
+// int shunt2;
 
 
 //Global Varriables
@@ -273,7 +273,8 @@ void setup()
   AudioMemory(12);
   Serial.println("Cloud v3.0");
 
-  pinMode(shunt1Pin, OUTPUT);    
+  pinMode(shunt1Pin, OUTPUT);
+  digitalWrite(shunt1Pin,LOW);    
   //pinMode(shunt2Pin, INPUT_PULLUP);  
 
   //shunt1 = digitalRead(shunt1Pin);  
@@ -821,6 +822,7 @@ void rainbow(int startPos, int number, float deltaHue)             //FASTLED fun
 
 void strom()
 {
+  digitalWrite(shunt1Pin,HIGH);
   for (int led = 0; led < int(random(LED_ADJUSTED)); led++) {          //turn on a random chain of LEDs white
         leds[led] = CHSV( 100, 0, 255);
         FastLED.show();
@@ -905,6 +907,7 @@ void strom()
   for (int led = 0; led < LED_ADJUSTED; led++) {          leds[led] = CHSV( 100, 0, 0);      }  //turn off all LEDS
       FastLED.show();
       delay(random(10, 200));                                                               //random delay between 10-100
+      digitalWrite(shunt1Pin,LOW);
 } 
 
 
