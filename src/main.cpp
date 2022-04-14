@@ -273,29 +273,29 @@ void setup()
   AudioMemory(12);
   Serial.println("Cloud v3.0");
 
-  pinMode(shunt1Pin, INPUT_PULLUP);    
-  pinMode(shunt2Pin, INPUT_PULLUP);  
+  pinMode(shunt1Pin, OUTPUT);    
+  //pinMode(shunt2Pin, INPUT_PULLUP);  
 
-  shunt1 = digitalRead(shunt1Pin);  
-  shunt2 = digitalRead(shunt2Pin); 
+  //shunt1 = digitalRead(shunt1Pin);  
+  //shunt2 = digitalRead(shunt2Pin); 
 
-  if (shunt1 == LOW && shunt2 == HIGH)
-  { 
-    LED_ADJUSTED = 50; //used for RGBH Clouds that have all 50 LEDs
-    Serial.println("Pin 5");
-    }
+  // if (shunt1 == LOW && shunt2 == HIGH)
+  // { 
+  //   LED_ADJUSTED = 50; //used for RGBH Clouds that have all 50 LEDs
+  //   Serial.println("Pin 5");
+  //   }
 
-  else if (shunt1 == HIGH && shunt2 == LOW)
-  { 
-    LED_ADJUSTED = 17; //used for RGBM Clouds that only have 17 LEDs
-    Serial.println("Pin 6");
-    }
+  // else if (shunt1 == HIGH && shunt2 == LOW)
+  // { 
+  //   LED_ADJUSTED = 17; //used for RGBM Clouds that only have 17 LEDs
+  //   Serial.println("Pin 6");
+  //   }
 
-  else if (shunt1 == LOW && shunt2 == LOW)
-  { 
-    LED_ADJUSTED = 10; //used for RGBS Clouds that have only 10 LEDs
-    Serial.println("BOTH");
-    }
+  // else if (shunt1 == LOW && shunt2 == LOW)
+  // { 
+  //   LED_ADJUSTED = 10; //used for RGBS Clouds that have only 10 LEDs
+  //   Serial.println("BOTH");
+  //   }
 
 
   FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS);
