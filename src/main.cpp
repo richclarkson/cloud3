@@ -23,9 +23,17 @@ FASTLED_USING_NAMESPACE
 int LED_ADJUSTED = 25;     
 
 const int shunt1Pin = 5;     // relay for triggering MP3 Player
-const int shunt2Pin = 6;     // motion sensor input
+const int motion_1 = 6;     // motion sensor input
 // int shunt1;
 // int shunt2;
+int strikeCounter = 0;
+unsigned long intervalSensor = 1501;
+unsigned long previousMillisSensor = 0;
+int randomstriketrigger;   //5
+int oldRandomstrikeTrigger;
+int sensor_1 = 0;
+int sensorReading = 0;
+int firststorm = 0;
 
 
 //Global Varriables
@@ -274,7 +282,8 @@ void setup()
   Serial.println("Cloud v3.0");
 
   pinMode(shunt1Pin, OUTPUT);
-  digitalWrite(shunt1Pin,LOW);    
+  digitalWrite(shunt1Pin,LOW); 
+  pinMode (motion_1, INPUT);   
   //pinMode(shunt2Pin, INPUT_PULLUP);  
 
   //shunt1 = digitalRead(shunt1Pin);  
@@ -549,13 +558,70 @@ void timedLightening(int gap)
 
 void soundLightening()
 { 
-  //  if (dot != soundLevel){
-  //  Serial.println(soundLevel);
-  //  dot = soundLevel;
-  //  }
-  if (soundLevel > 180){    //was 250
-  strom();
- }
+  unsigned long currentMillis = millis();
+  intervalSensor = (1001);
+  if (currentMillis - previousMillisSensor > intervalSensor) {
+    previousMillisSensor = currentMillis;
+    sensor_1 = digitalRead(motion_1);
+
+    if (sensor_1 == HIGH) {
+ 
+      Serial.println("Motion Detected");
+ 
+  for (int led = 0; led < LED_ADJUSTED; led++) {          leds[led] = CHSV( 100, 0, 0);      }        //turn off all LEDs
+  FastLED.show();
+
+  ledSingle1 = random(LED_ADJUSTED);                                                  //choose a random LED
+  leds[ledSingle1] = CHSV( 100, 0, 255);                                          //turn it on for a random time between 10-100 then turn it off. Do this twice.
+  FastLED.show();
+  delay(random (10, 100));
+  leds[ledSingle1] = CHSV( 100, 0, 0);
+  FastLED.show();
+  leds[ledSingle1] = CHSV( 100, 0, 255);
+  FastLED.show();
+  delay(random (40, 100));
+  leds[ledSingle1] = CHSV( 100, 0, 0);
+  FastLED.show();
+
+  if (random(1, 3) == 2) {                                                        //every 1 out of 3 times flash another LED
+    ledSingle1 = random (LED_ADJUSTED);
+    ledSingle2 = random (50);
+    leds[ledSingle1] = CHSV( 100, 0, 255);
+    if(ledSingle2 < LED_ADJUSTED){   leds[ledSingle2] = CHSV( 100, 0, 255);  }
+    FastLED.show();
+  }
+  else {
+    ledSingle1 = random (LED_ADJUSTED);                                               //every 2 out of 3 times flash a small group of LEDs on and off
+    ledSingle2 = ledSingle1 + 1;
+    ledSingle3 = ledSingle2 + 2;
+    leds[ledSingle1] = CHSV( 100, 0, 255);
+    FastLED.show();
+    delay(random (20));
+    if(ledSingle2 < LED_ADJUSTED){   leds[ledSingle2] = CHSV( 100, 0, 255); }
+    FastLED.show();
+    delay(random (20));
+    if(ledSingle3 < LED_ADJUSTED){   leds[ledSingle3] = CHSV( 100, 0, 255); }
+    FastLED.show();
+  }
+
+  for (int led = 0; led < LED_ADJUSTED; led++) {          leds[led] = CHSV( 100, 0, 0);      }        //turn off all LEDs
+  FastLED.show();
+  strikeCounter ++;
+ 
+      Serial.print("Strike number:   ");
+      Serial.println(strikeCounter);
+ 
+    }
+
+    if (strikeCounter >= randomstriketrigger) {
+      firststorm = 0;
+      strom();
+ 
+      Serial.println("STORM!");
+ 
+      strikeCounter = 0;
+    }
+  }
 }
 
 void demo()
