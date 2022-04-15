@@ -323,6 +323,7 @@ void setup()
   turnoffLEDs();
   FastLED.show();
   Serial.begin(9600);
+  Serial.begin(19200);
   delay(1000);  // Sanity Delay
   turnoffLEDs();
   FastLED.show();
@@ -896,7 +897,8 @@ void rainbow(int startPos, int number, float deltaHue)             //FASTLED fun
 
 void strom()
 {
-  digitalWrite(shunt1Pin,HIGH);
+  //digitalWrite(shunt1Pin,HIGH);
+  Serial1.write("1");
   Serial.println("Sending trigger to MP3 player");
   for (int led = 0; led < int(random(LED_ADJUSTED)); led++) {          //turn on a random chain of LEDs white
         leds[led] = CHSV( 100, 0, 255);
@@ -982,7 +984,9 @@ void strom()
   for (int led = 0; led < LED_ADJUSTED; led++) {          leds[led] = CHSV( 100, 0, 0);      }  //turn off all LEDS
       FastLED.show();
       delay(random(10, 200));                                                               //random delay between 10-100
-      digitalWrite(shunt1Pin,LOW);
+      //digitalWrite(shunt1Pin,LOW);
+      Serial1.write("0");
+
 } 
 
 
