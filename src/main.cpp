@@ -1115,41 +1115,48 @@ void remote()
               previousRemoteState = remoteState;
               remoteState = BUTTON_3_HELD;
             }
-            if (currentButton == 'D') {     // 1, 3, 5, 10, 25, 50 
-              randomstriketrigger = 1;
-              Serial.print("randomstriketrigger = ");
-              Serial.println(randomstriketrigger);
-              EEPROM.update(7, randomstriketrigger);
-              for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 50, 255, 255);  }
+            if (currentButton == 'B') {     // thunder volume level 1 (quitest)
+              Serial1.write("i");
+              Serial.print("volume level 1");
+              for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 200, 255, 20);  }
               FastLED.show();
               delay(2000);
               turnoffLEDs();
               FastLED.show();
             }
-            if (currentButton == 'E') {
-              randomstriketrigger = 3;
+            if (currentButton == 'D') {     // Motion sensor trigger frequency (least) 1, 3, 5, 10, 25, 50   change to 3, 10, 20, 50
+              randomstriketrigger = 50;
               Serial.print("randomstriketrigger = ");
               Serial.println(randomstriketrigger);
               EEPROM.update(7, randomstriketrigger);
-              for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 50, 255, 190);  }
+              for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 50, 255, 10);  }
               FastLED.show();
               delay(2000);
               turnoffLEDs();
               FastLED.show();
             }
-            if (currentButton == 'F') {
-              randomstriketrigger = 5;
-              Serial.print("randomstriketrigger = ");
-              Serial.println(randomstriketrigger);
-              EEPROM.update(7, randomstriketrigger);
-              for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 50, 255, 90);  }
+            if (currentButton == 'E') {  // thunder volume level 2 (mid)
+              Serial1.write("m");
+              Serial.print("volume level 2");
+              for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 200, 255, 120);  }
               FastLED.show();
               delay(2000);
               turnoffLEDs();
               FastLED.show();
             }
-            if (currentButton == 'G') {
+            if (currentButton == 'F') { // Motion sensor trigger frequency 2nd most
               randomstriketrigger = 10;
+              Serial.print("randomstriketrigger = ");
+              Serial.println(randomstriketrigger);
+              EEPROM.update(7, randomstriketrigger);
+              for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 50, 255, 160);  }
+              FastLED.show();
+              delay(2000);
+              turnoffLEDs();
+              FastLED.show();
+            }
+            if (currentButton == 'G') {  // Motion sensor trigger frequency 2nd least
+              randomstriketrigger = 20;
               Serial.print("randomstriketrigger = ");
               Serial.println(randomstriketrigger);
               EEPROM.update(7, randomstriketrigger);
@@ -1159,23 +1166,21 @@ void remote()
               turnoffLEDs();
               FastLED.show();
             }
-            if (currentButton == 'H') {
-              randomstriketrigger = 25;
-              Serial.print("randomstriketrigger = ");
-              Serial.println(randomstriketrigger);
-              EEPROM.update(7, randomstriketrigger);
-              for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 50, 255, 25);  }
+            if (currentButton == 'H') {  // thunder volume level 3 (loudest) defualt
+                Serial1.write("p");
+              Serial.print("volume level 3");
+              for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 200, 255, 255);  }
               FastLED.show();
               delay(2000);
               turnoffLEDs();
               FastLED.show();
             }
-            if (currentButton == 'I') {
-              randomstriketrigger = 50;
+            if (currentButton == 'I') {  // Motion sensor trigger frequency most
+              randomstriketrigger = 3;
               Serial.print("randomstriketrigger = ");
               Serial.println(randomstriketrigger);
               EEPROM.update(7, randomstriketrigger);
-              for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 50, 255, 5);  }
+              for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 50, 255, 255);  }
               FastLED.show();
               delay(2000);
               turnoffLEDs();
