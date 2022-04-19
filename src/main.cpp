@@ -1,12 +1,9 @@
 
 /*
-  Cloud 3.2
-  2020 Richard Clarkson Studio
+  Speaker Cloud with Thunder
+  2022 Richard Clarkson Studio
 
-  TODO fix LED flickering: For some reason any LED quantity over 25 results in LED flickering, symptoms also result when the Speed of animation setting is active.
-   - temporary workaround limit LEDs to 25 and remove Speed of Animation setting.
-
-  TODO add one more white step in between blue yellow change over.
+  Standard Interactive teensy in conjucntion with a 2nd teensy on an aduio sheld running: mp3_controller2_speaker_cloud_MP3only_1
 
 */
 
@@ -22,8 +19,8 @@ FASTLED_USING_NAMESPACE
 
 int LED_ADJUSTED = 25;     
 
-const int shunt1Pin = 5;     // relay for triggering MP3 Player
-const int motion_1 = 6;     // motion sensor input
+const int shunt1Pin = 6;     // relay for triggering MP3 Player
+const int motion_1 = 5;     // motion sensor input
 // int shunt1;
 // int shunt2;
 int strikeCounter = 0;
@@ -322,7 +319,7 @@ void setup()
   FastLED.show();
   turnoffLEDs();
   FastLED.show();
-  Serial.begin(9600);
+  Serial1.begin(9600);
   Serial.begin(19200);
   delay(1000);  // Sanity Delay
   turnoffLEDs();
@@ -985,7 +982,7 @@ void strom()
       FastLED.show();
       delay(random(10, 200));                                                               //random delay between 10-100
       //digitalWrite(shunt1Pin,LOW);
-      Serial1.write("0");
+      //Serial1.write("0");
 
 } 
 
@@ -1116,7 +1113,7 @@ void remote()
               remoteState = BUTTON_3_HELD;
             }
             if (currentButton == 'B') {     // thunder volume level 1 (quitest)
-              Serial1.write("i");
+              Serial1.write("2");
               Serial.print("volume level 1");
               for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 200, 255, 20);  }
               FastLED.show();
@@ -1136,7 +1133,7 @@ void remote()
               FastLED.show();
             }
             if (currentButton == 'E') {  // thunder volume level 2 (mid)
-              Serial1.write("m");
+              Serial1.write("3");
               Serial.print("volume level 2");
               for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 200, 255, 120);  }
               FastLED.show();
@@ -1167,7 +1164,7 @@ void remote()
               FastLED.show();
             }
             if (currentButton == 'H') {  // thunder volume level 3 (loudest) defualt
-                Serial1.write("p");
+                Serial1.write("4");
               Serial.print("volume level 3");
               for (int led = 0; led < LED_ADJUSTED; led++) {leds[led] = CHSV( 200, 255, 255);  }
               FastLED.show();
@@ -1468,6 +1465,7 @@ void reset()
   newEpprom = 1;
   EEPROM.update(0, newEpprom);
   eepromSet();
-      
+  Serial1.write("5");
+  Serial.println("Sending trigger to MP3 player to reset");
 }
 
