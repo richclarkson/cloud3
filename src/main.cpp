@@ -207,8 +207,8 @@ uint8_t gHue = 180;           // rotating "base color" used by many of the patte
 
 //LED Variables
 #define DATA_PIN 4 //MOSI  // Green
-#define CLK_PIN 3  //SCK  // Blue
-#define LED_TYPE WS2801 //APA102
+//#define CLK_PIN 3  //SCK  // Blue
+#define LED_TYPE WS2811 //APA102 //WS2801 (depreciated)
 #define COLOR_ORDER RGB
 CRGB leds[NUM_LEDS];
 
@@ -298,7 +298,8 @@ void setup()
     }
 
 
-  FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS);
+  //FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS);
+  FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
   FastLED.setBrightness(255);
   turnoffLEDs();
   FastLED.show();
