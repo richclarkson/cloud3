@@ -79,3 +79,6 @@ eagle.epf
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/.browse.c_cpp.db*
+/.pio/build/teensy/firmware.elf
+/.pio/build/teensy/firmware.hex
+/.pio/build/teensy/.sconsign38.dblite
