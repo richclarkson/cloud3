@@ -203,14 +203,21 @@ int timeSpeed;
 //Lamp Mode Variables
 int rainbowCounter = 0;
 
-uint8_t gHue = 180;           // rotating "base color" used by many of the patterns
+uint8_t gHue = 180;
 
-//LED Variables
+//WS2811   - Dont forget to change initator near line 300
 #define DATA_PIN 4 //MOSI  // Green
 //#define CLK_PIN 3  //SCK  // Blue
 #define LED_TYPE WS2811 //APA102 //WS2801 (depreciated)
 #define COLOR_ORDER RGB
 CRGB leds[NUM_LEDS];
+
+// //WS2801    - Dont forget to change initator near line 300
+// #define DATA_PIN 4 //MOSI  // Green
+// #define CLK_PIN 3  //SCK  // Blue
+// #define LED_TYPE WS2801 //APA102 //WS2811 (new)
+// #define COLOR_ORDER RGB
+// CRGB leds[NUM_LEDS];
 
 int minLEDvalue[NUM_LEDS];
 int goingUp[NUM_LEDS];
@@ -298,8 +305,8 @@ void setup()
     }
 
 
-  //FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS);
-  FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
+  //FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS);   // WS2801
+  FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);          // WS2811
   FastLED.setBrightness(255);
   turnoffLEDs();
   FastLED.show();
