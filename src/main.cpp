@@ -1,13 +1,9 @@
 
 /*
-  Cloud 3.2
+  Cloud 4.0
   2020 Richard Clarkson Studio
 
-  TODO fix LED flickering: For some reason any LED quantity over 25 results in LED flickering, symptoms also result when the Speed of animation setting is active.
-   - temporary workaround limit LEDs to 25 and remove Speed of Animation setting.
-
-  TODO add one more white step in between blue yellow change over.
-
+  For use with Teensy 4.0
 */
 
 
@@ -278,7 +274,7 @@ void setup()
 { 
   irrecv.enableIRIn(); // Start the IR receiver
   AudioMemory(12);
-  Serial.println("Cloud v3.0");
+  Serial.println("Cloud v4.0 use with teensy 4.0");
 
   pinMode(shunt1Pin, INPUT_PULLUP);    
   pinMode(shunt2Pin, INPUT_PULLUP);  
