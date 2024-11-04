@@ -201,19 +201,19 @@ int rainbowCounter = 0;
 
 uint8_t gHue = 180;
 
-//WS2811   - Dont forget to change initator near line 300
-#define DATA_PIN 4 //MOSI  // Green
-//#define CLK_PIN 3  //SCK  // Blue
-#define LED_TYPE WS2811 //APA102 //WS2801 (depreciated)
-#define COLOR_ORDER RGB
-CRGB leds[NUM_LEDS];
-
-// //WS2801    - Dont forget to change initator near line 300
+// //WS2811   - Dont forget to change initator near line 300
 // #define DATA_PIN 4 //MOSI  // Green
-// #define CLK_PIN 3  //SCK  // Blue
-// #define LED_TYPE WS2801 //APA102 //WS2811 (new)
+// //#define CLK_PIN 3  //SCK  // Blue
+// #define LED_TYPE WS2811 //APA102 //WS2801 (depreciated)
 // #define COLOR_ORDER RGB
 // CRGB leds[NUM_LEDS];
+
+//WS2801    - Dont forget to change initator near line 300
+#define DATA_PIN 4 //MOSI  // Green
+#define CLK_PIN 3  //SCK  // Blue
+#define LED_TYPE WS2801 //APA102 //WS2811 (new)
+#define COLOR_ORDER RGB
+CRGB leds[NUM_LEDS];
 
 int minLEDvalue[NUM_LEDS];
 int goingUp[NUM_LEDS];
@@ -274,13 +274,25 @@ void setup()
 { 
   irrecv.enableIRIn(); // Start the IR receiver
   AudioMemory(12);
+  Serial.begin(9600);
+  delay(1000);  // Sanity Delay
   Serial.println("Cloud v4.0 use with teensy 4.0");
 
-  pinMode(shunt1Pin, INPUT_PULLUP);    
-  pinMode(shunt2Pin, INPUT_PULLUP);  
+  pinMode(shunt1Pin, INPUT_PULLUP);    // pin 5
+  pinMode(shunt2Pin, INPUT_PULLUP);    // pin 6
 
   shunt1 = digitalRead(shunt1Pin);  
   shunt2 = digitalRead(shunt2Pin); 
+  delay(1000);  // Sanity Delay
+  shunt1 = digitalRead(shunt1Pin); 
+  shunt2 = digitalRead(shunt2Pin); 
+
+  Serial.print("Shunt1 (pin 5) = ");
+  Serial.println(shunt1);
+  Serial.print("Shunt2 (pin 6) = ");
+  Serial.println(shunt2);
+
+  Serial.println("0 is closed, 1 is open");
 
   if (shunt1 == LOW && shunt2 == HIGH)
   { 
@@ -294,22 +306,20 @@ void setup()
     Serial.println("Pin 6");
     }
 
-  else if (shunt1 == LOW && shunt2 == LOW)
-  { 
-    LED_ADJUSTED = 10; //used for RGBS Clouds that have only 10 LEDs
-    Serial.println("BOTH");
-    }
+  // else if (shunt1 == LOW && shunt2 == LOW)
+  // { 
+  //   LED_ADJUSTED = 10; //used for RGBS Clouds that have only 10 LEDs
+  //   Serial.println("BOTH");
+  //   }
 
 
-  //FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS);   // WS2801
-  FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);          // WS2811
+  FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS);   // WS2801
+  //FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);          // WS2811
   FastLED.setBrightness(255);
   turnoffLEDs();
   FastLED.show();
   turnoffLEDs();
   FastLED.show();
-  Serial.begin(9600);
-  delay(1000);  // Sanity Delay
   turnoffLEDs();
   FastLED.show();
   for (int i = 0; i < LED_ADJUSTED; i++) {    
