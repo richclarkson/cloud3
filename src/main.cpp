@@ -1,5 +1,7 @@
 /*
 
+I tried but couldn't get this to work in the end. I instead just used CloudV6_27.ino with the IRremote lib v2.6.0 and that suppress error message thing
+
  Cloud by Richard Clarkson Studio, LLC.
 
  Version 1 - 5 by Richard Clarkson 2013
@@ -7,6 +9,9 @@
  Version 7 by Richard Clarkson 2016
 
 */
+
+
+
 
 
 //#define SUPPRESS_ERROR_MESSAGE_FOR_BEGIN
@@ -505,7 +510,7 @@ void setup() {
 void loop() {
 
   remote();
-
+  //delay(100);
   //******************************    POWER BUTTON   ******************************************//
 
  if (remoteState == BUTTON_POWER) {
