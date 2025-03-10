@@ -20,7 +20,7 @@
   #define BRIGHTNESS          255
   #define FRAMES_PER_SECOND  120   //might need to bump down to 60 as was redefined lower down by accident.
 
-  int minLEDvalue[NUM_LEDS];
+int minLEDvalue[NUM_LEDS];
 int goingUp[NUM_LEDS];
 int currentValue[NUM_LEDS];
 
@@ -133,7 +133,7 @@ int goingUpFade = 1;
     // set master brightness control
     FastLED.setBrightness(BRIGHTNESS);
 
-    Serial.println("here i am");
+    //Serial.println("here i am");
   
     turnoffLEDs();
     FastLED.show();
@@ -149,8 +149,8 @@ int goingUpFade = 1;
     
   void loop()
   {
-    Serial.print("loop");
-    delay(1000);
+    //Serial.print("loop");
+    //delay(1000);
     checkButtons();
 
    if (mode == 1){           // Sunlight
@@ -612,7 +612,7 @@ void twinkle()
      // Buttons
 
   void checkButtons(){
-    Serial.print("checking buttons");
+    //Serial.print("checking buttons");
     buttonState1 = digitalRead(buttonPin1);
     buttonState2 = digitalRead(buttonPin2);
     buttonState3 = digitalRead(buttonPin3);
