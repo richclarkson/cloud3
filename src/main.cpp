@@ -465,29 +465,40 @@ CRGBPalette256 palette0 = CRGBPalette256(
   CRGB::Black, CRGB::OrangeRed
 );
 
-EVERY_N_MILLISECONDS(2){        // adjust this to slow everything down
+EVERY_N_MILLISECONDS(20){        // adjust this to slow everything down
   palletDelay++;
   if (palletDelay > 3000) {     // tweek this to adjust amount of time staying in target color vs changing colors
     palletDelay = 0;
     blendDelay = 0;
     palletCounter++;
+    Serial.print("Season: ");
+    Serial.println(palletCounter);
     extractionCounter++;            // counter to turn on and off extraction fans
-    Serial.print("Counter: ");
-    Serial.println(extractionCounter);
-    if (extractionCounter == 1){
-      digitalWrite(extractionPin, HIGH);
-      Serial.println("extraction fans on");
-    }
-    if (extractionCounter == 2){             // adjust this to change how long fans are ON for
-      digitalWrite(extractionPin, LOW);
-      Serial.println("extraction fans off");
-    }
-    if (extractionCounter > 100){           // adjust this to change how long fans are OFF for
-      extractionCounter = 0;
-    }
+    // Serial.print("Counter: ");
+    // Serial.println(extractionCounter);
+    // if (extractionCounter == 1){
+    //   digitalWrite(extractionPin, HIGH);
+    //   Serial.println("extraction fans on");
+    // }
+    // if (extractionCounter == 2){             // adjust this to change how long fans are ON for
+    //   digitalWrite(extractionPin, LOW);
+    //   Serial.println("extraction fans off");
+    // }
+    // if (extractionCounter > 3){           // adjust this to change how long fans are OFF for
+    //   extractionCounter = 0;
+    // }
     if (palletCounter > 4){
       palletCounter = 1;
     }
+    if (palletCounter == 1){
+      digitalWrite(extractionPin, HIGH);
+      Serial.println("extraction fans ON");
+    }
+    if (palletCounter == 2){
+      digitalWrite(extractionPin, LOW);
+      Serial.println("extraction fans OFF");
+    }
+
   }
 
   if (palletDelay < 255){
@@ -499,28 +510,28 @@ EVERY_N_MILLISECONDS(2){        // adjust this to slow everything down
       FastLED.show();
     }
     if (palletCounter == 1){
-      CRGB currentColor = ColorFromPalette(palette, palletDelay,255,LINEARBLEND); // Get the current color from the palette
+      CRGB currentColor = ColorFromPalette(palette, palletDelay,255,LINEARBLEND);
       for (int j = 0; j < NUM_LEDS; j++) {
         leds[j] = currentColor;
       }
       FastLED.show();
     }
     if (palletCounter == 2){
-        CRGB currentColor = ColorFromPalette(palette2, palletDelay,255,LINEARBLEND); // Get the current color from the palette
+        CRGB currentColor = ColorFromPalette(palette2, palletDelay,255,LINEARBLEND); 
       for (int j = 0; j < NUM_LEDS; j++) {
         leds[j] = currentColor;
       }
       FastLED.show();
       }
     if (palletCounter == 3){
-        CRGB currentColor = ColorFromPalette(palette3, palletDelay,255,LINEARBLEND); // Get the current color from the palette
+        CRGB currentColor = ColorFromPalette(palette3, palletDelay,255,LINEARBLEND); 
       for (int j = 0; j < NUM_LEDS; j++) {
         leds[j] = currentColor;
       }
       FastLED.show();
       }
     if (palletCounter == 4){
-        CRGB currentColor = ColorFromPalette(palette4, palletDelay,255,LINEARBLEND); // Get the current color from the palette
+        CRGB currentColor = ColorFromPalette(palette4, palletDelay,255,LINEARBLEND); 
       for (int j = 0; j < NUM_LEDS; j++) {
         leds[j] = currentColor;
       }
