@@ -104,7 +104,6 @@ int goingUpFade = 1;
   void volcano();
   void aurora();
   void fourseasons();
-  void fourseasons2();
 
   
   
@@ -393,8 +392,9 @@ int goingUpFade = 1;
      if (firstrun == 1){
       palletCounter = 0;
       firstrun = 0;
+      palletDelay = 0;
       digitalWrite(extractionPin, HIGH);
-      extractionCounter = 1;
+      //extractionCounter = 1;
      }
     fourseasons();
    }
@@ -403,32 +403,16 @@ int goingUpFade = 1;
    if (mode == 12){           // Stand-by
      if (firstrun == 1){
 
+      for (int i = 0; i <= 255; i++) {     
+        analogWrite(brightLEDPin,i);
+        delay(5);
+      }
+      
+
       //  for (int x = 0; x < NUM_LEDS; x++) {     
       //    leds[x] = CHSV( 18, 255, 255); 
       //  }
       //  FastLED.show();
-
-       //IN RGB format:
-      // CHSV( 95, 0, twinkle1); = cool white
-      // CHSV( 0, 255, twinkle2); = bright green
-      // CHSV( 50, 255, twinkle3); =  greenish yellow
-      // CHSV( 200, 255, twinkle3); = light blue
-      // CHSV( 140, 255, twinkle5); = fuscia
-      // 95  =  Red with a touch of orange
-      // 97  =  Deep red
-      // 90  =  Orange with a touch of yellow
-      // 170 =  Sea blue
-
-      //IN GRB format:
-      // CHSV( 0, 0, twinkle1); =  white
-      // CHSV( 100, 255, twinkle2); = bright green
-      // CHSV( 85, 255, twinkle3); =  greenish yellow
-      // CHSV( 140, 255, twinkle3); = light blue
-      // CHSV( 200, 255, twinkle5); = fuscia
-      // 7  =  Red with a touch of orange
-      // 3  =  Deep red
-      // 18  =  Orange with a touch of yellow
-      // 155 =  Sea blue
       
        firstrun = 0;
      }
@@ -473,7 +457,7 @@ EVERY_N_MILLISECONDS(20){        // adjust this to slow everything down
     palletCounter++;
     Serial.print("Season: ");
     Serial.println(palletCounter);
-    extractionCounter++;            // counter to turn on and off extraction fans
+    //extractionCounter++;            // counter to turn on and off extraction fans
     // Serial.print("Counter: ");
     // Serial.println(extractionCounter);
     // if (extractionCounter == 1){
