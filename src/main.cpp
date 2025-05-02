@@ -1,6 +1,15 @@
 
   #include <FastLED.h>
   #include <EEPROM.h>
+
+
+  /*  TODO: 
+          add in an extraction option that runs in the background of all modes (done check timing)
+          - would be great to be able to turn this off an on via some combination of buttons or pressing two at once? (done check indicator flashes)
+          move modes around so that all rain modes are on the same buttons
+          tweek mist fan strengh with PWM or pulseing
+          Create desert sunrise mode
+  */
   
   
   
@@ -62,6 +71,7 @@ int goingUpFade = 1;
   int palletCounter = 1;
   int palletDelay = 0;
   int extractionCounter = 0;
+  int extrationOn = 1;
 
   
   const int pumpPin = 11;
@@ -104,6 +114,7 @@ int goingUpFade = 1;
   void volcano();
   void aurora();
   void fourseasons();
+  void sunrise();
 
   
   
@@ -169,6 +180,23 @@ int goingUpFade = 1;
   {
     //Serial.print("loop");
     //delay(1000);
+
+
+    if (extrationOn == 1){
+    EVERY_N_SECONDS(60){        
+      extractionCounter++;
+      if (extractionCounter == 9) {     // Every 10 mins turn extractor fans on for 1 min (10-9) then back off
+        digitalWrite(extractionPin, HIGH);
+        Serial.println("extraction fans ON");  //TODO remote serial note
+      }
+      if (extractionCounter >= 10) {     
+        digitalWrite(extractionPin, LOW);
+        Serial.println("extraction fans OFF");  //TODO remote serial note
+        extractionCounter = 0;
+      }
+    }
+  }
+
     checkButtons();
 
    if (mode == 1){           // Sunlight
@@ -393,7 +421,7 @@ int goingUpFade = 1;
       palletCounter = 0;
       firstrun = 0;
       palletDelay = 0;
-      digitalWrite(extractionPin, HIGH);
+      //digitalWrite(extractionPin, HIGH);
       //extractionCounter = 1;
      }
     fourseasons();
@@ -403,10 +431,14 @@ int goingUpFade = 1;
    if (mode == 12){           // Stand-by
      if (firstrun == 1){
 
-      for (int i = 0; i <= 255; i++) {     
-        analogWrite(brightLEDPin,i);
-        delay(5);
-      }
+      palletCounter = 0;
+      firstrun = 0;
+      palletDelay = 0;
+
+      // for (int i = 0; i <= 255; i++) {     
+      //   analogWrite(brightLEDPin,i);
+      //   delay(5);
+      // }
       
 
       //  for (int x = 0; x < NUM_LEDS; x++) {     
@@ -416,7 +448,7 @@ int goingUpFade = 1;
       
        firstrun = 0;
      }
-     //do nothing
+     sunrise();
    }
   }
   
@@ -451,7 +483,7 @@ CRGBPalette256 palette0 = CRGBPalette256(
 
 EVERY_N_MILLISECONDS(20){        // adjust this to slow everything down
   palletDelay++;
-  if (palletDelay > 3000) {     // tweek this to adjust amount of time staying in target color vs changing colors
+  if (palletDelay > 3000) {     // tweek this to adjust amount of time staying in target color vs changing colors 
     palletDelay = 0;
     blendDelay = 0;
     palletCounter++;
@@ -474,14 +506,14 @@ EVERY_N_MILLISECONDS(20){        // adjust this to slow everything down
     if (palletCounter > 4){
       palletCounter = 1;
     }
-    if (palletCounter == 1){
-      digitalWrite(extractionPin, HIGH);
-      Serial.println("extraction fans ON");
-    }
-    if (palletCounter == 2){
-      digitalWrite(extractionPin, LOW);
-      Serial.println("extraction fans OFF");
-    }
+    // if (palletCounter == 1){
+    //   digitalWrite(extractionPin, HIGH);
+    //   Serial.println("extraction fans ON");
+    // }
+    // if (palletCounter == 2){
+    //   digitalWrite(extractionPin, LOW);
+    //   Serial.println("extraction fans OFF");
+    // }
 
   }
 
@@ -526,6 +558,68 @@ EVERY_N_MILLISECONDS(20){        // adjust this to slow everything down
 }
 
 
+
+void sunrise(){
+  CRGBPalette256 palette = CRGBPalette256(    
+    CRGB::Black, CRGB::Red
+  );
+  CRGBPalette256 palette2 = CRGBPalette256(    
+    CRGB::Red, CRGB::Yellow
+  );
+  CRGBPalette256 palette3 = CRGBPalette256(    
+    CRGB::Yellow, CRGB::SkyBlue
+  );
+  CRGBPalette256 palette4 = CRGBPalette256(    
+    CRGB::SkyBlue, CRGB::Black
+  );
+  
+  EVERY_N_MILLISECONDS(20){        // adjust this to slow everything down
+    palletDelay++;
+    if (palletDelay > 1000) {     // tweek this to adjust amount of time staying in target color vs changing colors 
+      palletDelay = 0;
+      blendDelay = 0;
+      palletCounter++;
+      Serial.print("Season: ");
+      Serial.println(palletCounter);
+
+      if (palletCounter > 4){
+        palletCounter = 1;
+      }
+  
+    }
+  
+    if (palletDelay < 255){
+      if (palletCounter == 1){
+        CRGB currentColor = ColorFromPalette(palette, palletDelay,255,LINEARBLEND);
+        for (int j = 0; j < NUM_LEDS; j++) {
+          leds[j] = currentColor;
+        }
+        FastLED.show();
+      }
+      if (palletCounter == 2){
+          CRGB currentColor = ColorFromPalette(palette2, palletDelay,255,LINEARBLEND); 
+        for (int j = 0; j < NUM_LEDS; j++) {
+          leds[j] = currentColor;
+        }
+        FastLED.show();
+        }
+      if (palletCounter == 3){
+          CRGB currentColor = ColorFromPalette(palette3, palletDelay,255,LINEARBLEND); 
+        for (int j = 0; j < NUM_LEDS; j++) {
+          leds[j] = currentColor;
+        }
+        FastLED.show();
+        }
+      if (palletCounter == 4){
+          CRGB currentColor = ColorFromPalette(palette4, palletDelay,255,LINEARBLEND); 
+        for (int j = 0; j < NUM_LEDS; j++) {
+          leds[j] = currentColor;
+        }
+        FastLED.show();
+        }
+      }
+    }
+}
 
 //   void fourseasons2()
 //   {
@@ -939,8 +1033,33 @@ void twinkle()
       Serial1.write("c");
       mode = 12;
       EEPROM.update(1, mode);
+
+      buttonState1 = digitalRead(buttonPin1);    // While button 6 is being held check button 1 to see if it is also now pressed if so toggle on/off background extraction fans
+      if (buttonState1 == LOW) {     
+        Serial.println("Button 1 also Pressed");
+        if (extrationOn == 1){
+          extrationOn = 0;
+          RGB_color(255, 0, 0); // Red
+          delay(timma);
+          turnoffLEDs();       //turn off LEDs
+          FastLED.show(); 
+          RGB_color(255, 0, 0); // Red
+          delay(timma);
+          FastLED.show(); 
+        }
+        else if (extrationOn == 0){
+          extrationOn = 1;
+          RGB_color(0, 255, 0); // Green
+          delay(timma);
+          turnoffLEDs();       //turn off LEDs
+          FastLED.show(); 
+          RGB_color(0, 255, 0); // Green
+          delay(timma);
+          FastLED.show();                     
+        }
       }
-    }
+     }
+   }
   }
 
 
