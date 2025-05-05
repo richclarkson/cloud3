@@ -63,8 +63,7 @@ int goingUpFade = 1;
   long thunderThreshold = 1000;
   long auroraCounter = 0;
   long auroraThreshold = 100;  
-
-
+  int heatIndex = 0;
 
     
   int blendDelay = 50;
@@ -115,6 +114,7 @@ int goingUpFade = 1;
   void aurora();
   void fourseasons();
   void sunrise();
+
 
   
   
@@ -559,67 +559,120 @@ EVERY_N_MILLISECONDS(20){        // adjust this to slow everything down
 
 
 
-void sunrise(){
-  CRGBPalette256 palette = CRGBPalette256(    
-    CRGB::Black, CRGB::Red
-  );
-  CRGBPalette256 palette2 = CRGBPalette256(    
-    CRGB::Red, CRGB::Yellow
-  );
-  CRGBPalette256 palette3 = CRGBPalette256(    
-    CRGB::Yellow, CRGB::SkyBlue
-  );
-  CRGBPalette256 palette4 = CRGBPalette256(    
-    CRGB::SkyBlue, CRGB::Black
-  );
-  
-  EVERY_N_MILLISECONDS(20){        // adjust this to slow everything down
-    palletDelay++;
-    if (palletDelay > 1000) {     // tweek this to adjust amount of time staying in target color vs changing colors 
-      palletDelay = 0;
-      blendDelay = 0;
-      palletCounter++;
-      Serial.print("Season: ");
-      Serial.println(palletCounter);
 
-      if (palletCounter > 4){
-        palletCounter = 1;
-      }
+void sunrise() {              //red pallet up to white, hold for a bit, then blend from red to black and repeat.
   
-    }
+  CRGBPalette16 paletteM = CRGBPalette16(     //0xFFCC00 yellow
+    0x000000,
+    0xFF3300,
+    0xFF6600,
+    0xFFFF50
+  );
+//  #000000,
+//  #FF3300,
+//  #FF6600,
+//  #FFFF60
   
-    if (palletDelay < 255){
-      if (palletCounter == 1){
-        CRGB currentColor = ColorFromPalette(palette, palletDelay,255,LINEARBLEND);
-        for (int j = 0; j < NUM_LEDS; j++) {
-          leds[j] = currentColor;
-        }
-        FastLED.show();
-      }
-      if (palletCounter == 2){
-          CRGB currentColor = ColorFromPalette(palette2, palletDelay,255,LINEARBLEND); 
-        for (int j = 0; j < NUM_LEDS; j++) {
-          leds[j] = currentColor;
-        }
-        FastLED.show();
-        }
-      if (palletCounter == 3){
-          CRGB currentColor = ColorFromPalette(palette3, palletDelay,255,LINEARBLEND); 
-        for (int j = 0; j < NUM_LEDS; j++) {
-          leds[j] = currentColor;
-        }
-        FastLED.show();
-        }
-      if (palletCounter == 4){
-          CRGB currentColor = ColorFromPalette(palette4, palletDelay,255,LINEARBLEND); 
-        for (int j = 0; j < NUM_LEDS; j++) {
-          leds[j] = currentColor;
-        }
-        FastLED.show();
-        }
-      }
+  CRGB color = ColorFromPalette(paletteM, heatIndex);
+
+  // fill the entire strip with the current color
+  fill_solid(leds, NUM_LEDS, color);
+
+  // slowly increase the heat
+  EVERY_N_MILLISECONDS(50) { 
+    palletDelay++;
+    if (palletDelay <= 244) {     
+      heatIndex++;
     }
+    if (500 < palletDelay && palletDelay < 745) {     
+       heatIndex--;
+    }
+    if (palletDelay == 744) {     
+      heatIndex = 0;
+    }
+    if (palletDelay == 2000) {     
+      palletDelay = 0;
+      heatIndex = 0;
+    }
+  }
+  FastLED.show();
+  //Serial.print("heatIndex: ");
+  //Serial.println(heatIndex);
 }
+
+
+
+// void sunrise2(){
+//   CRGBPalette256 palette = CRGBPalette256(    
+//     CRGB::DarkRed, CRGB::White
+//   );
+//   CRGBPalette256 palette2 = CRGBPalette256(    
+//     CRGB::IndianRed, CRGB::OrangeRed
+//   );
+//   CRGBPalette256 palette3 = CRGBPalette256(    
+//     CRGB::OrangeRed, CRGB::White
+//   );
+//   CRGBPalette256 palette4 = CRGBPalette256(    
+//     CRGB::White, CRGB::Black
+//   );
+//   CRGBPalette256 palette0 = CRGBPalette256(    
+//     CRGB::Black, CRGB::DarkRed
+//   );
+  
+//   EVERY_N_MILLISECONDS(20){        // adjust this to slow everything down
+//     palletDelay++;
+//     if (palletDelay > 500) {     // tweek this to adjust amount of time staying in target color vs changing colors 
+//       palletDelay = 0;
+//       blendDelay = 0;
+//       palletCounter++;
+//       Serial.print("Season: ");
+//       Serial.println(palletCounter);
+
+//       if (palletCounter > 4){
+//         palletCounter = 1;
+//       }
+  
+//     }
+  
+//     if (palletDelay < 255){
+//       if (palletCounter == 0){
+//         CRGB currentColor = ColorFromPalette(palette0, palletDelay,255,LINEARBLEND); // fade into orange from black only the first time around
+//         for (int j = 0; j < NUM_LEDS; j++) {
+//           leds[j] = currentColor;
+//         }
+//         FastLED.show();
+//       }
+//       if (palletCounter == 1){
+//         CRGB currentColor = ColorFromPalette(palette, palletDelay,255,LINEARBLEND);
+//         for (int j = 0; j < NUM_LEDS; j++) {
+//           leds[j] = currentColor;
+//         }
+//         FastLED.show();
+//       }
+//       if (palletCounter == 2){
+//           CRGB currentColor = ColorFromPalette(palette2, palletDelay,255,LINEARBLEND); 
+//         for (int j = 0; j < NUM_LEDS; j++) {
+//           leds[j] = currentColor;
+//         }
+//         FastLED.show();
+//         }
+//       if (palletCounter == 3){
+//           CRGB currentColor = ColorFromPalette(palette3, palletDelay,255,LINEARBLEND); 
+//         for (int j = 0; j < NUM_LEDS; j++) {
+//           leds[j] = currentColor;
+//         }
+//         FastLED.show();
+//         }
+//       if (palletCounter == 4){
+//           CRGB currentColor = ColorFromPalette(palette4, palletDelay,255,LINEARBLEND); 
+//         for (int j = 0; j < NUM_LEDS; j++) {
+//           leds[j] = currentColor;
+//         }
+//         FastLED.show();
+//         }
+//       }
+//     }
+// }
 
 //   void fourseasons2()
 //   {
