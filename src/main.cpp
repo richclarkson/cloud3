@@ -2,13 +2,12 @@
   #include <FastLED.h>
   #include <EEPROM.h>
 
+  // Upload note - sometimes upload code fails - 
+  // if that happends disconnect USB cord, turn Tempescope off, plug in USB cord upload code then should be sucessfull and can then on upload code suffessfully
+
 
   /*  TODO: 
-          add in an extraction option that runs in the background of all modes (done check timing)
-          - would be great to be able to turn this off an on via some combination of buttons or pressing two at once? (done check indicator flashes)
           move modes around so that all rain modes are on the same buttons
-          tweek mist fan strengh with PWM or pulseing
-          Create desert sunrise mode
   */
   
   
@@ -75,6 +74,8 @@ int goingUpFade = 1;
   
   const int pumpPin = 11;
   const int fanPin = 10;
+  int fanPulseCounter = 0;
+  const int fanSpeed = 150;
   const int brightLEDPin = 9;
   const int mister1Pin = 14;
   const int mister2Pin = 15;
@@ -162,6 +163,53 @@ int goingUpFade = 1;
 
     //mode = 12;
     eepromSet();
+
+    buttonState1 = digitalRead(buttonPin1);    // When unit powers up check button 1 to see if it is being pressed if so toggle on/off background extraction fans
+      if (buttonState1 == LOW) {
+        Serial.println("Button 1 Pressed during startup");
+        if (extrationOn == 1){
+          extrationOn = 0;
+          EEPROM.update(2, extrationOn);
+          Serial.println("Extration Turned Off");
+          fill_solid(leds, NUM_LEDS, 0xF70505);
+          FastLED.show();
+          delay(timma);
+
+          turnoffLEDs();       //turn off LEDs
+          FastLED.show();
+          delay(timma); 
+
+          fill_solid(leds, NUM_LEDS, 0xF70505);
+          FastLED.show(); 
+          delay(timma);
+
+          turnoffLEDs();       //turn off LEDs
+          FastLED.show();
+          delay(timma); 
+        }
+
+        else if (extrationOn == 0){
+          extrationOn = 1;
+          EEPROM.update(2, extrationOn);
+          Serial.println("Extration Turned On");
+          fill_solid(leds, NUM_LEDS, 0x33C213);
+          FastLED.show();
+          delay(timma);
+
+          turnoffLEDs();       //turn off LEDs
+          FastLED.show();
+          delay(timma); 
+
+          fill_solid(leds, NUM_LEDS, 0x33C213);
+          FastLED.show(); 
+          delay(timma);
+
+          turnoffLEDs();       //turn off LEDs
+          FastLED.show();
+          delay(timma);                   
+        }
+      }
+
     Serial.println("end of setup");
   }
   
@@ -181,7 +229,6 @@ int goingUpFade = 1;
     //Serial.print("loop");
     //delay(1000);
 
-
     if (extrationOn == 1){
     EVERY_N_SECONDS(60){        
       extractionCounter++;
@@ -189,7 +236,7 @@ int goingUpFade = 1;
         digitalWrite(extractionPin, HIGH);
         Serial.println("extraction fans ON");  //TODO remote serial note
       }
-      if (extractionCounter >= 10) {     
+      if (extractionCounter >= 11) {     
         digitalWrite(extractionPin, LOW);
         Serial.println("extraction fans OFF");  //TODO remote serial note
         extractionCounter = 0;
@@ -203,7 +250,8 @@ int goingUpFade = 1;
      if (firstrun == 1){
       digitalWrite(mister1Pin, HIGH);
       digitalWrite(mister2Pin, HIGH);
-      digitalWrite(fanPin, HIGH);                             //TODO make this low 
+      //digitalWrite(fanPin, HIGH);                             
+      analogWrite(fanPin, fanSpeed);
       for (int i = 0; i <= 255; i++) {     
            analogWrite(brightLEDPin,i);
            delay(5);
@@ -217,7 +265,8 @@ int goingUpFade = 1;
      if (firstrun == 1){
       digitalWrite(mister1Pin, HIGH);
       digitalWrite(mister2Pin, HIGH);
-      digitalWrite(fanPin, HIGH);                             //TODO make this low
+      //digitalWrite(fanPin, HIGH);                             
+      analogWrite(fanPin, fanSpeed);
       firstrun = 0;
      }
      //twinkling white RGB LEDs
@@ -234,7 +283,8 @@ int goingUpFade = 1;
          }
        digitalWrite(mister1Pin, HIGH);
        digitalWrite(mister2Pin, HIGH);
-       digitalWrite(fanPin, HIGH);                             //TODO make this low
+       //digitalWrite(fanPin, HIGH);                             
+      analogWrite(fanPin, fanSpeed);
        for (int x = upperHalfstart; x < NUM_LEDS; x++) {     
          leds[x] = CHSV(170, 255, 150);   //prepare the data for the LED given the above in global color
        }
@@ -267,7 +317,8 @@ int goingUpFade = 1;
       digitalWrite(pumpPin, HIGH);
       digitalWrite(mister1Pin, HIGH);
       digitalWrite(mister2Pin, HIGH);
-      digitalWrite(fanPin, HIGH);          //TODO make this low
+      //digitalWrite(fanPin, HIGH);                             
+      analogWrite(fanPin, fanSpeed);
       firstrun = 0;
     }
     if (thunderStrike++ >= thunderThreshold){
@@ -333,7 +384,16 @@ int goingUpFade = 1;
        FastLED.show(); 
        firstrun = 0;
      }
-     //do nothing
+     EVERY_N_SECONDS(1) {
+      ++fanPulseCounter;
+      if (fanPulseCounter > 20){
+        digitalWrite(fanPin, HIGH);
+      }
+      if (fanPulseCounter > 21){
+        digitalWrite(fanPin, LOW);
+        fanPulseCounter = 0;
+      }
+     }
    }
    
    if (mode == 6){           // Fog
@@ -350,7 +410,16 @@ int goingUpFade = 1;
       FastLED.show(); 
        firstrun = 0;
      }
-     //do nothing
+     EVERY_N_SECONDS(1) {
+      ++fanPulseCounter;
+      if (fanPulseCounter > 20){
+        digitalWrite(fanPin, HIGH);
+      }
+      if (fanPulseCounter > 21){
+        digitalWrite(fanPin, LOW);
+        fanPulseCounter = 0;
+      }
+     }
    }
 
    if (mode == 7){           // was mode 10 Rainforest now "Heavy Rain No Lights"
@@ -365,18 +434,24 @@ int goingUpFade = 1;
       }
       FastLED.show();
     }
-    EVERY_N_SECONDS(20) {
-       digitalWrite(fanPin, HIGH);
-       delay(1000);
-       digitalWrite(fanPin, LOW);
-    }
+    EVERY_N_SECONDS(1) {
+      ++fanPulseCounter;
+      if (fanPulseCounter > 20){
+        digitalWrite(fanPin, HIGH);
+      }
+      if (fanPulseCounter > 21){
+        digitalWrite(fanPin, LOW);
+        fanPulseCounter = 0;
+      }
+     }
   }
 
    if (mode == 8){           // Rainbow
      if (firstrun == 1){
        digitalWrite(mister1Pin, HIGH);
        digitalWrite(mister2Pin, HIGH);
-       digitalWrite(fanPin, HIGH);
+       //digitalWrite(fanPin, HIGH);                             
+      analogWrite(fanPin, fanSpeed);
        firstrun = 0;
      }
      fill_rainbow( leds, NUM_LEDS, gHue, 2);
@@ -392,7 +467,7 @@ int goingUpFade = 1;
 
    if (mode == 9){           // Volcano Ocean
      if (firstrun == 1){
-       digitalWrite(pumpPin, HIGH); 
+       //digitalWrite(pumpPin, HIGH); 
        digitalWrite(mister1Pin, HIGH);
        digitalWrite(mister2Pin, HIGH);
        digitalWrite(fanPin, HIGH);
@@ -402,7 +477,12 @@ int goingUpFade = 1;
 //        }
 //        FastLED.show();
      }
-    volcano();
+     volcano();
+      EVERY_N_SECONDS(60) {
+        digitalWrite(pumpPin, HIGH);
+        delay(500);
+        digitalWrite(pumpPin, LOW);
+     }
    }
 
    if (mode == 10){           // Aurora  (was 7) 
@@ -574,11 +654,8 @@ void sunrise() {              //red pallet up to white, hold for a bit, then ble
 //  #FFFF60
   
   CRGB color = ColorFromPalette(paletteM, heatIndex);
-
-  // fill the entire strip with the current color
   fill_solid(leds, NUM_LEDS, color);
 
-  // slowly increase the heat
   EVERY_N_MILLISECONDS(50) { 
     palletDelay++;
     if (palletDelay <= 244) {     
@@ -601,78 +678,6 @@ void sunrise() {              //red pallet up to white, hold for a bit, then ble
 }
 
 
-
-// void sunrise2(){
-//   CRGBPalette256 palette = CRGBPalette256(    
-//     CRGB::DarkRed, CRGB::White
-//   );
-//   CRGBPalette256 palette2 = CRGBPalette256(    
-//     CRGB::IndianRed, CRGB::OrangeRed
-//   );
-//   CRGBPalette256 palette3 = CRGBPalette256(    
-//     CRGB::OrangeRed, CRGB::White
-//   );
-//   CRGBPalette256 palette4 = CRGBPalette256(    
-//     CRGB::White, CRGB::Black
-//   );
-//   CRGBPalette256 palette0 = CRGBPalette256(    
-//     CRGB::Black, CRGB::DarkRed
-//   );
-  
-//   EVERY_N_MILLISECONDS(20){        // adjust this to slow everything down
-//     palletDelay++;
-//     if (palletDelay > 500) {     // tweek this to adjust amount of time staying in target color vs changing colors 
-//       palletDelay = 0;
-//       blendDelay = 0;
-//       palletCounter++;
-//       Serial.print("Season: ");
-//       Serial.println(palletCounter);
-
-//       if (palletCounter > 4){
-//         palletCounter = 1;
-//       }
-  
-//     }
-  
-//     if (palletDelay < 255){
-//       if (palletCounter == 0){
-//         CRGB currentColor = ColorFromPalette(palette0, palletDelay,255,LINEARBLEND); // fade into orange from black only the first time around
-//         for (int j = 0; j < NUM_LEDS; j++) {
-//           leds[j] = currentColor;
-//         }
-//         FastLED.show();
-//       }
-//       if (palletCounter == 1){
-//         CRGB currentColor = ColorFromPalette(palette, palletDelay,255,LINEARBLEND);
-//         for (int j = 0; j < NUM_LEDS; j++) {
-//           leds[j] = currentColor;
-//         }
-//         FastLED.show();
-//       }
-//       if (palletCounter == 2){
-//           CRGB currentColor = ColorFromPalette(palette2, palletDelay,255,LINEARBLEND); 
-//         for (int j = 0; j < NUM_LEDS; j++) {
-//           leds[j] = currentColor;
-//         }
-//         FastLED.show();
-//         }
-//       if (palletCounter == 3){
-//           CRGB currentColor = ColorFromPalette(palette3, palletDelay,255,LINEARBLEND); 
-//         for (int j = 0; j < NUM_LEDS; j++) {
-//           leds[j] = currentColor;
-//         }
-//         FastLED.show();
-//         }
-//       if (palletCounter == 4){
-//           CRGB currentColor = ColorFromPalette(palette4, palletDelay,255,LINEARBLEND); 
-//         for (int j = 0; j < NUM_LEDS; j++) {
-//           leds[j] = currentColor;
-//         }
-//         FastLED.show();
-//         }
-//       }
-//     }
-// }
 
 //   void fourseasons2()
 //   {
@@ -960,7 +965,6 @@ void twinkle()
     buttonState6 = digitalRead(buttonPin6);
      
   
-  
       // check if the pushbutton is pressed.
     // if it is, the buttonState is HIGH:
     if (buttonState1 == LOW) {     
@@ -1086,31 +1090,6 @@ void twinkle()
       Serial1.write("c");
       mode = 12;
       EEPROM.update(1, mode);
-
-      buttonState1 = digitalRead(buttonPin1);    // While button 6 is being held check button 1 to see if it is also now pressed if so toggle on/off background extraction fans
-      if (buttonState1 == LOW) {     
-        Serial.println("Button 1 also Pressed");
-        if (extrationOn == 1){
-          extrationOn = 0;
-          RGB_color(255, 0, 0); // Red
-          delay(timma);
-          turnoffLEDs();       //turn off LEDs
-          FastLED.show(); 
-          RGB_color(255, 0, 0); // Red
-          delay(timma);
-          FastLED.show(); 
-        }
-        else if (extrationOn == 0){
-          extrationOn = 1;
-          RGB_color(0, 255, 0); // Green
-          delay(timma);
-          turnoffLEDs();       //turn off LEDs
-          FastLED.show(); 
-          RGB_color(0, 255, 0); // Green
-          delay(timma);
-          FastLED.show();                     
-        }
-      }
      }
    }
   }
@@ -1311,19 +1290,25 @@ void eepromSet()
     newEpprom = 73;
     EEPROM.update(0, newEpprom);
     mode = 0;
+    extrationOn = 1;
     EEPROM.update(1, mode);
+    EEPROM.update(2, extrationOn);
   }
 
   else { 
     Serial.println("Old EPROM!");                           //not new eeprom
     mode =        (int)EEPROM.read(1);
-
     Serial.print("mode :   ");
     Serial.println(mode);
-
     if (mode < 0 || mode > 12){    // safety in case bad eprom reading
       mode = 0;
+    }
 
+    extrationOn = (int)EEPROM.read(2);
+    Serial.print("extrationOn :   ");
+    Serial.println(extrationOn);
+    if (extrationOn < 0 || extrationOn > 1){    // safety in case bad eprom reading
+      extrationOn = 1;
     }
 
       // check if the pushbutton is pressed.
