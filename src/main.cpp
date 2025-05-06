@@ -14,19 +14,19 @@
 
   /*  Mode Key: 
  
-      Mode 1:  Sunlight         Yellow
-      Mode 2:  Twilight         Orange   
-      Mode 3:  Sunshower        Mid Blue
-      Mode 4:  Thunderstorm     Teal
-      Mode 5:  Midnight Rain    Dark Green
-      Mode 6:  Ocean Volcano    Red
-      Mode 7:  Partly Cloudy    Aqua
-      Mode 8:  Fog              Navy
-      Mode 9:  Rainbow          Fuchsia
-      Mode 10: Aurora           Lime
-      Mode 11: Four Seasons     Purple
-      Mode 12: Stand-by         White
-
+      B1 Mode 1:  Sunlight         Yellow
+      B1 Mode 2:  Twilight         Purple   
+      B2 Mode 3:  Sunshower        Mid Blue
+      B2 Mode 4:  Thunderstorm     Teal
+      B3 Mode 5:  Midnight Rain    Dark Green
+      B3 Mode 6:  Ocean Volcano    Red
+      B4 Mode 7:  Partly Cloudy    Aqua
+      B4 Mode 8:  Fog              Navy
+      B5 Mode 9:  Rainbow          Fuchsia
+      B5 Mode 10: Aurora           Lime
+      B6 Mode 11: Sunrise          Orange
+      B6 Mode 12: Stand-by         White
+ 
 
       RGB_color(0, 255, 255); // Red  
       RGB_color(0, 210, 255); // Orange      
@@ -109,6 +109,7 @@ int goingUpFade = 1;
   int fanPulseCounter = 0;
   const int fanSpeed = 150;
   const int brightLEDPin = 9;
+  int brightLEDfade = 0;
   const int mister1Pin = 14;
   const int mister2Pin = 15;
   const int extractionPin = 13;
@@ -333,8 +334,10 @@ int goingUpFade = 1;
       digitalWrite(mister1Pin, HIGH);
       digitalWrite(mister2Pin, HIGH);
       //digitalWrite(fanPin, HIGH);                             
-      analogWrite(fanPin, fanSpeed);
+      analogWrite(fanPin, 220);
       firstrun = 0;
+      thunderStrike = 600;
+      thunderThreshold = 1000;
     }
     if (thunderStrike++ >= thunderThreshold){
       analogWrite(brightLEDPin,255);;
@@ -391,23 +394,22 @@ int goingUpFade = 1;
       digitalWrite(mister2Pin, HIGH);
       //digitalWrite(fanPin, HIGH);
       firstrun = 0;
-      for (int x = 0; x < lowerHalfend; x++) {     
-        leds[x] = CHSV(240, 255, 150);   //prepare the data for the LED given the above in global color
-      }
-      FastLED.show();
+      // for (int x = 0; x < lowerHalfend; x++) {     
+      //   leds[x] = CHSV(240, 255, 150);   //prepare the data for the LED given the above in global color
+      // }
+      // FastLED.show();
     }
-    EVERY_N_SECONDS(1) {
+    EVERY_N_MILLISECONDS(10) {
       ++fanPulseCounter;
-      if (fanPulseCounter > 20){
-        //digitalWrite(fanPin, HIGH);
+      if (fanPulseCounter == 600){
         analogWrite(fanPin, 255);
+        ++fanPulseCounter;
       }
-      if (fanPulseCounter > 21){
-        //digitalWrite(fanPin, LOW);
+      if (fanPulseCounter == 1000){
         analogWrite(fanPin, 0);
         fanPulseCounter = 0;
       }
-     }
+    }
   }
    
 
@@ -450,17 +452,16 @@ int goingUpFade = 1;
       FastLED.show(); 
       firstrun = 0;
     }
-    EVERY_N_SECONDS(1) {
-     ++fanPulseCounter;
-     if (fanPulseCounter > 20){
-       //digitalWrite(fanPin, HIGH);
-       analogWrite(fanPin, 255);
-     }
-     if (fanPulseCounter > 21){
-       //digitalWrite(fanPin, LOW);
-       analogWrite(fanPin, 0);
-       fanPulseCounter = 0;
-     }
+    EVERY_N_MILLISECONDS(10) {
+      ++fanPulseCounter;
+      if (fanPulseCounter == 600){
+        analogWrite(fanPin, 255);
+        ++fanPulseCounter;
+      }
+      if (fanPulseCounter == 1000){
+        analogWrite(fanPin, 0);
+        fanPulseCounter = 0;
+      }
     }
   }
 
@@ -479,17 +480,16 @@ int goingUpFade = 1;
      FastLED.show(); 
       firstrun = 0;
     }
-    EVERY_N_SECONDS(1) {
-     ++fanPulseCounter;
-     if (fanPulseCounter > 20){
-       //digitalWrite(fanPin, HIGH);
-       analogWrite(fanPin, 255);
-     }
-     if (fanPulseCounter > 21){
-       //digitalWrite(fanPin, LOW);
-       analogWrite(fanPin, 0);
-       fanPulseCounter = 0;
-     }
+    EVERY_N_MILLISECONDS(10) {
+      ++fanPulseCounter;
+      if (fanPulseCounter == 600){
+        analogWrite(fanPin, 255);
+        ++fanPulseCounter;
+      }
+      if (fanPulseCounter == 1000){
+        analogWrite(fanPin, 0);
+        fanPulseCounter = 0;
+      }
     }
   }
 
@@ -526,15 +526,17 @@ int goingUpFade = 1;
     aurora();
   }
 
-   if (mode == 11){           // Four Seasons 
+   if (mode == 11){           // Sunrise
      if (firstrun == 1){
       palletCounter = 0;
       firstrun = 0;
       palletDelay = 0;
+      brightLEDfade = 0;
       //digitalWrite(extractionPin, HIGH);
       //extractionCounter = 1;
      }
-    fourseasons();
+     sunrise();
+    
 
       // EVERY_N_MILLISECONDS(100){                   // Troubleshooting each top component
       //   palletDelay++;
@@ -577,7 +579,7 @@ int goingUpFade = 1;
    }
 
 
-   if (mode == 12){           // Stand-by / Sunrise
+   if (mode == 12){           // Stand-by
      if (firstrun == 1){
 
       palletCounter = 0;
@@ -597,7 +599,7 @@ int goingUpFade = 1;
       
        firstrun = 0;
      }
-     sunrise();
+     //fourseasons();
    }
   }
   
@@ -730,11 +732,21 @@ void sunrise() {              //red pallet up to white, hold for a bit, then ble
     if (palletDelay <= 244) {     
       heatIndex++;
     }
-    if (800 < palletDelay && palletDelay < 945) {     
+    if (150 < palletDelay && palletDelay <= 405) {     
+      brightLEDfade++;
+      analogWrite(brightLEDPin,brightLEDfade);
+    }
+    if (700 < palletDelay && palletDelay <= 955) {     
+      brightLEDfade--;
+      analogWrite(brightLEDPin,brightLEDfade);
+    }
+
+    if (800 < palletDelay && palletDelay < 1045) {     
        heatIndex--;
     }
-    if (palletDelay == 944) {     
+    if (palletDelay == 1045) {     
       heatIndex = 0;
+      brightLEDfade = 0;
     }
     if (palletDelay == 1444) {     
       palletDelay = 0;
@@ -1026,7 +1038,7 @@ void twinkle()
   
       if (buttonState1 == LOW){             // check to see if the button is still being held
         Serial.println("Button 1 HELD");
-        RGB_color(0, 210, 255); // Mode 2:  Twilight         Orange   
+        RGB_color(0, 255, 0); // Mode 2:  Twilight         Purple   
       Serial1.write("2");
       delay(timma);
       mode = 2;
@@ -1057,7 +1069,7 @@ void twinkle()
 
     else if (buttonState3 == LOW) {     
       Serial.println("Button 3 Pressed");
-      RGB_color(255, 255, 255); // Mode 5:  Midnight Rain    Green
+      RGB_color(255, 225, 255); // Mode 5:  Midnight Rain    Green
       delay(timma); 
       turnoffLEDs();       //turn off LEDs
       FastLED.show();
@@ -1120,7 +1132,7 @@ void twinkle()
 
     else if (buttonState6 == LOW) {     
       Serial.println("Button 6 Pressed");
-      RGB_color(0, 255, 0); // Mode 11: Four Seasons     Purple
+      RGB_color(0, 210, 255); // Mode 11: Four Seasons     Orange
       delay(timma); 
       turnoffLEDs();       //turn off LEDs
       FastLED.show();
@@ -1365,7 +1377,7 @@ void eepromSet()
       }
 
      else if (mode == 2){
-      RGB_color(0, 210, 255); // Mode 2:  Twilight         Orange   
+      RGB_color(0, 255, 0); // Mode 2:  Twilight         Purple   
       Serial1.write("2");
       }
      
@@ -1380,7 +1392,7 @@ void eepromSet()
       }
 
      else if (mode == 5){
-      RGB_color(255, 255, 255); // Mode 5:  Midnight Rain    Green
+      RGB_color(255, 225, 255); // Mode 5:  Midnight Rain    Green
       Serial1.write("5");
       }
 
@@ -1410,7 +1422,7 @@ void eepromSet()
       }
 
      else if (mode == 11){
-      RGB_color(0, 255, 0); // Mode 11: Four Seasons     Purple
+      RGB_color(0, 210, 255); // Mode 11: Four Seasons     Orange
       Serial1.write("b");
       }
 
