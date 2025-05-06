@@ -5,9 +5,41 @@
   // Upload note - sometimes upload code fails - 
   // if that happends disconnect USB cord, turn Tempescope off, plug in USB cord upload code then should be sucessfull and can then on upload code suffessfully
 
+  // Background extraction fans can be switched on/off by holding button 1 when unit powers up (red flash indicates now off, green now on)
 
   /*  TODO: 
-          move modes around so that all rain modes are on the same buttons
+      Go through modes 1 by one and make final tweeks
+  */
+
+
+  /*  Mode Key: 
+ 
+      Mode 1:  Sunlight         Yellow
+      Mode 2:  Twilight         Orange   
+      Mode 3:  Sunshower        Mid Blue
+      Mode 4:  Thunderstorm     Teal
+      Mode 5:  Midnight Rain    Dark Green
+      Mode 6:  Ocean Volcano    Red
+      Mode 7:  Partly Cloudy    Aqua
+      Mode 8:  Fog              Navy
+      Mode 9:  Rainbow          Fuchsia
+      Mode 10: Aurora           Lime
+      Mode 11: Four Seasons     Purple
+      Mode 12: Stand-by         White
+
+
+      RGB_color(0, 255, 255); // Red  
+      RGB_color(0, 210, 255); // Orange      
+      RGB_color(0, 0, 255); // Yellow        
+      RGB_color(255, 225, 255); // Dark Green 
+      RGB_color(240, 0, 240); // Lime        
+      RGB_color(255, 50, 200); // teal       
+      RGB_color(255, 0, 0); // Aqua          
+      RGB_color(255, 255, 225); // Navy      
+      RGB_color(255, 240, 20); // Mid Blue    
+      RGB_color(0, 255, 0); // Purple        
+      RGB_color(0, 200, 128); // Fuchsia      
+      RGB_color(0, 0, 0); // White            
   */
   
   
@@ -244,7 +276,7 @@ int goingUpFade = 1;
     }
   }
 
-    checkButtons();
+   checkButtons();
 
    if (mode == 1){           // Sunlight
      if (firstrun == 1){
@@ -274,7 +306,7 @@ int goingUpFade = 1;
      }
 
 
-    if (mode == 3){           // Heavy Rain
+    if (mode == 3){           // Sunshower
      if (firstrun == 1){
        digitalWrite(pumpPin, HIGH);
        for (int i = 0; i <= 255; i++) {     
@@ -294,25 +326,8 @@ int goingUpFade = 1;
      //do nothing
    }
 
-   
-  //  if (mode == 4){           // Previously Light Rain now Thunderstorm
-  //    if (firstrun == 1){
-  //      //analogWrite(brightLEDPin,20);
-  //      for (int x = upperHalfstart; x < NUM_LEDS; x++) {     
-  //        leds[x] = CHSV(200, 255, 255);   //prepare the data for the LED given the above in global color
-  //      }
-  //      FastLED.show(); 
-  //      firstrun = 0;
-  //    }
-  //    EVERY_N_SECONDS(60) {
-  //       digitalWrite(pumpPin, HIGH);
-  //       delay(500);
-  //       digitalWrite(pumpPin, LOW);
-  //    }
-  //  }
-
   
-  if (mode == 4){           // Thunder storm
+  if (mode == 4){           // Thunderstorm
     if (firstrun == 1){
       digitalWrite(pumpPin, HIGH);
       digitalWrite(mister1Pin, HIGH);
@@ -367,62 +382,9 @@ int goingUpFade = 1;
     }
     delay(10);
   }
-   
 
-   if (mode == 5){           // Partly Cloudy
-     if (firstrun == 1){
-       analogWrite(brightLEDPin,255);
-       digitalWrite(mister1Pin, HIGH);
-       digitalWrite(mister2Pin, HIGH);
-       digitalWrite(fanPin, HIGH);
-       for (int x = 0; x < lowerHalfend; x++) {     
-         leds[x] = CHSV(0, 0, 255);   //white
-       }
-       for (int x = upperHalfstart; x < NUM_LEDS; x++) {     
-        leds[x] = CHSV(60, 150, 255);   //yellow bright
-      }
-       FastLED.show(); 
-       firstrun = 0;
-     }
-     EVERY_N_SECONDS(1) {
-      ++fanPulseCounter;
-      if (fanPulseCounter > 20){
-        digitalWrite(fanPin, HIGH);
-      }
-      if (fanPulseCounter > 21){
-        digitalWrite(fanPin, LOW);
-        fanPulseCounter = 0;
-      }
-     }
-   }
-   
-   if (mode == 6){           // Fog
-     if (firstrun == 1){
-       digitalWrite(mister1Pin, HIGH);
-       digitalWrite(mister2Pin, HIGH);
-       digitalWrite(fanPin, HIGH);
-       for (int x = 0; x < lowerHalfend; x++) {     
-        leds[x] = CHSV(0, 0, 255);   //white
-       }
-       for (int x = upperHalfstart; x < NUM_LEDS; x++) {     
-        leds[x] = CHSV(0, 0, 255);   //white
-       }
-      FastLED.show(); 
-       firstrun = 0;
-     }
-     EVERY_N_SECONDS(1) {
-      ++fanPulseCounter;
-      if (fanPulseCounter > 20){
-        digitalWrite(fanPin, HIGH);
-      }
-      if (fanPulseCounter > 21){
-        digitalWrite(fanPin, LOW);
-        fanPulseCounter = 0;
-      }
-     }
-   }
 
-   if (mode == 7){           // was mode 10 Rainforest now "Heavy Rain No Lights"
+  if (mode == 5){           // Midnight Rain
     if (firstrun == 1){
       digitalWrite(pumpPin, HIGH);
       digitalWrite(mister1Pin, HIGH);
@@ -437,16 +399,101 @@ int goingUpFade = 1;
     EVERY_N_SECONDS(1) {
       ++fanPulseCounter;
       if (fanPulseCounter > 20){
-        digitalWrite(fanPin, HIGH);
+        //digitalWrite(fanPin, HIGH);
+        analogWrite(fanPin, 255);
       }
       if (fanPulseCounter > 21){
-        digitalWrite(fanPin, LOW);
+        //digitalWrite(fanPin, LOW);
+        analogWrite(fanPin, 0);
         fanPulseCounter = 0;
       }
      }
   }
+   
 
-   if (mode == 8){           // Rainbow
+  if (mode == 6){           // Volcano Ocean
+    if (firstrun == 1){
+      //digitalWrite(pumpPin, HIGH); 
+      digitalWrite(mister1Pin, HIGH);
+      digitalWrite(mister2Pin, HIGH);
+      //digitalWrite(fanPin, HIGH);
+      analogWrite(fanPin, 255);
+      firstrun = 0;
+//        for (int x = 0; x < lowerHalfend; x++) {     
+//          leds[x] = CHSV(95, 255, 255);   //prepare the data for the LED given the above in global color
+//        }
+//        FastLED.show();
+    }
+    volcano();
+     EVERY_N_SECONDS(60) {
+       digitalWrite(pumpPin, HIGH);
+       delay(500);
+       digitalWrite(pumpPin, LOW);
+    }
+  }
+   
+   
+
+   if (mode == 7){           // Partly Cloudy
+    if (firstrun == 1){
+      analogWrite(brightLEDPin,255);
+      digitalWrite(mister1Pin, HIGH);
+      digitalWrite(mister2Pin, HIGH);
+      //digitalWrite(fanPin, HIGH);
+      analogWrite(fanPin, 255);
+      for (int x = 0; x < lowerHalfend; x++) {     
+        leds[x] = CHSV(0, 0, 255);   //white
+      }
+      for (int x = upperHalfstart; x < NUM_LEDS; x++) {     
+       leds[x] = CHSV(60, 150, 255);   //yellow bright
+     }
+      FastLED.show(); 
+      firstrun = 0;
+    }
+    EVERY_N_SECONDS(1) {
+     ++fanPulseCounter;
+     if (fanPulseCounter > 20){
+       //digitalWrite(fanPin, HIGH);
+       analogWrite(fanPin, 255);
+     }
+     if (fanPulseCounter > 21){
+       //digitalWrite(fanPin, LOW);
+       analogWrite(fanPin, 0);
+       fanPulseCounter = 0;
+     }
+    }
+  }
+
+  if (mode == 8){           // Fog
+    if (firstrun == 1){
+      digitalWrite(mister1Pin, HIGH);
+      digitalWrite(mister2Pin, HIGH);
+      //digitalWrite(fanPin, HIGH);
+      analogWrite(fanPin, 255);
+      for (int x = 0; x < lowerHalfend; x++) {     
+       leds[x] = CHSV(0, 0, 255);   //white
+      }
+      for (int x = upperHalfstart; x < NUM_LEDS; x++) {     
+       leds[x] = CHSV(0, 0, 255);   //white
+      }
+     FastLED.show(); 
+      firstrun = 0;
+    }
+    EVERY_N_SECONDS(1) {
+     ++fanPulseCounter;
+     if (fanPulseCounter > 20){
+       //digitalWrite(fanPin, HIGH);
+       analogWrite(fanPin, 255);
+     }
+     if (fanPulseCounter > 21){
+       //digitalWrite(fanPin, LOW);
+       analogWrite(fanPin, 0);
+       fanPulseCounter = 0;
+     }
+    }
+  }
+
+   if (mode == 9){           // Rainbow
      if (firstrun == 1){
        digitalWrite(mister1Pin, HIGH);
        digitalWrite(mister2Pin, HIGH);
@@ -465,38 +512,21 @@ int goingUpFade = 1;
      EVERY_N_MILLISECONDS( 20 ) { gHue++; } // slowly cycle the "base color" through the rainbow
    }
 
-   if (mode == 9){           // Volcano Ocean
-     if (firstrun == 1){
-       //digitalWrite(pumpPin, HIGH); 
-       digitalWrite(mister1Pin, HIGH);
-       digitalWrite(mister2Pin, HIGH);
-       digitalWrite(fanPin, HIGH);
-       firstrun = 0;
-//        for (int x = 0; x < lowerHalfend; x++) {     
-//          leds[x] = CHSV(95, 255, 255);   //prepare the data for the LED given the above in global color
-//        }
-//        FastLED.show();
-     }
-     volcano();
-      EVERY_N_SECONDS(60) {
-        digitalWrite(pumpPin, HIGH);
-        delay(500);
-        digitalWrite(pumpPin, LOW);
-     }
-   }
+   
 
-   if (mode == 10){           // Aurora  (was 7) 
+   if (mode == 10){           // Aurora 
     if (firstrun == 1){
       digitalWrite(mister1Pin, HIGH);
       digitalWrite(mister2Pin, HIGH);
-      digitalWrite(fanPin, HIGH);        //has a pulsing fan built into aurora LED function.
+      //digitalWrite(fanPin, HIGH);        //has a pulsing fan built into aurora LED function.
+      analogWrite(fanPin, 255);
       //analogWrite(brightLEDPin, 100);
       firstrun = 0;
     }
     aurora();
   }
 
-   if (mode == 11){           // Defoger - Four Seasons (Slow Lights) Sumer 
+   if (mode == 11){           // Four Seasons 
      if (firstrun == 1){
       palletCounter = 0;
       firstrun = 0;
@@ -505,10 +535,49 @@ int goingUpFade = 1;
       //extractionCounter = 1;
      }
     fourseasons();
+
+      // EVERY_N_MILLISECONDS(100){                   // Troubleshooting each top component
+      //   palletDelay++;
+      // }
+      //   if (palletDelay == 100) {     
+      //     analogWrite(brightLEDPin,255);
+      //     Serial.println("Bright LED on");
+      //     palletDelay++;
+      //   }
+      //   if (palletDelay == 200) {     
+      //     analogWrite(brightLEDPin,0);
+      //     Serial.println("Bright LED off");
+      //     palletDelay++;
+      //   }
+      //   if (palletDelay == 300) {     
+      //     digitalWrite(mister1Pin, HIGH);
+      //     digitalWrite(mister2Pin, HIGH);
+      //     Serial.println("Misters on");
+      //     palletDelay++;
+      //   }
+      //   if (palletDelay == 400) {     
+      //     digitalWrite(mister1Pin, LOW);
+      //     digitalWrite(mister2Pin, LOW);
+      //     Serial.println("Misters off");
+      //     palletDelay++;
+      //   }
+      //   if (palletDelay == 500) {     
+      //     digitalWrite(fanPin, HIGH);
+      //     Serial.println("lower fan on");
+      //     palletDelay++;
+      //   }
+      //   if (palletDelay == 600) {     
+      //     analogWrite(fanPin, 0);
+      //     Serial.println("lower fan off");
+      //     palletDelay++;
+      //   }
+      //   if (palletDelay == 700) {     
+      //     palletDelay = 0;
+      //   }
    }
 
 
-   if (mode == 12){           // Stand-by
+   if (mode == 12){           // Stand-by / Sunrise
      if (firstrun == 1){
 
       palletCounter = 0;
@@ -656,18 +725,18 @@ void sunrise() {              //red pallet up to white, hold for a bit, then ble
   CRGB color = ColorFromPalette(paletteM, heatIndex);
   fill_solid(leds, NUM_LEDS, color);
 
-  EVERY_N_MILLISECONDS(50) { 
+  EVERY_N_MILLISECONDS(50) {            //rise for 244 counts, day for 500 counts, set for 244 counts, night for 500 counds
     palletDelay++;
     if (palletDelay <= 244) {     
       heatIndex++;
     }
-    if (500 < palletDelay && palletDelay < 745) {     
+    if (800 < palletDelay && palletDelay < 945) {     
        heatIndex--;
     }
-    if (palletDelay == 744) {     
+    if (palletDelay == 944) {     
       heatIndex = 0;
     }
-    if (palletDelay == 2000) {     
+    if (palletDelay == 1444) {     
       palletDelay = 0;
       heatIndex = 0;
     }
@@ -766,7 +835,8 @@ void aurora()
   
   else if (auroraCounter > auroraThreshold){
   fadeToBlackBy( leds, NUM_LEDS, 1);
-  digitalWrite(fanPin, LOW);
+  //digitalWrite(fanPin, LOW);
+  analogWrite(fanPin, 0);
   Serial.println("Fan OFF");
    //Serial.println("Limit"); 
   }
@@ -774,7 +844,8 @@ void aurora()
     Serial.println("Fan ON");
     auroraCounter = 0;
     auroraThreshold = random(10,200);
-    digitalWrite(fanPin, HIGH);
+    //digitalWrite(fanPin, HIGH);
+    analogWrite(fanPin, 255);
   }
   FastLED.show();
   delay(35);
@@ -892,31 +963,6 @@ void twinkle()
   
     // do some periodic updates
     EVERY_N_MILLISECONDS( 20 ) { gHue++; } // slowly cycle the "base color" through the rainbow
-  
-  //  RGB_color(0, 255, 255); // Red      Volcano
-  //  delay(timma);
-  //  RGB_color(0, 210, 255); // Orange  Twilight
-  //  delay(timma);
-  //  RGB_color(0, 0, 255); // Yellow    Sunlight
-  //  delay(timma);
-  //  RGB_color(255, 225, 255); // Dark Green    Rainforest
-  //  delay(timma);
-  //  RGB_color(240, 0, 240); // Light Green  Aurora
-  //  delay(timma);
-  //  RGB_color(255, 50, 200); // teal      Light Rain
-  //  delay(timma);
-  //  RGB_color(255, 0, 0); // Aqua      Partly Cloudy
-  //  delay(timma);
-  //  RGB_color(255, 255, 225); // Navy     Fog
-  //  delay(timma);
-  //  RGB_color(255, 240, 20); // Mid Blue  Heavy Rain
-  //  delay(timma);
-  //  RGB_color(0, 255, 0); // Purple   Thunder Storm
-  //  delay(timma);
-  //  RGB_color(0, 200, 128); // Fuchsia           Rainbow
-  //  delay(timma);
-  //  RGB_color(0, 0, 0); // White      White
-  //  delay(timma);
   }
   
   
@@ -928,11 +974,11 @@ void twinkle()
       leds[led] = CHSV( 100, 0, 0);
     }
     digitalWrite(pumpPin, LOW);   
-    digitalWrite(fanPin, LOW);   
+    analogWrite(fanPin, 0);  
     analogWrite(brightLEDPin,0);
     digitalWrite(mister1Pin, LOW);   
     digitalWrite(mister2Pin, LOW); 
-    digitalWrite(extractionPin, LOW); 
+    //digitalWrite(extractionPin, LOW); 
     firstrun = 1; 
   }
   
@@ -969,7 +1015,7 @@ void twinkle()
     // if it is, the buttonState is HIGH:
     if (buttonState1 == LOW) {     
       Serial.println("Button 1 Pressed");
-      RGB_color(0, 0, 255); // Yellow    Sunlight
+      RGB_color(0, 0, 255); // Mode 1:  Sunlight         Yellow
       delay(timma);
       turnoffLEDs();       //turn off LEDs
       FastLED.show(); 
@@ -980,7 +1026,7 @@ void twinkle()
   
       if (buttonState1 == LOW){             // check to see if the button is still being held
         Serial.println("Button 1 HELD");
-      RGB_color(0, 210, 255); // Orange  Twilight
+        RGB_color(0, 210, 255); // Mode 2:  Twilight         Orange   
       Serial1.write("2");
       delay(timma);
       mode = 2;
@@ -990,7 +1036,7 @@ void twinkle()
      
     else if (buttonState2 == LOW) {     
       Serial.println("Button 2 Pressed");
-      RGB_color(255, 240, 20); // Mid Blue  Heavy Rain
+      RGB_color(255, 240, 20); // Mode 3:  Sunshower        Mid Blue
       delay(timma); 
       turnoffLEDs();       //turn off LEDs
       FastLED.show();
@@ -1001,8 +1047,8 @@ void twinkle()
       
       if (buttonState2 == LOW){             // check to see if the button is still being held
         Serial.println("Button 2 HELD");
-      RGB_color(255, 50, 200); // teal      Light Rain
-      delay(timma);
+        RGB_color(255, 50, 200); // Mode 4:  Thunderstorm     Teal
+        delay(timma);
       Serial1.write("4");
       mode = 4;
       EEPROM.update(1, mode);
@@ -1011,7 +1057,7 @@ void twinkle()
 
     else if (buttonState3 == LOW) {     
       Serial.println("Button 3 Pressed");
-      RGB_color(255, 0, 0); // Aqua      Partly Cloudy
+      RGB_color(255, 255, 255); // Mode 5:  Midnight Rain    Green
       delay(timma); 
       turnoffLEDs();       //turn off LEDs
       FastLED.show();
@@ -1022,8 +1068,8 @@ void twinkle()
       
       if (buttonState3 == LOW){             // check to see if the button is still being held
         Serial.println("Button 3 HELD");
-      RGB_color(255, 255, 225); // Navy     Fog
-      delay(timma);
+        RGB_color(0, 255, 225); //  Mode 6:  Ocean Volcano    Red
+        delay(timma);
       Serial1.write("6");
       mode = 6;
       EEPROM.update(1, mode);
@@ -1032,7 +1078,7 @@ void twinkle()
 
     else if (buttonState4 == LOW) {     
       Serial.println("Button 4 Pressed");
-      RGB_color(240, 0, 240); // Light Green  Aurora
+      RGB_color(255, 0, 0); // Mode 7:  Partly Cloudy    Aqua
       delay(timma); 
       turnoffLEDs();       //turn off LEDs
       FastLED.show();
@@ -1043,8 +1089,8 @@ void twinkle()
       
       if (buttonState4 == LOW){             // check to see if the button is still being held
         Serial.println("Button 4 HELD");
-      RGB_color(0, 200, 128); // Fuchsia           Rainbow
-      delay(timma);
+        RGB_color(255, 255, 225); // Mode 8:  Fog              Navy
+        delay(timma);
       Serial1.write("8");
       mode = 8;
       EEPROM.update(1, mode);
@@ -1053,7 +1099,7 @@ void twinkle()
 
     else if (buttonState5 == LOW) {     
       Serial.println("Button 5 Pressed");
-      RGB_color(0, 255, 255); // Red      Volcano
+      RGB_color(0, 200, 128); // Mode 9:  Rainbow          Fuchsia
       delay(timma);
       turnoffLEDs();       //turn off LEDs
       FastLED.show(); 
@@ -1064,8 +1110,8 @@ void twinkle()
       
       if (buttonState5 == LOW){             // check to see if the button is still being held
         Serial.println("Button 5 HELD");
-      RGB_color(255, 225, 255); // Dark Green    Rainforest
-      delay(timma);
+        RGB_color(240, 0, 240); // Mode 10: Aurora           Lime
+        delay(timma);
       Serial1.write("a");
       mode = 10;
       EEPROM.update(1, mode);
@@ -1074,7 +1120,7 @@ void twinkle()
 
     else if (buttonState6 == LOW) {     
       Serial.println("Button 6 Pressed");
-      RGB_color(0, 255, 0); // Purple   Thunder Storm
+      RGB_color(0, 255, 0); // Mode 11: Four Seasons     Purple
       delay(timma); 
       turnoffLEDs();       //turn off LEDs
       FastLED.show();
@@ -1085,8 +1131,8 @@ void twinkle()
       
       if (buttonState6 == LOW){             // check to see if the button is still being held
         Serial.println("Button 6 HELD");
-      RGB_color(0, 0, 0); // White      White
-      delay(timma);
+        RGB_color(0, 0, 0); // Mode 12: Stand-by         White
+        delay(timma);
       Serial1.write("c");
       mode = 12;
       EEPROM.update(1, mode);
@@ -1314,62 +1360,62 @@ void eepromSet()
       // check if the pushbutton is pressed.
     // if it is, the buttonState is HIGH:
     if (mode == 1){
-      RGB_color(0, 0, 255); // Yellow    Sunlight
+      RGB_color(0, 0, 255); // Mode 1:  Sunlight         Yellow
       Serial1.write("1");
       }
 
      else if (mode == 2){
-      RGB_color(0, 210, 255); // Orange  Twilight
+      RGB_color(0, 210, 255); // Mode 2:  Twilight         Orange   
       Serial1.write("2");
       }
      
      else if (mode == 3){
-      RGB_color(255, 240, 20); // Mid Blue  Heavy Rain
+      RGB_color(255, 240, 20); // Mode 3:  Sunshower        Mid Blue
       Serial1.write("3");
       }
       
      else if (mode == 4){
-      RGB_color(255, 50, 200); // teal      Light Rain
+      RGB_color(255, 50, 200); // Mode 4:  Thunderstorm     Teal
       Serial1.write("4");
       }
 
      else if (mode == 5){
-      RGB_color(255, 0, 0); // Aqua      Partly Cloudy
+      RGB_color(255, 255, 255); // Mode 5:  Midnight Rain    Green
       Serial1.write("5");
       }
 
      else if (mode == 6){
-      RGB_color(255, 255, 225); // Navy     Fog
+      RGB_color(0, 255, 225); //  Mode 6:  Ocean Volcano    Red
       Serial1.write("6");
       }
 
      else if (mode == 7){
-      RGB_color(240, 0, 240); // Light Green  Aurora
+      RGB_color(255, 0, 0); // Mode 7:  Partly Cloudy    Aqua
       Serial1.write("7");
       }
 
      else if (mode == 8){
-      RGB_color(0, 200, 128); // Fuchsia           Rainbow
+      RGB_color(255, 255, 225); // Mode 8:  Fog              Navy
       Serial1.write("8");
       }
 
      else if (mode == 9){
-      RGB_color(0, 255, 255); // Red      Volcano
+      RGB_color(0, 200, 128); // Mode 9:  Rainbow          Fuchsia
       Serial1.write("9");
       }
 
      else if (mode == 10){
-      RGB_color(255, 225, 255); // Dark Green    Rainforest
+      RGB_color(240, 0, 240); // Mode 10: Aurora           Lime
       Serial1.write("a");
       }
 
      else if (mode == 11){
-      RGB_color(0, 255, 0); // Purple   Thunder Storm
+      RGB_color(0, 255, 0); // Mode 11: Four Seasons     Purple
       Serial1.write("b");
       }
 
      else if (mode == 12){
-      RGB_color(0, 0, 0); // White      White
+      RGB_color(0, 0, 0); // Mode 12: Stand-by         White
       Serial1.write("c");
       }
      }
