@@ -225,6 +225,8 @@ int goingUpFade = 1;
           extrationOn = 1;
           EEPROM.update(2, extrationOn);
           Serial.println("Extration Turned On");
+          digitalWrite(extractionPin, HIGH);
+          Serial.println("extraction fans ON");  //TODO remote serial note
           fill_solid(leds, NUM_LEDS, 0x33C213);
           FastLED.show();
           delay(timma);
@@ -239,7 +241,9 @@ int goingUpFade = 1;
 
           turnoffLEDs();       //turn off LEDs
           FastLED.show();
-          delay(timma);                   
+          delay(timma);  
+          digitalWrite(extractionPin, LOW);
+          Serial.println("extraction fans OFF");  //TODO remote serial note                 
         }
       }
 
@@ -263,7 +267,7 @@ int goingUpFade = 1;
     //delay(1000);
 
     if (extrationOn == 1){
-    EVERY_N_SECONDS(60){        
+    EVERY_N_SECONDS(60){    //TODO put back to 60       
       extractionCounter++;
       if (extractionCounter == 9) {     // Every 10 mins turn extractor fans on for 1 min (10-9) then back off
         digitalWrite(extractionPin, HIGH);
